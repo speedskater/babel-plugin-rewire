@@ -1,0 +1,6 @@
+fixtures
+.idea
+node_modules
+test
+.travis.yml
+.gitignore

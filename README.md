@@ -1,4 +1,7 @@
 # babel-rewire-plugin
+
+[![Build Status](https://travis-ci.org/speedskater/babel-rewire-plugin.svg)](https://travis-ci.org/speedskater/babel-rewire-plugin)
+
 A Babel plugin that adds the ability to rewire modul dependency. 
 This is useful for writing tests, which want to mock the dependencies of the modules to test.
 
