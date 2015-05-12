@@ -1,12 +1,15 @@
 # babel-rewire-plugin
 
+A Babel plugin that adds the ability to rewire modul dependency.
+
 [![Build Status](https://travis-ci.org/speedskater/babel-rewire-plugin.svg)](https://travis-ci.org/speedskater/babel-rewire-plugin)
+ 
+It is inspired by [rewire.js](https://github.com/jhnns/rewire) and transfers its concepts to es6 using babel.
 
-A Babel plugin that adds the ability to rewire modul dependency. 
-This is useful for writing tests, which want to mock the dependencies of the modules to test.
+It is for writing tests, specifically to mock the dependencies of the module under test.
 
-For each module it therefore adds and exports the methods __GetDependency__, __Rewire__, and __ResetDependency__.
-These methods allow to rewire the module under test. Furthermode in case of a default Export these methods are assigned to
+Therfore for each module it adds and exports the methods __GetDependency__, __Rewire__, and __ResetDependency__.
+These methods allow to rewire the module under test. Furthermore in case of a default Export these methods are assigned to
 the existing default export.
 
 e.g. 
