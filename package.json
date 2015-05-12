@@ -1,6 +1,6 @@
 {
   "name": "babel-rewire-plugin",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "A babel plugin adding the ability to rewire modul dependency. This enables to mock modules for testing purposes.",
   "main": "src/index.js",
   "scripts": {

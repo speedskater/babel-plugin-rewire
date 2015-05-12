@@ -60,6 +60,10 @@ with `webpack` use the following loader:
 {test: /src\/js\/.+\.js$/, loader: 'babel-loader?plugins=babel-rewire-plugin' }
 ```
 
+## Release History
+
+* 0.1.0 Initial release
+
 # License
 
 The ISC License (ISC)
