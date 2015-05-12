@@ -1,4 +1,4 @@
-# babel-rewire-plugin
+# babel-plugin-rewire
 
 A Babel plugin that adds the ability to rewire modul dependency.
 
@@ -45,25 +45,25 @@ ComponentToTest.__ResetDependency__('ChildComponent');
 # Install
 
 ```
-$ npm install babel babel-rewire-plugin
+$ npm install babel babel-plugin-rewire
 ```
 
 # Use
 
 ```
-$ babel --plugins babel-rewire-plugin
+$ babel --plugins rewire
 ```
 
 or:
 
 ```javascript
-require("babel").transform("code", { plugins: ["object-assign"] });
+require("babel").transform("code", { plugins: ["rewire"] });
 ```
 
 with `webpack` use the following loader:
 
 ```javascript
-{test: /src\/js\/.+\.js$/, loader: 'babel-loader?plugins=babel-rewire-plugin' }
+{test: /src\/js\/.+\.js$/, loader: 'babel-loader?plugins=rewire' }
 ```
 
 ## Release History
