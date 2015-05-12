@@ -12,9 +12,9 @@ Therfore for each module it adds and exports the methods __GetDependency__, __Re
 These methods allow to rewire the module under test. Furthermore in case of a default Export these methods are assigned to
 the existing default export.
 
-e.g. 
+e.g. Testing a React Component
 
-##Module to test (React Component) 
+##Module to test (e.g. a React Component) 
 
 ```javascript
 import ChildComponent from 'child-component-module';
