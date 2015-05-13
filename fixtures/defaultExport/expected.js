@@ -40,6 +40,8 @@ __$Setters__["MyModule"] = __setMyModule__;
 __$Resetters__["MyModule"] = __resetMyModule__;
 export default Object.assign("", {
   "__Rewire__": __Rewire__,
+  "__set__": __Rewire__,
   "__ResetDependency__": __ResetDependency__,
-  "__GetDependency__": __GetDependency__
+  "__GetDependency__": __GetDependency__,
+  "__get__": __GetDependency__
 });

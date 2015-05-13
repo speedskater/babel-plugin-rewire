@@ -8,8 +8,8 @@ It is inspired by [rewire.js](https://github.com/jhnns/rewire) and transfers its
 
 It is for writing tests, specifically to mock the dependencies of the module under test.
 
-Therfore for each module it adds and exports the methods __GetDependency__, __Rewire__, and __ResetDependency__.
-These methods allow to rewire the module under test. Furthermore in case of a default Export these methods are assigned to the existing default export.
+Therfore for each module it adds and exports the methods \_\_GetDependency\_\_, \_\_Rewire\_\_, and \_\_ResetDependency\_\_..
+These methods allow to rewire the module under test. Furthermore in case of a default Export these methods are assigned to the existing default export. For compatibility reasons with rewire.js the methods \_\_get\_\_ and \_\_set\_\_ are assigned to the default export as well.
 
 e.g. Testing a React Component
 
@@ -77,10 +77,10 @@ The ISC License (ISC)
 Copyright (c) 2015, Robert Binna <r.binna@synedra.com>
 
 Permission to use, copy, modify, and/or distribute this software for any
-	purpose with or without fee is hereby granted, provided that the above
+purpose with or without fee is hereby granted, provided that the above
 copyright notice and this permission notice appear in all copies.
 
-	THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
 WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
 MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
 ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
