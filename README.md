@@ -70,7 +70,7 @@ with `webpack` use the following loader:
 
 * 0.1.0 Initial release
 * 0.1.1 Bugfix: moved to peer dependencies
-* 0.1.2 Added __set__ and __get__ to provide compatibility with rewire.js
+* 0.1.2 Added \_\_set\_\_ and \_\_get\_\_ to provide compatibility with rewire.js
 
 # License
 
