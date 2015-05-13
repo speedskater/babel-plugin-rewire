@@ -8,8 +8,9 @@ It is inspired by [rewire.js](https://github.com/jhnns/rewire) and transfers its
 
 It is for writing tests, specifically to mock the dependencies of the module under test.
 
-Therfore for each module it adds and exports the methods \_\_GetDependency\_\_, \_\_Rewire\_\_, and \_\_ResetDependency\_\_..
-These methods allow to rewire the module under test. Furthermore in case of a default Export these methods are assigned to the existing default export. For compatibility reasons with rewire.js the methods \_\_get\_\_ and \_\_set\_\_ are assigned to the default export as well.
+Therfore for each module it adds and exports the methods \_\_GetDependency\_\_, \_\_Rewire\_\_, and \_\_ResetDependency\_\_.
+These methods allow to rewire the module under test. 
+Furthermore in case of a default export these methods are assigned to the existing default export. For compatibility reasons with rewire.js the methods \_\_get\_\_ and \_\_set\_\_ are assigned to the default export as well.
 
 e.g. Testing a React Component
 
