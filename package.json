@@ -2,16 +2,16 @@
   "name": "babel-plugin-rewire",
   "version": "0.1.1",
   "description": "A babel plugin adding the ability to rewire modul dependency. This enables to mock modules for testing purposes.",
-  "main": "src/babel-rewire-plugin.js",
+  "main": "src/babel-plugin-rewire.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/speedskater/babel-rewire-plugin.git"
+    "url": "git://github.com/speedskater/babel-plugin-rewire.git"
   },
   "bugs": {
-    "url": "https://github.com/speedskater/babel-rewire-plugin/issues"
+    "url": "https://github.com/speedskater/babel-plugin-rewire/issues"
   },
   "keywords": [
     "babel",

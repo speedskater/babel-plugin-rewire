@@ -9,7 +9,7 @@ describe('BabelRewirePluginTest', function() {
 	var babelTranslationOptions = {
 		blacklist: 'es6.modules',
 		whitelist: '',
-		plugins: path.resolve(__dirname, '../src/babel-rewire-plugin.js')
+		plugins: path.resolve(__dirname, '../src/babel-plugin-rewire.js')
 	};
 
 	function testTranslation(testName) {
@@ -35,7 +35,7 @@ describe('BabelRewirePluginTest', function() {
 	];
 	
 	featuresToTest.forEach(function(feature) {
-		it('test babel-rewire-plugin for ' + feature, testTranslation.bind(null, feature));
+		it('test babel-plugin-rewire for ' + feature, testTranslation.bind(null, feature));
 	});
 
 });
