@@ -9,12 +9,11 @@ It is inspired by [rewire.js](https://github.com/jhnns/rewire) and transfers its
 It is for writing tests, specifically to mock the dependencies of the module under test.
 
 Therfore for each module it adds and exports the methods __GetDependency__, __Rewire__, and __ResetDependency__.
-These methods allow to rewire the module under test. Furthermore in case of a default Export these methods are assigned to
-the existing default export.
+These methods allow to rewire the module under test. Furthermore in case of a default Export these methods are assigned to the existing default export.
 
 e.g. Testing a React Component
 
-##Module to test (e.g. a React Component) 
+## Module to test (e.g. a React Component) 
 
 ```javascript
 import ChildComponent from 'child-component-module';
@@ -29,10 +28,10 @@ export default class MyFancyWrapperComponent extends React.Component {
 }
 ```
 
-##TestCode
+## TestCode
 
 ```javascript
-import ComponentToTest from MyFancyWrapperComponent;
+import ComponentToTest from 'my-fancy-wrapper-component-module';
 
 ComponentToTest.__Rewire__('ChildComponent', React.createClass({
     render: function() { return <div {...this.props}></div>; }
