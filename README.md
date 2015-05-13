@@ -2,7 +2,7 @@
 
 A Babel plugin that adds the ability to rewire modul dependency.
 
-[![Build Status](https://travis-ci.org/speedskater/babel-rewire-plugin.svg)](https://travis-ci.org/speedskater/babel-rewire-plugin)
+[![Build Status](https://travis-ci.org/speedskater/babel-plugin-rewire.svg)](https://travis-ci.org/speedskater/babel-plugin-rewire)
  
 It is inspired by [rewire.js](https://github.com/jhnns/rewire) and transfers its concepts to es6 using babel.
 
@@ -69,6 +69,7 @@ with `webpack` use the following loader:
 ## Release History
 
 * 0.1.0 Initial release
+* 0.1.1 Bugfix: moved to peer dependencies
 
 # License
 
