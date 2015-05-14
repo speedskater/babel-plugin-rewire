@@ -29,6 +29,8 @@ describe('BabelRewirePluginTest', function() {
 	var featuresToTest = [
 		'defaultImport',
 		'defaultExport',
+		'defaultExportWithClass',
+		'defaultExportWithNamedFunction',
 		'multipleImports',
 		'multipleImportsWithAliases',
 		'wildcardImport'

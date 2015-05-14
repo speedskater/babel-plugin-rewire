@@ -113,7 +113,13 @@ module.exports = new Transformer("rewire", {
 	},
 
 	ExportDefaultDeclaration: function(node) {
-		return t.exportDefaultDeclaration(t.callExpression(t.memberExpression(t.identifier('Object'),  t.identifier('assign')), [ node.declaration, t.objectExpression([
+		var originalExport = node.declaration;
+		if(!!node.declaration.id) {
+			this.insertBefore(node.declaration);
+			originalExport = node.declaration.id;
+		}
+
+		return t.exportDefaultDeclaration(t.callExpression(t.memberExpression(t.identifier('Object'),  t.identifier('assign')), [ originalExport, t.objectExpression([
 			t.property('init', t.literal('__Rewire__'), t.identifier('__Rewire__')),
 			t.property('init', t.literal('__set__'), t.identifier('__Rewire__')),
 			t.property('init',t.literal('__ResetDependency__'), t.identifier('__ResetDependency__')),
