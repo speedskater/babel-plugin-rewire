@@ -4,7 +4,7 @@ A Babel plugin that adds the ability to rewire module dependencies.
 
 [![Build Status](https://travis-ci.org/speedskater/babel-plugin-rewire.svg)](https://travis-ci.org/speedskater/babel-plugin-rewire)
  
-It is inspired by [rewire.js](https://github.com/jhnns/rewire) and transfers it's concepts to es6 using babel.
+It is inspired by [rewire.js](https://github.com/jhnns/rewire) and transfers its concepts to es6 using babel.
 
 It is useful for writing tests, specifically to mock the dependencies of the module under test.
 
