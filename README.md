@@ -1,20 +1,19 @@
 # babel-plugin-rewire
 
-A Babel plugin that adds the ability to rewire modul dependency.
+A Babel plugin that adds the ability to rewire module dependencies.
 
 [![Build Status](https://travis-ci.org/speedskater/babel-plugin-rewire.svg)](https://travis-ci.org/speedskater/babel-plugin-rewire)
  
 It is inspired by [rewire.js](https://github.com/jhnns/rewire) and transfers its concepts to es6 using babel.
 
-It is for writing tests, specifically to mock the dependencies of the module under test.
+It is useful for writing tests, specifically to mock the dependencies of the module under test.
 
-Therfore for each module it adds and exports the methods \_\_GetDependency\_\_, \_\_Rewire\_\_, and \_\_ResetDependency\_\_.
+Therefore for each module it adds and exports the methods \_\_GetDependency\_\_, \_\_Rewire\_\_, and \_\_ResetDependency\_\_.
 These methods allow to rewire the module under test. 
-Furthermore in case of a default export these methods are assigned to the existing default export. For compatibility reasons with rewire.js the methods \_\_get\_\_ and \_\_set\_\_ are assigned to the default export as well.
+Furthermore in case of a default export these methods are assigned to the existing default export. For compatibility reasons with rewire.js, the methods \_\_get\_\_ and \_\_set\_\_ are assigned to the default export as well.
 
-e.g. Testing a React Component
-
-## Module to test (e.g. a React Component) 
+##Example
+###React Component
 
 ```javascript
 import ChildComponent from 'child-component-module';
@@ -29,7 +28,7 @@ export default class MyFancyWrapperComponent extends React.Component {
 }
 ```
 
-## TestCode
+### Test Code
 
 ```javascript
 import ComponentToTest from 'my-fancy-wrapper-component-module';
@@ -42,13 +41,13 @@ ComponentToTest.__Rewire__('ChildComponent', React.createClass({
 ComponentToTest.__ResetDependency__('ChildComponent');
 ```
 
-# Install
+# Installation
 
 ```
 $ npm install babel babel-plugin-rewire
 ```
 
-# Use
+# Usage
 
 ```
 $ babel --plugins rewire
