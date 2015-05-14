@@ -62,7 +62,7 @@ require("babel").transform("code", { plugins: ["rewire"] });
 with `webpack` use the following loader:
 
 ```javascript
-{test: /src\/js\/.+\.js$/, loader: 'babel-loader?plugins=rewire' }
+{test: /src\/js\/.+\.js$/, loader: 'babel-loader?plugins=babel-plugin-rewire' }
 ```
 
 ## Release History
