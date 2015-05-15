@@ -41,13 +41,13 @@ ComponentToTest.__Rewire__('ChildComponent', React.createClass({
 ComponentToTest.__ResetDependency__('ChildComponent');
 ```
 
-# Installation
+## Installation
 
 ```
 $ npm install babel babel-plugin-rewire
 ```
 
-# Usage
+## Usage
 
 To use the plugin identify it by its long name "babel-plugin-rewire" or by its abbreviation "rewire". In case you are using rewire.js in the same project you must use the unabbreviated plugin name. Otherwise babel is trying to load rewire.js as a plugin which will cause an [error](https://github.com/speedskater/babel-plugin-rewire/issues/5). 
 
@@ -83,14 +83,14 @@ abbreviated:
 {test: /src\/js\/.+\.js$/, loader: 'babel-loader?plugins=babel-plugin-rewire' }
 ```
 
-# Release History
+## Release History
 
 * 0.1.0 Initial release
 * 0.1.1 Bugfix: moved to peer dependencies
 * 0.1.2 Added \_\_set\_\_ and \_\_get\_\_ to provide compatibility with rewire.js
 * 0.1.3 Added handling for the export of named declarations like classes or functions
 
-# License
+## License
 
 The ISC License (ISC)
 
