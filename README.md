@@ -49,23 +49,41 @@ $ npm install babel babel-plugin-rewire
 
 # Usage
 
+To use the plugin identify it by its long name "babel-plugin-rewire" or by its abbreviation "rewire". In case you are using rewire.js in the same project you must use the unabbreviated plugin name. Otherwise babel is trying to load rewire.js as a plugin which will cause an [error](https://github.com/speedskater/babel-plugin-rewire/issues/5). 
+
+###Commandline
+full plugin name:
 ```
-$ babel --plugins rewire
+$ babel --plugins rewire ..
+```
+abbreviated:
+```
+$ babel --plugins babel-plugin-rewire ..
 ```
 
-or:
+### JavaScript API
 
+full plugin name:
 ```javascript
 require("babel").transform("code", { plugins: ["rewire"] });
 ```
+abbreviated:
+```javascript
+require("babel").transform("code", { plugins: ["babel-plugin-rewire"] });
+```
 
-with `webpack` use the following loader:
+### Webpack
 
+full plugin name:
 ```javascript
 {test: /src\/js\/.+\.js$/, loader: 'babel-loader?plugins=rewire' }
 ```
+abbreviated:
+```javascript
+{test: /src\/js\/.+\.js$/, loader: 'babel-loader?plugins=babel-plugin-rewire' }
+```
 
-## Release History
+# Release History
 
 * 0.1.0 Initial release
 * 0.1.1 Bugfix: moved to peer dependencies
