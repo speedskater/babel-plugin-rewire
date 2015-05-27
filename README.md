@@ -3,13 +3,13 @@
 A Babel plugin that adds the ability to rewire module dependencies.
 
 [![Build Status](https://travis-ci.org/speedskater/babel-plugin-rewire.svg)](https://travis-ci.org/speedskater/babel-plugin-rewire)
- 
+
 It is inspired by [rewire.js](https://github.com/jhnns/rewire) and transfers its concepts to es6 using babel.
 
 It is useful for writing tests, specifically to mock the dependencies of the module under test.
 
 Therefore for each module it adds and exports the methods \_\_GetDependency\_\_, \_\_Rewire\_\_, and \_\_ResetDependency\_\_.
-These methods allow to rewire the module under test. 
+These methods allow to rewire the module under test.
 Furthermore in case of a default export these methods are assigned to the existing default export. For compatibility reasons with rewire.js, the methods \_\_get\_\_ and \_\_set\_\_ are assigned to the default export as well.
 
 ##Example
@@ -17,7 +17,7 @@ Furthermore in case of a default export these methods are assigned to the existi
 
 ```javascript
 import ChildComponent from 'child-component-module';
- 
+
 export default class MyFancyWrapperComponent extends React.Component {
 
 	render() {
@@ -49,36 +49,36 @@ $ npm install babel babel-plugin-rewire
 
 ## Usage
 
-To use the plugin identify it by its long name "babel-plugin-rewire" or by its abbreviation "rewire". In case you are using rewire.js in the same project you must use the unabbreviated plugin name. Otherwise babel is trying to load rewire.js as a plugin which will cause an [error](https://github.com/speedskater/babel-plugin-rewire/issues/5). 
+To use the plugin identify it by its long name "babel-plugin-rewire" or by its abbreviation "rewire". In case you are using rewire.js in the same project you must use the unabbreviated plugin name. Otherwise babel is trying to load rewire.js as a plugin which will cause an [error](https://github.com/speedskater/babel-plugin-rewire/issues/5).
 
 ###Commandline
-full plugin name:
+abbreviated:
 ```
 $ babel --plugins rewire ..
 ```
-abbreviated:
+full plugin name:
 ```
 $ babel --plugins babel-plugin-rewire ..
 ```
 
 ### JavaScript API
 
-full plugin name:
+abbreviated:
 ```javascript
 require("babel").transform("code", { plugins: ["rewire"] });
 ```
-abbreviated:
+full plugin name:
 ```javascript
 require("babel").transform("code", { plugins: ["babel-plugin-rewire"] });
 ```
 
 ### Webpack
 
-full plugin name:
+abbreviated:
 ```javascript
 {test: /src\/js\/.+\.js$/, loader: 'babel-loader?plugins=rewire' }
 ```
-abbreviated:
+full plugin name:
 ```javascript
 {test: /src\/js\/.+\.js$/, loader: 'babel-loader?plugins=babel-plugin-rewire' }
 ```
