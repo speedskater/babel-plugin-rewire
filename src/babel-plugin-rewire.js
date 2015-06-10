@@ -14,16 +14,12 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.*/
 
 var Transformer = require("babel-core").Transformer;
 var t           = require("babel-core").types;
-var GettersArray = t.identifier("__$Getters__");
-var SettersArray = t.identifier("__$Setters__");
-var ReSettersArray = t.identifier("__$Resetters__");
-
 
 module.exports = new Transformer("rewire", {
 	Program: function(node) {
-		var gettersArrayDeclaration = t.variableDeclaration('let', [ t.variableDeclarator(GettersArray, t.arrayExpression([])) ]);
-		var settersArrayDeclaration = t.variableDeclaration('let', [ t.variableDeclarator(SettersArray, t.arrayExpression([])) ]);
-		var resettersArrayDeclaration = t.variableDeclaration('let', [ t.variableDeclarator(ReSettersArray, t.arrayExpression([])) ]);
+		var gettersArrayDeclaration = t.variableDeclaration('let', [ t.variableDeclarator(t.identifier("__$Getters__"), t.arrayExpression([])) ]);
+		var settersArrayDeclaration = t.variableDeclaration('let', [ t.variableDeclarator(t.identifier("__$Setters__"), t.arrayExpression([])) ]);
+		var resettersArrayDeclaration = t.variableDeclaration('let', [ t.variableDeclarator(t.identifier("__$Resetters__"), t.arrayExpression([])) ]);
 
 		var nameVariable = t.identifier("name");
 		var valueVariable = t.identifier("value");
@@ -32,7 +28,7 @@ module.exports = new Transformer("rewire", {
 			t.identifier('__GetDependency__'),
 			[nameVariable ],
 			t.blockStatement([
-				t.returnStatement(t.callExpression(t.memberExpression(GettersArray, nameVariable, true), []))
+				t.returnStatement(t.callExpression(t.memberExpression(t.identifier("__$Getters__"), nameVariable, true), []))
 			])
 		));
 
@@ -40,7 +36,7 @@ module.exports = new Transformer("rewire", {
 			t.identifier('__Rewire__'),
 			[nameVariable, valueVariable ],
 			t.blockStatement([
-				t.expressionStatement(t.callExpression(t.memberExpression(SettersArray, nameVariable, true), [valueVariable]))
+				t.expressionStatement(t.callExpression(t.memberExpression(t.identifier("__$Setters__"), nameVariable, true), [valueVariable]))
 			])
 		));
 
@@ -48,7 +44,7 @@ module.exports = new Transformer("rewire", {
 			t.identifier('__ResetDependency__'),
 			[ nameVariable ],
 			t.blockStatement([
-				t.expressionStatement(t.callExpression(t.memberExpression(ReSettersArray, nameVariable, true), []))
+				t.expressionStatement(t.callExpression(t.memberExpression(t.identifier("__$Resetters__"), nameVariable, true), []))
 			])
 		));
 
@@ -64,16 +60,22 @@ module.exports = new Transformer("rewire", {
 		var accessors = [];
 
 		node.specifiers.forEach(function(specifier) {
+			var importedSpecifierName = (specifier.imported && specifier.imported.name) || null;
 			var localVariable = specifier.local;
 			var localVariableName = localVariable.name;
 			var getter = t.identifier('__get' + localVariableName + '__');
 			var setter = t.identifier('__set' + localVariableName + '__');
 			var resetter = t.identifier('__reset' + localVariableName + '__');
-			var requireExpression = t.callExpression(t.identifier('require'), [node.source]) ;
+
 			var actualImport = scope.generateUidIdentifier(localVariableName + "Temp");
+			scope.rename(localVariableName, actualImport.name);
+
+			if(importedSpecifierName === localVariableName) {
+				specifier.imported = t.identifier(importedSpecifierName);
+			}
 			specifier.local = actualImport;
 
-			variableDeclarations.push(t.variableDeclaration('let', [ t.variableDeclarator(localVariable, actualImport)]));
+			variableDeclarations.push(t.variableDeclaration('let', [ t.variableDeclarator(t.identifier(localVariableName), actualImport)]));
 
 			function addAccessor(array, operation) {
 				accessors.push(t.expressionStatement(t.assignmentExpression("=", t.memberExpression(array, t.literal(localVariableName), true), operation)));
@@ -83,29 +85,29 @@ module.exports = new Transformer("rewire", {
 				getter,
 				[],
 				t.blockStatement([
-					t.returnStatement(localVariable)
+					t.returnStatement(t.identifier(localVariableName))
 				])
 			));
-			addAccessor(GettersArray, getter);
+			addAccessor(t.identifier("__$Getters__"), getter);
 
 			setters.push(t.functionDeclaration(
 				setter,
 				[t.identifier("value")],
 				t.blockStatement([
-					t.expressionStatement(t.assignmentExpression("=", localVariable, t.identifier("value")))
+					t.expressionStatement(t.assignmentExpression("=", t.identifier(localVariableName), t.identifier("value")))
 				])
 			));
-			addAccessor(SettersArray, setter);
+			addAccessor(t.identifier("__$Setters__"), setter);
 
 
 			resetters.push(t.functionDeclaration(
 				resetter,
 				[],
 				t.blockStatement([
-					t.expressionStatement(t.assignmentExpression("=", localVariable, actualImport))
+					t.expressionStatement(t.assignmentExpression("=", t.identifier(localVariableName), actualImport))
 				])
 			));
-			addAccessor(ReSettersArray, resetter);
+			addAccessor(t.identifier("__$Resetters__"), resetter);
 
 		});
 
