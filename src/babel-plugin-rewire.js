@@ -52,6 +52,7 @@ module.exports = new Transformer("rewire", {
 			universalSetter, universalResetter);
 		return node;
 	},
+
 	ImportDeclaration: function(node, parent, scope, file) {
 		var variableDeclarations = [];
 		var getters = [];
@@ -68,7 +69,10 @@ module.exports = new Transformer("rewire", {
 			var resetter = t.identifier('__reset' + localVariableName + '__');
 
 			var actualImport = scope.generateUidIdentifier(localVariableName + "Temp");
-			scope.rename(localVariableName, actualImport.name);
+			scope.bindings[localVariableName].constant = false;
+			scope.bindings[localVariableName].kind = 'let';
+
+			//scope.rename(localVariableName, actualImport.name);
 
 			if(importedSpecifierName === localVariableName) {
 				specifier.imported = t.identifier(importedSpecifierName);

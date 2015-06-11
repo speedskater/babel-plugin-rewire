@@ -94,7 +94,9 @@ function __resetUserModel__() {
 __$Getters__['UserModel'] = __getUserModel__;
 __$Setters__['UserModel'] = __setUserModel__;
 __$Resetters__['UserModel'] = __resetUserModel__;
-var user = _UserModelTemp.getCurrent();
+var a = 'b';
+
+var user = UserModel.getCurrent();
 var moduleName = user && user.inState('activated') ? 'inside' : 'outside';
 
 // Main app entryPoint
@@ -111,6 +113,6 @@ else if (moduleName === 'outside') {
 	});
 }
 
-_$Temp(function () {
-	return _ie8IconsTemp.fix();
+$(function () {
+	return ie8Icons.fix();
 });

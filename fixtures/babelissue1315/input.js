@@ -22,6 +22,8 @@ import $ from 'jquery';
 import ie8Icons from 'utils/ie8-icons';
 import UserModel from 'models/user';
 
+let a='b';
+
 const user = UserModel.getCurrent();
 const moduleName = user && user.inState('activated') ? 'inside' : 'outside';
 
