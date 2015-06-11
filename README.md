@@ -90,6 +90,7 @@ full plugin name:
 * 0.1.2 Added \_\_set\_\_ and \_\_get\_\_ to provide compatibility with rewire.js
 * 0.1.3 Added handling for the export of named declarations like classes or functions
 * 0.1.4 Fixed variable handling and used renaming of scope variables. Further removed global identifiers to prevent memory leaks.
+* 0.1.5 Fixed regression
 
 ## License
 
