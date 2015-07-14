@@ -1,13 +1,10 @@
 "use strict";
 
-export { __GetDependency__ };
-export { __Rewire__ };
-export { __ResetDependency__ };
 import _myDependencyTemp from "dependency";
 
-var __$Getters__ = [];
-var __$Setters__ = [];
-var __$Resetters__ = [];
+let __$Getters__ = [];
+let __$Setters__ = [];
+let __$Resetters__ = [];
 
 function __GetDependency__(name) {
 	return __$Getters__[name]();
@@ -21,23 +18,20 @@ function __ResetDependency__(name) {
 	__$Resetters__[name]();
 }
 
-var myDependency = _myDependencyTemp;
+let myDependency = _myDependencyTemp;
 
-function __setmyDependency__(value) {
-	myDependency = value;
-}
-
-function __getmyDependency__() {
+__$Getters__["myDependency"] = function () {
 	return myDependency;
-}
+};
 
-function __resetmyDependency__() {
+__$Setters__["myDependency"] = function (value) {
+	myDependency = value;
+};
+
+__$Resetters__["myDependency"] = function () {
 	myDependency = _myDependencyTemp;
-}
+};
 
-__$Getters__["myDependency"] = __getmyDependency__;
-__$Setters__["myDependency"] = __setmyDependency__;
-__$Resetters__["myDependency"] = __resetmyDependency__;
 function helloWorld() {
 	console.log("Hello World!");
 }
@@ -48,3 +42,8 @@ export default Object.assign(helloWorld, {
 	"__GetDependency__": __GetDependency__,
 	"__get__": __GetDependency__
 });
+export { __GetDependency__ };
+export { __GetDependency__ as __get__ };
+export { __Rewire__ };
+export { __Rewire__ as __set__ };
+export { __ResetDependency__ };

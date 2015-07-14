@@ -1,22 +1,25 @@
 /*Copyright (c) 2015, Robert Binna <r.binna@synedra.com>
 
-Permission to use, copy, modify, and/or distribute this software for any
-	purpose with or without fee is hereby granted, provided that the above
-copyright notice and this permission notice appear in all copies.
+ Permission to use, copy, modify, and/or distribute this software for any
+ purpose with or without fee is hereby granted, provided that the above
+ copyright notice and this permission notice appear in all copies.
 
-	THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.*/
+ THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.*/
 
 var Transformer = require("babel-core").Transformer;
 var t           = require("babel-core").types;
 
+var isES6Module;
+
 module.exports = new Transformer("rewire", {
-	Program: function(node) {
+	Program: (function() {
+
 		var gettersArrayDeclaration = t.variableDeclaration('let', [ t.variableDeclarator(t.identifier("__$Getters__"), t.arrayExpression([])) ]);
 		var settersArrayDeclaration = t.variableDeclaration('let', [ t.variableDeclarator(t.identifier("__$Setters__"), t.arrayExpression([])) ]);
 		var resettersArrayDeclaration = t.variableDeclaration('let', [ t.variableDeclarator(t.identifier("__$Resetters__"), t.arrayExpression([])) ]);
@@ -24,49 +27,97 @@ module.exports = new Transformer("rewire", {
 		var nameVariable = t.identifier("name");
 		var valueVariable = t.identifier("value");
 
-		var universalGetter = t.exportNamedDeclaration(t.functionDeclaration(
-			t.identifier('__GetDependency__'),
-			[nameVariable ],
-			t.blockStatement([
-				t.returnStatement(t.callExpression(t.memberExpression(t.identifier("__$Getters__"), nameVariable, true), []))
-			])
-		));
+		var universalGetter = t.functionDeclaration(
+				t.identifier('__GetDependency__'),
+				[nameVariable ],
+				t.blockStatement([
+					t.returnStatement(t.callExpression(t.memberExpression(t.identifier("__$Getters__"), nameVariable, true), []))
+				])
+		);
 
-		var universalSetter = t.exportNamedDeclaration(t.functionDeclaration(
-			t.identifier('__Rewire__'),
-			[nameVariable, valueVariable ],
-			t.blockStatement([
-				t.expressionStatement(t.callExpression(t.memberExpression(t.identifier("__$Setters__"), nameVariable, true), [valueVariable]))
-			])
-		));
+		var universalSetter = t.functionDeclaration(
+				t.identifier('__Rewire__'),
+				[nameVariable, valueVariable ],
+				t.blockStatement([
+					t.expressionStatement(t.callExpression(t.memberExpression(t.identifier("__$Setters__"), nameVariable, true), [valueVariable]))
+				])
+		);
 
-		var universalResetter = t.exportNamedDeclaration(t.functionDeclaration(
-			t.identifier('__ResetDependency__'),
-			[ nameVariable ],
-			t.blockStatement([
-				t.expressionStatement(t.callExpression(t.memberExpression(t.identifier("__$Resetters__"), nameVariable, true), []))
-			])
-		));
+		var universalResetter = t.functionDeclaration(
+				t.identifier('__ResetDependency__'),
+				[ nameVariable ],
+				t.blockStatement([
+					t.expressionStatement(t.callExpression(t.memberExpression(t.identifier("__$Resetters__"), nameVariable, true), []))
+				])
+		);
 
-		node.body.unshift(gettersArrayDeclaration, settersArrayDeclaration, resettersArrayDeclaration, universalGetter,
-			universalSetter, universalResetter);
-		return node;
+
+
+		return {
+			enter: function(node) {
+				isES6Module = false;
+				node.body.unshift(gettersArrayDeclaration, settersArrayDeclaration, resettersArrayDeclaration, universalGetter,
+						universalSetter, universalResetter);
+				return node;
+			},
+			exit: function(node) {
+				var exports;
+
+				if (isES6Module) {
+					exports = [
+						t.exportNamedDeclaration(null, [t.exportSpecifier(universalGetter.id)]),
+						t.exportNamedDeclaration(null, [t.exportSpecifier(universalGetter.id, t.identifier('__get__'))]),
+						t.exportNamedDeclaration(null, [t.exportSpecifier(universalSetter.id)]),
+						t.exportNamedDeclaration(null, [t.exportSpecifier(universalSetter.id, t.identifier('__set__'))]),
+					  t.exportNamedDeclaration(null, [t.exportSpecifier(universalResetter.id)])
+					]
+				}
+				else {
+					var moduleExports = t.memberExpression(t.identifier('module'), t.identifier('exports'), false);
+
+					exports = [
+						t.expressionStatement(t.assignmentExpression("=", t.memberExpression(moduleExports, universalGetter.id, false), universalGetter.id)),
+						t.expressionStatement(t.assignmentExpression("=", t.memberExpression(moduleExports, t.identifier('__get__'), false), universalGetter.id)),
+						t.expressionStatement(t.assignmentExpression("=", t.memberExpression(moduleExports, universalSetter.id, false), universalSetter.id)),
+						t.expressionStatement(t.assignmentExpression("=", t.memberExpression(moduleExports, t.identifier('__set__'), false), universalSetter.id)),
+					  t.expressionStatement(t.assignmentExpression("=", t.memberExpression(moduleExports, universalResetter.id, false), universalResetter.id))
+				  ]
+				}
+				node.body.push.apply(node.body, exports);
+				return node;
+			}
+		}
+	})(),
+
+	VariableDeclaration: function(node, parent, scope) {
+		var variableDeclarations = [];
+		var accessors = [];
+
+		node.declarations.forEach(function(declaration) {
+			if (parent.sourceType === 'module' && declaration.init.type === 'CallExpression' && declaration.init.callee.name === 'require') {
+				var variableName = declaration.id.name;
+
+				node.kind = 'let';
+
+				var originalVar = scope.generateUidIdentifier(variableName);
+				variableDeclarations.push(t.variableDeclaration('let', [t.variableDeclarator(originalVar, t.identifier(variableName))]));
+
+				accessors.push.apply(accessors, accessorsFor(variableName, originalVar));
+			}
+		});
+
+		return [node].concat(variableDeclarations).concat(accessors);
 	},
 
 	ImportDeclaration: function(node, parent, scope, file) {
+		isES6Module = true;
 		var variableDeclarations = [];
-		var getters = [];
-		var setters = [];
-		var resetters = [];
 		var accessors = [];
 
 		node.specifiers.forEach(function(specifier) {
 			var importedSpecifierName = (specifier.imported && specifier.imported.name) || null;
 			var localVariable = specifier.local;
 			var localVariableName = localVariable.name;
-			var getter = t.identifier('__get' + localVariableName + '__');
-			var setter = t.identifier('__set' + localVariableName + '__');
-			var resetter = t.identifier('__reset' + localVariableName + '__');
 
 			var actualImport = scope.generateUidIdentifier(localVariableName + "Temp");
 			scope.bindings[localVariableName].constant = false;
@@ -81,44 +132,19 @@ module.exports = new Transformer("rewire", {
 
 			variableDeclarations.push(t.variableDeclaration('let', [ t.variableDeclarator(t.identifier(localVariableName), actualImport)]));
 
-			function addAccessor(array, operation) {
-				accessors.push(t.expressionStatement(t.assignmentExpression("=", t.memberExpression(array, t.literal(localVariableName), true), operation)));
-			}
-
-			getters.push(t.functionDeclaration(
-				getter,
-				[],
-				t.blockStatement([
-					t.returnStatement(t.identifier(localVariableName))
-				])
-			));
-			addAccessor(t.identifier("__$Getters__"), getter);
-
-			setters.push(t.functionDeclaration(
-				setter,
-				[t.identifier("value")],
-				t.blockStatement([
-					t.expressionStatement(t.assignmentExpression("=", t.identifier(localVariableName), t.identifier("value")))
-				])
-			));
-			addAccessor(t.identifier("__$Setters__"), setter);
-
-
-			resetters.push(t.functionDeclaration(
-				resetter,
-				[],
-				t.blockStatement([
-					t.expressionStatement(t.assignmentExpression("=", t.identifier(localVariableName), actualImport))
-				])
-			));
-			addAccessor(t.identifier("__$Resetters__"), resetter);
-
+			accessors.push.apply(accessors, accessorsFor(localVariableName, actualImport));
 		});
 
-		return [node].concat(variableDeclarations).concat(setters).concat(getters).concat(resetters).concat(accessors);
+		return [node].concat(variableDeclarations).concat(accessors);
+	},
+
+	'ExportNamedDeclaration|ExportAllDeclaration': function(node) {
+		isES6Module = true;
+		return [node];
 	},
 
 	ExportDefaultDeclaration: function(node) {
+		isES6Module = true;
 		var originalExport = node.declaration;
 		if(!!node.declaration.id) {
 			this.insertBefore(node.declaration);
@@ -134,3 +160,39 @@ module.exports = new Transformer("rewire", {
 		])]));
 	}
 });
+
+function accessorsFor(variableName, originalVar) {
+	var accessor = function(array, variableName, operation) {
+		return t.expressionStatement(t.assignmentExpression("=", t.memberExpression(array, t.literal(variableName), true), operation));
+	};
+
+	var getter = t.functionDeclaration(
+			getter,
+			[],
+			t.blockStatement([
+				t.returnStatement(t.identifier(variableName))
+			])
+	);
+
+	var setter = t.functionDeclaration(
+			null,
+			[t.identifier("value")],
+			t.blockStatement([
+				t.expressionStatement(t.assignmentExpression("=", t.identifier(variableName), t.identifier("value")))
+			])
+	);
+
+	var resetter = t.functionDeclaration(
+			null,
+			[],
+			t.blockStatement([
+				t.expressionStatement(t.assignmentExpression("=", t.identifier(variableName), originalVar))
+			])
+	);
+
+	return [
+		accessor(t.identifier("__$Getters__"), variableName, getter),
+		accessor(t.identifier("__$Setters__"), variableName, setter),
+		accessor(t.identifier("__$Resetters__"), variableName, resetter)
+	];
+}
