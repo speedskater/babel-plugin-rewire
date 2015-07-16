@@ -143,6 +143,7 @@ var appBundler = browserify({
 
 ## Contributors
 
+[speedskater](https://github.com/speedskater) - author and creator of initial release
 [Peet](https://github.com/peet) - module.exports and top-level var support
 
 ## License
