@@ -1,6 +1,5 @@
 'use strict';
 
-import _MyModuleTemp from 'path/to/MyModule.js';
 let __$Getters__ = [];
 let __$Setters__ = [];
 let __$Resetters__ = [];
@@ -17,7 +16,9 @@ function __ResetDependency__(name) {
   __$Resetters__[name]();
 }
 
-let MyModule = _MyModuleTemp;
+let MyModule = require('MyModule');
+
+let _MyModule = MyModule;
 
 __$Getters__['MyModule'] = function () {
   return MyModule;
@@ -28,11 +29,17 @@ __$Setters__['MyModule'] = function (value) {
 };
 
 __$Resetters__['MyModule'] = function () {
-  MyModule = _MyModuleTemp;
+  MyModule = _MyModule;
 };
 
-export { __GetDependency__ };
-export { __GetDependency__ as __get__ };
-export { __Rewire__ };
-export { __Rewire__ as __set__ };
-export { __ResetDependency__ };
+function out(todo) {
+  return MyModule.something(todo);
+}
+
+module.exports.out = out;
+module.exports.other = 'Foo';
+module.exports.__GetDependency__ = __GetDependency__;
+module.exports.__get__ = __GetDependency__;
+module.exports.__Rewire__ = __Rewire__;
+module.exports.__set__ = __Rewire__;
+module.exports.__ResetDependency__ = __ResetDependency__;

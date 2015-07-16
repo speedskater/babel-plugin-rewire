@@ -1,8 +1,5 @@
 'use strict';
 
-export { __GetDependency__ };
-export { __Rewire__ };
-export { __ResetDependency__ };
 import 'babel/polyfill';
 
 import 'underscore-wrapper';
@@ -27,9 +24,9 @@ import _$Temp from 'jquery';
 import _ie8IconsTemp from 'utils/ie8-icons';
 import _UserModelTemp from 'models/user';
 
-var __$Getters__ = [];
-var __$Setters__ = [];
-var __$Resetters__ = [];
+let __$Getters__ = [];
+let __$Setters__ = [];
+let __$Resetters__ = [];
 
 function __GetDependency__(name) {
 	return __$Getters__[name]();
@@ -43,61 +40,94 @@ function __ResetDependency__(name) {
 	__$Resetters__[name]();
 }
 
-var $ = _$Temp;
+let $ = _$Temp;
 
-function __set$__(value) {
-	$ = value;
-}
-
-function __get$__() {
+__$Getters__['$'] = function () {
 	return $;
-}
+};
 
-function __reset$__() {
+__$Setters__['$'] = function (value) {
+	$ = value;
+};
+
+__$Resetters__['$'] = function () {
 	$ = _$Temp;
-}
+};
 
-__$Getters__['$'] = __get$__;
-__$Setters__['$'] = __set$__;
-__$Resetters__['$'] = __reset$__;
-var ie8Icons = _ie8IconsTemp;
+let ie8Icons = _ie8IconsTemp;
 
-function __setie8Icons__(value) {
-	ie8Icons = value;
-}
-
-function __getie8Icons__() {
+__$Getters__['ie8Icons'] = function () {
 	return ie8Icons;
-}
+};
 
-function __resetie8Icons__() {
+__$Setters__['ie8Icons'] = function (value) {
+	ie8Icons = value;
+};
+
+__$Resetters__['ie8Icons'] = function () {
 	ie8Icons = _ie8IconsTemp;
-}
+};
 
-__$Getters__['ie8Icons'] = __getie8Icons__;
-__$Setters__['ie8Icons'] = __setie8Icons__;
-__$Resetters__['ie8Icons'] = __resetie8Icons__;
-var UserModel = _UserModelTemp;
+let UserModel = _UserModelTemp;
 
-function __setUserModel__(value) {
-	UserModel = value;
-}
-
-function __getUserModel__() {
+__$Getters__['UserModel'] = function () {
 	return UserModel;
-}
+};
 
-function __resetUserModel__() {
+__$Setters__['UserModel'] = function (value) {
+	UserModel = value;
+};
+
+__$Resetters__['UserModel'] = function () {
 	UserModel = _UserModelTemp;
-}
+};
 
-__$Getters__['UserModel'] = __getUserModel__;
-__$Setters__['UserModel'] = __setUserModel__;
-__$Resetters__['UserModel'] = __resetUserModel__;
-var a = 'b';
+let a = 'b';
 
-var user = UserModel.getCurrent();
-var moduleName = user && user.inState('activated') ? 'inside' : 'outside';
+let _a = a;
+
+__$Getters__['a'] = function () {
+	return a;
+};
+
+__$Setters__['a'] = function (value) {
+	a = value;
+};
+
+__$Resetters__['a'] = function () {
+	a = _a;
+};
+
+let user = UserModel.getCurrent();
+let _user = user;
+
+__$Getters__['user'] = function () {
+	return user;
+};
+
+__$Setters__['user'] = function (value) {
+	user = value;
+};
+
+__$Resetters__['user'] = function () {
+	user = _user;
+};
+
+let moduleName = user && user.inState('activated') ? 'inside' : 'outside';
+
+let _moduleName = moduleName;
+
+__$Getters__['moduleName'] = function () {
+	return moduleName;
+};
+
+__$Setters__['moduleName'] = function (value) {
+	moduleName = value;
+};
+
+__$Resetters__['moduleName'] = function () {
+	moduleName = _moduleName;
+};
 
 // Main app entryPoint
 if (moduleName === 'inside') {
@@ -113,6 +143,9 @@ else if (moduleName === 'outside') {
 	});
 }
 
-$(function () {
-	return ie8Icons.fix();
-});
+$(() => ie8Icons.fix());
+export { __GetDependency__ };
+export { __GetDependency__ as __get__ };
+export { __Rewire__ };
+export { __Rewire__ as __set__ };
+export { __ResetDependency__ };

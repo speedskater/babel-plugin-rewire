@@ -8,12 +8,16 @@ It is inspired by [rewire.js](https://github.com/jhnns/rewire) and transfers its
 
 It is useful for writing tests, specifically to mock the dependencies of the module under test.
 
-Therefore for each module it adds and exports the methods \_\_GetDependency\_\_, \_\_Rewire\_\_, and \_\_ResetDependency\_\_.
-These methods allow to rewire the module under test.
-Furthermore in case of a default export these methods are assigned to the existing default export. For compatibility reasons with rewire.js, the methods \_\_get\_\_ and \_\_set\_\_ are assigned to the default export as well.
+Therefore for each module it adds and exports the methods `__GetDependency__`, `__Rewire__`, and `__ResetDependency__`.
+For compatibility reasons with rewire.js, the methods `__get__` and `__set__` are exported as well.
+These methods allow you to rewire the module under test.
+Furthermore in case of a default export these methods are assigned to the existing default export.
 
-##Example
-###React Component
+##ES6 Imports and React
+
+Dependencies from import statements can be rewired
+
+###Example
 
 ```javascript
 import ChildComponent from 'child-component-module';
@@ -39,6 +43,37 @@ ComponentToTest.__Rewire__('ChildComponent', React.createClass({
 ....
 
 ComponentToTest.__ResetDependency__('ChildComponent');
+```
+
+##Node/browserify require() and top-level var support
+
+Variables declared and initialised at the top level, such as those from require() calls, can be rewired
+
+###Example
+
+```javascript
+var Path = require('path');
+
+var env = 'production';
+
+module.exports = function(name) {
+	return Path.normalise(name);
+}
+```
+
+### Test Code
+
+```javascript
+var Normaliser = require('Normaliser');
+
+Normaliser.__Rewire__('Path', {
+  normalise: (name) => name;
+});
+
+Normaliser.__Rewire__('env', 'testing');
+....
+
+Normaliser.__ResetDependency__('Path');
 ```
 
 ## Installation
@@ -83,6 +118,19 @@ full plugin name:
 {test: /src\/js\/.+\.js$/, loader: 'babel-loader?plugins=babel-plugin-rewire' }
 ```
 
+### Browserify/Babelify
+
+full plugin name:
+```javascript
+var appBundler = browserify({
+    entries: [test.src], // Only need initial file, browserify finds the rest
+}).transform(
+    babelify.configure({
+        plugins: [require('babel-plugin-rewire')]
+    })
+);
+```
+
 ## Release History
 
 * 0.1.0 Initial release
@@ -91,6 +139,11 @@ full plugin name:
 * 0.1.3 Added handling for the export of named declarations like classes or functions
 * 0.1.4 Fixed variable handling and used renaming of scope variables. Further removed global identifiers to prevent memory leaks.
 * 0.1.5 Fixed regression
+* 0.1.6 Support for rewiring top level variables. Added module.exports for non-es6 modules.
+
+## Contributors
+
+[Peet](https://github.com/peet) - module.exports and top-level var support
 
 ## License
 

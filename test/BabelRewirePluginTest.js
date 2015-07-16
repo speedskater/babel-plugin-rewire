@@ -8,7 +8,7 @@ describe('BabelRewirePluginTest', function() {
 
 	var babelTranslationOptions = {
 		blacklist: 'es6.modules',
-		whitelist: '',
+		whitelist: 'strict',
 		plugins: path.resolve(__dirname, '../src/babel-plugin-rewire.js')
 	};
 
@@ -34,7 +34,10 @@ describe('BabelRewirePluginTest', function() {
 		'defaultExportWithNamedFunction',
 		'multipleImports',
 		'multipleImportsWithAliases',
-		'wildcardImport'
+		'wildcardImport',
+		'requireExports',
+		'requireMultiExports',
+		'topLevelVar'
 	];
 	
 	featuresToTest.forEach(function(feature) {
