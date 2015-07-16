@@ -84,8 +84,50 @@ __$Resetters__['UserModel'] = function () {
 
 let a = 'b';
 
-const user = UserModel.getCurrent();
-const moduleName = user && user.inState('activated') ? 'inside' : 'outside';
+let _a = a;
+
+__$Getters__['a'] = function () {
+	return a;
+};
+
+__$Setters__['a'] = function (value) {
+	a = value;
+};
+
+__$Resetters__['a'] = function () {
+	a = _a;
+};
+
+let user = UserModel.getCurrent();
+let _user = user;
+
+__$Getters__['user'] = function () {
+	return user;
+};
+
+__$Setters__['user'] = function (value) {
+	user = value;
+};
+
+__$Resetters__['user'] = function () {
+	user = _user;
+};
+
+let moduleName = user && user.inState('activated') ? 'inside' : 'outside';
+
+let _moduleName = moduleName;
+
+__$Getters__['moduleName'] = function () {
+	return moduleName;
+};
+
+__$Setters__['moduleName'] = function (value) {
+	moduleName = value;
+};
+
+__$Resetters__['moduleName'] = function () {
+	moduleName = _moduleName;
+};
 
 // Main app entryPoint
 if (moduleName === 'inside') {

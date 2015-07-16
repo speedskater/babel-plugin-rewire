@@ -20,9 +20,9 @@ var isES6Module;
 module.exports = new Transformer("rewire", {
 	Program: (function() {
 
-		var gettersArrayDeclaration = t.variableDeclaration('let', [ t.variableDeclarator(t.identifier("__$Getters__"), t.arrayExpression([])) ]);
-		var settersArrayDeclaration = t.variableDeclaration('let', [ t.variableDeclarator(t.identifier("__$Setters__"), t.arrayExpression([])) ]);
-		var resettersArrayDeclaration = t.variableDeclaration('let', [ t.variableDeclarator(t.identifier("__$Resetters__"), t.arrayExpression([])) ]);
+		var gettersArrayDeclaration = t.variableDeclaration('let', [ t.variableDeclarator(noRewire(t.identifier("__$Getters__")), t.arrayExpression([])) ]);
+		var settersArrayDeclaration = t.variableDeclaration('let', [ t.variableDeclarator(noRewire(t.identifier("__$Setters__")), t.arrayExpression([])) ]);
+		var resettersArrayDeclaration = t.variableDeclaration('let', [ t.variableDeclarator(noRewire(t.identifier("__$Resetters__")), t.arrayExpression([])) ]);
 
 		var nameVariable = t.identifier("name");
 		var valueVariable = t.identifier("value");
@@ -94,12 +94,13 @@ module.exports = new Transformer("rewire", {
 		var accessors = [];
 
 		node.declarations.forEach(function(declaration) {
-			if (parent.sourceType === 'module' && declaration.init.type === 'CallExpression' && declaration.init.callee.name === 'require') {
+			if (parent.sourceType === 'module' && !declaration.id.__noRewire && declaration.init) {
 				var variableName = declaration.id.name;
 
 				node.kind = 'let';
 
-				var originalVar = scope.generateUidIdentifier(variableName);
+				var originalVar = noRewire(scope.generateUidIdentifier(variableName));
+
 				variableDeclarations.push(t.variableDeclaration('let', [t.variableDeclarator(originalVar, t.identifier(variableName))]));
 
 				accessors.push.apply(accessors, accessorsFor(variableName, originalVar));
@@ -130,7 +131,7 @@ module.exports = new Transformer("rewire", {
 			}
 			specifier.local = actualImport;
 
-			variableDeclarations.push(t.variableDeclaration('let', [ t.variableDeclarator(t.identifier(localVariableName), actualImport)]));
+			variableDeclarations.push(t.variableDeclaration('let', [ t.variableDeclarator(noRewire(t.identifier(localVariableName)), actualImport)]));
 
 			accessors.push.apply(accessors, accessorsFor(localVariableName, actualImport));
 		});
@@ -195,4 +196,9 @@ function accessorsFor(variableName, originalVar) {
 		accessor(t.identifier("__$Setters__"), variableName, setter),
 		accessor(t.identifier("__$Resetters__"), variableName, resetter)
 	];
+}
+
+function noRewire(identifier) {
+	identifier.__noRewire = true;
+	return identifier;
 }

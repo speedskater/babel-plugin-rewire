@@ -13,8 +13,11 @@ For compatibility reasons with rewire.js, the methods `__get__` and `__set__` ar
 These methods allow you to rewire the module under test.
 Furthermore in case of a default export these methods are assigned to the existing default export.
 
-##Example
-###React Component
+##ES6 Imports and React
+
+Dependencies from import statements can be rewired
+
+###Example
 
 ```javascript
 import ChildComponent from 'child-component-module';
@@ -42,14 +45,16 @@ ComponentToTest.__Rewire__('ChildComponent', React.createClass({
 ComponentToTest.__ResetDependency__('ChildComponent');
 ```
 
-##Node/browserify require() support
+##Node/browserify require() and top-level var support
 
-Dependencies declared using `require` are also supported.
+Variables declared and initialised at the top level, such as those from require() calls, can be rewired
 
 ###Example
 
 ```javascript
 var Path = require('path');
+
+var env = 'production';
 
 module.exports = function(name) {
 	return Path.normalise(name);
@@ -59,12 +64,13 @@ module.exports = function(name) {
 ### Test Code
 
 ```javascript
-
 var Normaliser = require('Normaliser');
 
 Normaliser.__Rewire__('Path', {
   normalise: (name) => name;
 });
+
+Normaliser.__Rewire__('env', 'testing');
 ....
 
 Normaliser.__ResetDependency__('Path');
@@ -133,11 +139,11 @@ var appBundler = browserify({
 * 0.1.3 Added handling for the export of named declarations like classes or functions
 * 0.1.4 Fixed variable handling and used renaming of scope variables. Further removed global identifiers to prevent memory leaks.
 * 0.1.5 Fixed regression
-* 0.1.6 Added require() support
+* 0.1.6 Support for rewiring top level variables. Added module.exports for non-es6 modules.
 
 ## Contributors
 
-[Peet](https://github.com/peet) - require() support
+[Peet](https://github.com/peet) - module.exports and top-level var support
 
 ## License
 
