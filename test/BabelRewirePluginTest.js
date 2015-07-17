@@ -12,6 +12,10 @@ describe('BabelRewirePluginTest', function() {
 		plugins: path.resolve(__dirname, '../src/babel-plugin-rewire.js')
 	};
 
+	var babelTranslationOptionsAllEnabled = {
+		plugins: path.resolve(__dirname, '../src/babel-plugin-rewire.js')
+	};
+
 	function testTranslation(testName) {
 		var directory = path.resolve(__dirname, '..', 'fixtures', testName);
 
@@ -26,12 +30,20 @@ describe('BabelRewirePluginTest', function() {
 		expect(transformationOutput).to.be(expected);
 	}
 
+	function testSuccessfulTranslation(testName) {
+		var directory = path.resolve(__dirname, '..', 'fixtures', testName);
+		var input = fs.readFileSync(path.resolve(directory, 'input.js'), 'utf-8');
+
+		var transformationResult = babel.transform(input, babelTranslationOptionsAllEnabled);
+	}
+
 	var featuresToTest = [
 		'babelissue1315',
 		'defaultImport',
 		'defaultExport',
 		'defaultExportWithClass',
 		'defaultExportWithNamedFunction',
+		'issuePathReplaceWith',
 		'multipleImports',
 		'multipleImportsWithAliases',
 		'wildcardImport',
@@ -44,4 +56,11 @@ describe('BabelRewirePluginTest', function() {
 		it('test babel-plugin-rewire for ' + feature, testTranslation.bind(null, feature));
 	});
 
-});
+	featuresToTest.forEach(function(feature) {
+		it('test successful translation babel-plugin-rewire for ' + feature, testSuccessfulTranslation.bind(null, feature));
+	});
+
+
+
+
+	});

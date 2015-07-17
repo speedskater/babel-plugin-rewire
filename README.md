@@ -140,6 +140,7 @@ var appBundler = browserify({
 * 0.1.4 Fixed variable handling and used renaming of scope variables. Further removed global identifiers to prevent memory leaks.
 * 0.1.5 Fixed regression
 * 0.1.6 Support for rewiring top level variables. Added module.exports for non-es6 modules.
+* 0.1.7 Fixed regressions from 0.1.6.
 
 ## Contributors
 

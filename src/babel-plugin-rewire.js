@@ -65,11 +65,11 @@ module.exports = new Transformer("rewire", {
 
 				if (isES6Module) {
 					exports = [
-						t.exportNamedDeclaration(null, [t.exportSpecifier(universalGetter.id)]),
+						t.exportNamedDeclaration(null, [t.exportSpecifier(universalGetter.id, universalGetter.id)]),
 						t.exportNamedDeclaration(null, [t.exportSpecifier(universalGetter.id, t.identifier('__get__'))]),
-						t.exportNamedDeclaration(null, [t.exportSpecifier(universalSetter.id)]),
+						t.exportNamedDeclaration(null, [t.exportSpecifier(universalSetter.id, universalSetter.id)]),
 						t.exportNamedDeclaration(null, [t.exportSpecifier(universalSetter.id, t.identifier('__set__'))]),
-					  t.exportNamedDeclaration(null, [t.exportSpecifier(universalResetter.id)])
+						t.exportNamedDeclaration(null, [t.exportSpecifier(universalResetter.id, universalResetter.id)])
 					]
 				}
 				else {
@@ -97,6 +97,7 @@ module.exports = new Transformer("rewire", {
 			if (parent.sourceType === 'module' && !declaration.id.__noRewire && declaration.init) {
 				var variableName = declaration.id.name;
 
+				scope.bindings[variableName].kind = 'let';
 				node.kind = 'let';
 
 				var originalVar = noRewire(scope.generateUidIdentifier(variableName));
