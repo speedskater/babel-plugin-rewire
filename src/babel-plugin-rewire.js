@@ -94,10 +94,13 @@ module.exports = new Transformer("rewire", {
 		var accessors = [];
 
 		node.declarations.forEach(function(declaration) {
-			if (parent.sourceType === 'module' && !declaration.id.__noRewire && declaration.init) {
+			if (parent.sourceType === 'module' && !declaration.id.__noRewire && declaration.init && !!declaration.id.name) {
 				var variableName = declaration.id.name;
+ 				var existingBinding = scope.bindings[variableName];
 
-				scope.bindings[variableName].kind = 'let';
+				if(!!existingBinding) {
+					existingBinding.kind = 'let';
+				}
 				node.kind = 'let';
 
 				var originalVar = noRewire(scope.generateUidIdentifier(variableName));
