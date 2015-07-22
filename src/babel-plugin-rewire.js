@@ -20,42 +20,38 @@ var isES6Module;
 module.exports = new Transformer("rewire", {
 	Program: (function() {
 
-		var gettersArrayDeclaration = t.variableDeclaration('let', [ t.variableDeclarator(noRewire(t.identifier("__$Getters__")), t.arrayExpression([])) ]);
-		var settersArrayDeclaration = t.variableDeclaration('let', [ t.variableDeclarator(noRewire(t.identifier("__$Setters__")), t.arrayExpression([])) ]);
-		var resettersArrayDeclaration = t.variableDeclaration('let', [ t.variableDeclarator(noRewire(t.identifier("__$Resetters__")), t.arrayExpression([])) ]);
-
-		var nameVariable = t.identifier("name");
-		var valueVariable = t.identifier("value");
-
 		var universalGetter = t.functionDeclaration(
 				t.identifier('__GetDependency__'),
-				[nameVariable ],
+				[t.identifier("name") ],
 				t.blockStatement([
-					t.returnStatement(t.callExpression(t.memberExpression(t.identifier("__$Getters__"), nameVariable, true), []))
+					t.returnStatement(t.callExpression(t.memberExpression(t.identifier("__$Getters__"), t.identifier("name"), true), []))
 				])
 		);
 
 		var universalSetter = t.functionDeclaration(
 				t.identifier('__Rewire__'),
-				[nameVariable, valueVariable ],
+				[t.identifier("name"), t.identifier("value") ],
 				t.blockStatement([
-					t.expressionStatement(t.callExpression(t.memberExpression(t.identifier("__$Setters__"), nameVariable, true), [valueVariable]))
+					t.expressionStatement(t.callExpression(t.memberExpression(t.identifier("__$Setters__"), t.identifier("name"), true), [t.identifier("value")]))
 				])
 		);
 
 		var universalResetter = t.functionDeclaration(
 				t.identifier('__ResetDependency__'),
-				[ nameVariable ],
+				[ t.identifier("name") ],
 				t.blockStatement([
-					t.expressionStatement(t.callExpression(t.memberExpression(t.identifier("__$Resetters__"), nameVariable, true), []))
+					t.expressionStatement(t.callExpression(t.memberExpression(t.identifier("__$Resetters__"), t.identifier("name"), true), []))
 				])
 		);
-
 
 
 		return {
 			enter: function(node) {
 				isES6Module = false;
+				var gettersArrayDeclaration = t.variableDeclaration('let', [ t.variableDeclarator(noRewire(t.identifier("__$Getters__")), t.arrayExpression([])) ]);
+				var settersArrayDeclaration = t.variableDeclaration('let', [ t.variableDeclarator(noRewire(t.identifier("__$Setters__")), t.arrayExpression([])) ]);
+				var resettersArrayDeclaration = t.variableDeclaration('let', [ t.variableDeclarator(noRewire(t.identifier("__$Resetters__")), t.arrayExpression([])) ]);
+
 				node.body.unshift(gettersArrayDeclaration, settersArrayDeclaration, resettersArrayDeclaration, universalGetter,
 						universalSetter, universalResetter);
 				return node;

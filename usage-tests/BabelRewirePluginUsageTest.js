@@ -1,0 +1,28 @@
+var babel = require('babel-core');
+var path = require('path');
+var fs = require('fs');
+var expect = require('expect.js');
+var hook = require('node-hook');
+require('core-js');
+
+function isSampleCode(filename) {
+	var samplesPath = path.resolve(path.join(__dirname, '../samples/'));
+	return (filename.substr(0, samplesPath.length) === samplesPath);
+}
+
+function transformSampleCodeToTestWithBabelPluginRewire(source, filename) {
+	var babelTransformationOptions = {
+		plugins: path.resolve(__dirname, '../src/babel-plugin-rewire.js'),
+		optional:[
+			'es6.spec.blockScoping',
+			'es6.spec.symbols',
+			'es6.spec.templateLiterals'
+		]
+	};
+
+	return isSampleCode(filename) ? babel.transform(source, babelTransformationOptions).code : source;
+}
+
+hook.hook('.js', transformSampleCodeToTestWithBabelPluginRewire);
+require('../samples/issue16/sample.js');
+hook.unhook('.js'); // removes your own transform

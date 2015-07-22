@@ -8,7 +8,7 @@ describe('BabelRewirePluginTest', function() {
 
 	var babelTranslationOptions = {
 		blacklist: 'es6.modules',
-		whitelist: 'strict',
+		whitelist: [ 'strict' ],
 		plugins: path.resolve(__dirname, '../src/babel-plugin-rewire.js')
 	};
 
@@ -17,7 +17,7 @@ describe('BabelRewirePluginTest', function() {
 	};
 
 	function testTranslation(testName) {
-		var directory = path.resolve(__dirname, '..', 'fixtures', testName);
+		var directory = path.resolve(__dirname, '..', 'fixtures', 'transformation', testName);
 
 		var input = fs.readFileSync(path.resolve(directory, 'input.js'), 'utf-8');
 		var expected = fs.readFileSync(path.resolve(directory, 'expected.js'), 'utf-8');
@@ -28,7 +28,7 @@ describe('BabelRewirePluginTest', function() {
 			expect().fail("Transformation failed: \n" + error.stack)
 		}
 
-		//fs.writeFileSync('/tmp/testexpected', transformationOutput, 'utf-8');
+		fs.writeFileSync('/tmp/testexpected' + testName + '.js', transformationOutput, 'utf-8');
 
 		if(expected != transformationOutput) {
 			console.log(transformationOutput);
@@ -37,7 +37,7 @@ describe('BabelRewirePluginTest', function() {
 	}
 
 	function testSuccessfulTranslation(testName) {
-		var directory = path.resolve(__dirname, '..', 'fixtures', testName);
+		var directory = path.resolve(__dirname, '..', 'fixtures', 'transformation', testName);
 		var input = fs.readFileSync(path.resolve(directory, 'input.js'), 'utf-8');
 
 		var transformationResult = babel.transform(input, babelTranslationOptionsAllEnabled);

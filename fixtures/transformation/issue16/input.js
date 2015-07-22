@@ -2,32 +2,32 @@ var React = require('react/addons');
 var _ = require('lodash');
 var StyleSheet = require('react-style');
 var cx = require('classnames');
- 
+
 var $ = require('vendor/jquery/semantic');
- 
+
 var Style = require('style/index.js');
- 
+
 var {
   validateEmail,
   validateURL
 } = require('util/validators');
- 
- 
+
+
 const PROTOCOLS = [
   'http://',
   'https://',
   'ftp://'
 ];
- 
+
 const DEFAULT_PROTOCOL = 'http://';
- 
- 
+
+
 var Mixins = require('./mixins.jsx');
 var FormFieldMixin = Mixins.FormFieldMixin,
     InputMixin = Mixins.InputMixin,
     TextInputMixin = Mixins.TextInputMixin;
- 
- 
+
+
 var TextInput = React.createClass({
   /*
     Simple text input. See comments for
@@ -36,8 +36,8 @@ var TextInput = React.createClass({
   */
   mixins: [TextInputMixin]
 });
- 
- 
+
+
 var EmailInput = React.createClass({
   /*
     Exactly the same as `TextInput` component
@@ -50,8 +50,8 @@ var EmailInput = React.createClass({
     return validateEmail(val);
   }
 });
- 
- 
+
+
 var URLInput = React.createClass({
   mixins: [TextInputMixin],
   baseIsValid: function(val) {
@@ -70,15 +70,15 @@ var URLInput = React.createClass({
     return val;
   }
 });
- 
- 
+
+
 var textAreaStyle = StyleSheet.create({
   textarea: {
- 
+
   }
 });
- 
- 
+
+
 var TextArea = React.createClass({
   /*
     A simple text area component. See
@@ -109,8 +109,8 @@ var TextArea = React.createClass({
     );
   }
 });
- 
- 
+
+
 var HiddenTextInput = React.createClass({
   /*
     Browsers often focus on first input in a form automatically.
@@ -121,8 +121,8 @@ var HiddenTextInput = React.createClass({
     return <input type='text' style={{opacity: 0, height: 0, position: 'absolute'}}/>;
   }
 });
- 
- 
+
+
 module.exports = {
   TextInput: TextInput,
   TextArea: TextArea,
