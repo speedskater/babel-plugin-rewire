@@ -143,6 +143,8 @@ var appBundler = browserify({
 * 0.1.7 Fixed regressions from 0.1.6.
 * 0.1.8 Ignores destructuring assignments to prevent errors.
 * 0.1.9 Removed issues with TDZ and es6.spec.blockScoping optional transformer
+* 0.1.10 Fixed tests
+* 0.1.11 Fixed issues with for-of loops
 
 ## Contributors
 

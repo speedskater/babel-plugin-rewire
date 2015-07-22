@@ -107,7 +107,7 @@ module.exports = new Transformer("rewire", {
 			}
 		});
 
-		return [node].concat(variableDeclarations).concat(accessors);
+		return variableDeclarations.length == 0 ? node : [node].concat(variableDeclarations).concat(accessors);
 	},
 
 	ImportDeclaration: function(node, parent, scope, file) {

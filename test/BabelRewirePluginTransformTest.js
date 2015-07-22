@@ -46,6 +46,7 @@ describe('BabelRewirePluginTest', function() {
 	var featuresToTest = [
 		'babelissue1315',
 		'issue16',
+		'forOf',
 		'defaultImport',
 		'defaultExport',
 		'defaultExportWithClass',

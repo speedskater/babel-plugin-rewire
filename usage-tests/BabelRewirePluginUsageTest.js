@@ -25,4 +25,5 @@ function transformSampleCodeToTestWithBabelPluginRewire(source, filename) {
 
 hook.hook('.js', transformSampleCodeToTestWithBabelPluginRewire);
 require('../samples/issue16/sample.js');
+require('../samples/issue18/sample.js');
 hook.unhook('.js'); // removes your own transform
