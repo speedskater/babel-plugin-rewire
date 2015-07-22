@@ -1,6 +1,6 @@
 'use strict';
 
-import 'babel/polyfill';
+import "babel/polyfill";
 
 import 'underscore-wrapper';
 import 'jquery-wrapper';
@@ -115,6 +115,7 @@ __$Resetters__['user'] = function () {
 
 let moduleName = user && user.inState('activated') ? 'inside' : 'outside';
 
+// Main app entryPoint
 let _moduleName = moduleName;
 
 __$Getters__['moduleName'] = function () {
@@ -129,7 +130,6 @@ __$Resetters__['moduleName'] = function () {
 	moduleName = _moduleName;
 };
 
-// Main app entryPoint
 if (moduleName === 'inside') {
 	require.ensure([], function () {
 		require('inside')();
@@ -138,10 +138,10 @@ if (moduleName === 'inside') {
 
 // Login or register entryPoint
 else if (moduleName === 'outside') {
-	require.ensure([], function () {
-		require('outside')();
-	});
-}
+		require.ensure([], function () {
+			require('outside')();
+		});
+	}
 
 $(() => ie8Icons.fix());
 export { __GetDependency__ };

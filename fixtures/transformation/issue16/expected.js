@@ -322,7 +322,7 @@ let TextArea = React.createClass({
     var labelStyle = _.extend({}, textAreaStyle.label, this.props.style.label);
     if (this.props.height) taStyle.height = this.props.height;
     var error = !this.isValid() && this.userHasChangedValue();
-    var classNames = cx('field', { error: error });
+    var classNames = cx("field", { error: error });
     return <div className={classNames}>
         {this.getLabelEl(labelStyle)}
         <textarea onBlur={this.onBlur} onFocus={this.onFocus} onChange={this.onChange} style={taStyle} value={this.state.value} />

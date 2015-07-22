@@ -1,6 +1,6 @@
 "use strict";
 
-import _myDependencyTemp from "dependency";
+import _myDependencyTemp from 'dependency';
 
 let __$Getters__ = [];
 let __$Setters__ = [];

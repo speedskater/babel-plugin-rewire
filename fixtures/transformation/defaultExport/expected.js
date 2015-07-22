@@ -1,6 +1,6 @@
 "use strict";
 
-import _MyModuleTemp from "path/to/MyModule.js";
+import _MyModuleTemp from 'path/to/MyModule.js';
 
 let __$Getters__ = [];
 let __$Setters__ = [];
