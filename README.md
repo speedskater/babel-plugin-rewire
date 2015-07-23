@@ -145,6 +145,7 @@ var appBundler = browserify({
 * 0.1.9 Removed issues with TDZ and es6.spec.blockScoping optional transformer
 * 0.1.10 Fixed tests
 * 0.1.11 Fixed issues with for-of loops
+* 0.1.12 Updated Plugin Format
 
 ## Contributors
 
