@@ -32,13 +32,28 @@ __$Resetters__["MyModule"] = function () {
   MyModule = _MyModuleTemp;
 };
 
-export default Object.assign("", {
-  "__Rewire__": __Rewire__,
-  "__set__": __Rewire__,
-  "__ResetDependency__": __ResetDependency__,
-  "__GetDependency__": __GetDependency__,
-  "__get__": __GetDependency__
-});
+let _defaultExport = "";
+Object.defineProperty(_defaultExport, "__Rewire__", {
+  "value": __Rewire__,
+  "enumberable": false
+})
+Object.defineProperty(_defaultExport, "__set__", {
+  "value": __Rewire__,
+  "enumberable": false
+})
+Object.defineProperty(_defaultExport, "__ResetDependency__", {
+  "value": __ResetDependency__,
+  "enumberable": false
+})
+Object.defineProperty(_defaultExport, "__GetDependency__", {
+  "value": __GetDependency__,
+  "enumberable": false
+})
+Object.defineProperty(_defaultExport, "__get__", {
+  "value": __GetDependency__,
+  "enumberable": false
+})
+export default _defaultExport;
 export { __GetDependency__ };
 export { __GetDependency__ as __get__ };
 export { __Rewire__ };

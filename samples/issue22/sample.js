@@ -8,5 +8,6 @@ describe('Function keys', function(){
   it('should not be leaked', function(){
     let keys = Object.keys(SimpleObject);
     expect(keys).to.eql(['foo', 'bar']);
+    expect(typeof (SimpleObject.__Rewire__)).to.be('function');
   });
 });
