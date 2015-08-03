@@ -146,6 +146,7 @@ var appBundler = browserify({
 * 0.1.10 Fixed tests
 * 0.1.11 Fixed issues with for-of loops
 * 0.1.12 Updated Plugin Format
+* 0.1.13 Changed rewire specific properties on default export to non-enumerable properties
 
 ## Contributors
 
