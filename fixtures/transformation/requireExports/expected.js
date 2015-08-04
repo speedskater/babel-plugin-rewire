@@ -37,8 +37,23 @@ function out(todo) {
 }
 
 module.exports = out;
-module.exports.__GetDependency__ = __GetDependency__;
-module.exports.__get__ = __GetDependency__;
-module.exports.__Rewire__ = __Rewire__;
-module.exports.__set__ = __Rewire__;
-module.exports.__ResetDependency__ = __ResetDependency__;
+Object.defineProperty(module.exports, '__Rewire__', {
+  'value': __Rewire__,
+  'enumberable': false
+});
+Object.defineProperty(module.exports, '__set__', {
+  'value': __Rewire__,
+  'enumberable': false
+});
+Object.defineProperty(module.exports, '__ResetDependency__', {
+  'value': __ResetDependency__,
+  'enumberable': false
+});
+Object.defineProperty(module.exports, '__GetDependency__', {
+  'value': __GetDependency__,
+  'enumberable': false
+});
+Object.defineProperty(module.exports, '__get__', {
+  'value': __GetDependency__,
+  'enumberable': false
+});

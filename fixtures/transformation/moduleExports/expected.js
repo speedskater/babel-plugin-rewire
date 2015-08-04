@@ -19,25 +19,23 @@ function __ResetDependency__(name) {
 module.exports = {
   foo: 'bar'
 };
-
 Object.defineProperty(module.exports, '__Rewire__', {
   'value': __Rewire__,
   'enumberable': false
-})
+});
 Object.defineProperty(module.exports, '__set__', {
   'value': __Rewire__,
   'enumberable': false
-})
+});
 Object.defineProperty(module.exports, '__ResetDependency__', {
   'value': __ResetDependency__,
   'enumberable': false
-})
+});
 Object.defineProperty(module.exports, '__GetDependency__', {
   'value': __GetDependency__,
   'enumberable': false
-})
+});
 Object.defineProperty(module.exports, '__get__', {
   'value': __GetDependency__,
   'enumberable': false
-})
-
+});
