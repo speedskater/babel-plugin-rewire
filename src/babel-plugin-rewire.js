@@ -76,11 +76,11 @@ module.exports = function(pluginArguments) {
 							var moduleExports = t.memberExpression(t.identifier('module'), t.identifier('exports'), false);
 
 							exports = [
-								t.expressionStatement(t.assignmentExpression("=", t.memberExpression(moduleExports, universalGetter.id, false), universalGetter.id)),
-								t.expressionStatement(t.assignmentExpression("=", t.memberExpression(moduleExports, t.identifier('__get__'), false), universalGetter.id)),
-								t.expressionStatement(t.assignmentExpression("=", t.memberExpression(moduleExports, universalSetter.id, false), universalSetter.id)),
-								t.expressionStatement(t.assignmentExpression("=", t.memberExpression(moduleExports, t.identifier('__set__'), false), universalSetter.id)),
-								t.expressionStatement(t.assignmentExpression("=", t.memberExpression(moduleExports, universalResetter.id, false), universalResetter.id))
+								addNonEnumerableProperty(t, moduleExports, '__Rewire__', t.identifier('__Rewire__')),
+								addNonEnumerableProperty(t, moduleExports, '__set__', t.identifier('__Rewire__')),
+								addNonEnumerableProperty(t, moduleExports, '__ResetDependency__', t.identifier('__ResetDependency__')),
+								addNonEnumerableProperty(t, moduleExports, '__GetDependency__', t.identifier('__GetDependency__')),
+								addNonEnumerableProperty(t, moduleExports, '__get__', t.identifier('__GetDependency__'))
 							]
 						}
 						node.body.push.apply(node.body, exports);

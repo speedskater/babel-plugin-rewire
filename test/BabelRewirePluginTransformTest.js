@@ -52,6 +52,7 @@ describe('BabelRewirePluginTest', function() {
 		'defaultExportWithClass',
 		'defaultExportWithNamedFunction',
 		'issuePathReplaceWith',
+		'moduleExports',
 		'multipleImports',
 		'multipleImportsWithAliases',
 		'wildcardImport',
@@ -59,7 +60,7 @@ describe('BabelRewirePluginTest', function() {
 		'requireMultiExports',
 		'topLevelVar'
 	];
-	
+
 	featuresToTest.forEach(function(feature) {
 		it('test babel-plugin-rewire for ' + feature, testTranslation.bind(null, feature));
 	});
