@@ -155,6 +155,7 @@ var appBundler = browserify({
 
 [speedskater](https://github.com/speedskater) - author and creator of initial release
 [Peet](https://github.com/peet) - module.exports and top-level var support
+[TheSavior](https://github.com/TheSavior) - support for non-enumerable rewire properties
 
 ## License
 
