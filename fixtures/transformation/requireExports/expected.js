@@ -37,24 +37,26 @@ function out(todo) {
 }
 
 module.exports = out;
-module.exports = ({}).valueOf.call(module.exports);
-Object.defineProperty(module.exports, '__Rewire__', {
-  'value': __Rewire__,
-  'enumberable': false
-});
-Object.defineProperty(module.exports, '__set__', {
-  'value': __Rewire__,
-  'enumberable': false
-});
-Object.defineProperty(module.exports, '__ResetDependency__', {
-  'value': __ResetDependency__,
-  'enumberable': false
-});
-Object.defineProperty(module.exports, '__GetDependency__', {
-  'value': __GetDependency__,
-  'enumberable': false
-});
-Object.defineProperty(module.exports, '__get__', {
-  'value': __GetDependency__,
-  'enumberable': false
-});
+
+if (typeof module.exports === 'object' || typeof module.exports === 'function') {
+  Object.defineProperty(module.exports, '__Rewire__', {
+    'value': __Rewire__,
+    'enumberable': false
+  });
+  Object.defineProperty(module.exports, '__set__', {
+    'value': __Rewire__,
+    'enumberable': false
+  });
+  Object.defineProperty(module.exports, '__ResetDependency__', {
+    'value': __ResetDependency__,
+    'enumberable': false
+  });
+  Object.defineProperty(module.exports, '__GetDependency__', {
+    'value': __GetDependency__,
+    'enumberable': false
+  });
+  Object.defineProperty(module.exports, '__get__', {
+    'value': __GetDependency__,
+    'enumberable': false
+  });
+}

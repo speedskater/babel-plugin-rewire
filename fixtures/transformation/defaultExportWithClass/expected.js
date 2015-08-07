@@ -43,27 +43,30 @@ class EclipseClient {
 
 }
 let _defaultExport = EclipseClient;
-_defaultExport = ({}).valueOf.call(_defaultExport);
-Object.defineProperty(_defaultExport, '__Rewire__', {
-    'value': __Rewire__,
-    'enumberable': false
-});
-Object.defineProperty(_defaultExport, '__set__', {
-    'value': __Rewire__,
-    'enumberable': false
-});
-Object.defineProperty(_defaultExport, '__ResetDependency__', {
-    'value': __ResetDependency__,
-    'enumberable': false
-});
-Object.defineProperty(_defaultExport, '__GetDependency__', {
-    'value': __GetDependency__,
-    'enumberable': false
-});
-Object.defineProperty(_defaultExport, '__get__', {
-    'value': __GetDependency__,
-    'enumberable': false
-});
+
+if (typeof _defaultExport === 'object' || typeof _defaultExport === 'function') {
+    Object.defineProperty(_defaultExport, '__Rewire__', {
+        'value': __Rewire__,
+        'enumberable': false
+    });
+    Object.defineProperty(_defaultExport, '__set__', {
+        'value': __Rewire__,
+        'enumberable': false
+    });
+    Object.defineProperty(_defaultExport, '__ResetDependency__', {
+        'value': __ResetDependency__,
+        'enumberable': false
+    });
+    Object.defineProperty(_defaultExport, '__GetDependency__', {
+        'value': __GetDependency__,
+        'enumberable': false
+    });
+    Object.defineProperty(_defaultExport, '__get__', {
+        'value': __GetDependency__,
+        'enumberable': false
+    });
+}
+
 export default _defaultExport;
 export { __GetDependency__ };
 export { __GetDependency__ as __get__ };

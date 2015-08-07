@@ -12,41 +12,30 @@ import expect from 'expect.js';
 
 describe('Primitive', function(){
 
-	function expectRewireProperties(object) {
-		expect(typeof object.__Rewire__ == 'function').to.be(true);
-		expect(typeof object.__set__ == 'function').to.be(true);
-		expect(typeof object.__get__ == 'function').to.be(true);
-		expect(typeof object.__GetDependency__ == 'function').to.be(true);
-		expect(typeof object.__ResetDependency__ == 'function').to.be(true);
-	}
-
   it('rewireing of exported primitive bool', function(){
-    expect(BoolObject == true).to.be(true);
-		expectRewireProperties(BoolObject);
+    expect(BoolObject === true).to.be(true);
   });
 
 	it('rewireing of exported primitive bool via common js', function(){
-		expect(BoolObjectFromRewireJS == false).to.be(true);
-		expectRewireProperties(BoolObject);
+		if(BoolObjectFromRewireJS) {
+			expect(true).to.be(false);
+		}
+		expect(BoolObjectFromRewireJS === false).to.be(true);
 	});
 
 	it('rewireing of exported primitive number', function(){
-		expect(NumberObject == 7).to.be(true);
-		expectRewireProperties(NumberObject);
+		expect(NumberObject).to.be(7);
 	});
 
 	it('rewireing of exported primitive number via common js', function(){
-		expect(NumberObjectFromRewireJS == 4).to.be(true);
-		expectRewireProperties(NumberObjectFromRewireJS);
+		expect(NumberObjectFromRewireJS).to.be(4);
 	});
 
 	it('rewireing of exported primitive string', function(){
-		expect(StringObject == 'test').to.be(true);
-		expectRewireProperties(StringObject);
+		expect(StringObject).to.be('test');
 	});
 
 	it('rewireing of exported primitive string via common js', function(){
-		expect(StringObjectFromRewireJS == 'test common js').to.be(true);
-		expectRewireProperties(StringObjectFromRewireJS);
+		expect(StringObjectFromRewireJS).to.be('test common js');
 	});
 });

@@ -16,6 +16,8 @@ var Transformer = require("babel-core").Transformer;
 var t           = require("babel-core").types;
 
 var isES6Module;
+var hasES6Export;
+var hasCommonJSExport;
 
 module.exports = function(pluginArguments) {
 	var Plugin = pluginArguments.Plugin;
@@ -52,6 +54,8 @@ module.exports = function(pluginArguments) {
 				return {
 					enter: function (node) {
 						isES6Module = false;
+						hasES6Export = false;
+						hasCommonJSExport = false;
 						var gettersArrayDeclaration = t.variableDeclaration('let', [t.variableDeclarator(noRewire(t.identifier("__$Getters__")), t.arrayExpression([]))]);
 						var settersArrayDeclaration = t.variableDeclaration('let', [t.variableDeclarator(noRewire(t.identifier("__$Setters__")), t.arrayExpression([]))]);
 						var resettersArrayDeclaration = t.variableDeclaration('let', [t.variableDeclarator(noRewire(t.identifier("__$Resetters__")), t.arrayExpression([]))]);
@@ -63,7 +67,7 @@ module.exports = function(pluginArguments) {
 					exit: function (node) {
 						var exports;
 
-						if (isES6Module) {
+						if (isES6Module && (!hasCommonJSExport || hasES6Export)) {
 							exports = [
 								t.exportNamedDeclaration(null, [t.exportSpecifier(universalGetter.id, universalGetter.id)]),
 								t.exportNamedDeclaration(null, [t.exportSpecifier(universalGetter.id, t.identifier('__get__'))]),
@@ -72,23 +76,41 @@ module.exports = function(pluginArguments) {
 								t.exportNamedDeclaration(null, [t.exportSpecifier(universalResetter.id, universalResetter.id)])
 							]
 						}
-						else {
+						else if(!isES6Module || (!hasES6Export && hasCommonJSExport)) {
 							var moduleExports = t.memberExpression(t.identifier('module'), t.identifier('exports'), false);
-							var convertToObject = convertPrimitiveToObject(t, moduleExports);
 
-							exports = [
+							nonEnumerableExports = [
 								addNonEnumerableProperty(t, moduleExports, '__Rewire__', t.identifier('__Rewire__')),
 								addNonEnumerableProperty(t, moduleExports, '__set__', t.identifier('__Rewire__')),
 								addNonEnumerableProperty(t, moduleExports, '__ResetDependency__', t.identifier('__ResetDependency__')),
 								addNonEnumerableProperty(t, moduleExports, '__GetDependency__', t.identifier('__GetDependency__')),
 								addNonEnumerableProperty(t, moduleExports, '__get__', t.identifier('__GetDependency__'))
-							]
+							];
+
+							exports = [ t.ifStatement(
+								t.logicalExpression('||',
+									t.binaryExpression('===', t.unaryExpression('typeof', moduleExports, true), t.literal('object')),
+									t.binaryExpression('===', t.unaryExpression('typeof', moduleExports, true), t.literal('function'))
+								),
+								t.blockStatement(nonEnumerableExports)
+							)];
 						}
-						node.body.push.apply(node.body, [ convertToObject ].concat(exports));
+						node.body.push.apply(node.body, exports);
 						return node;
 					}
 				}
 			})(),
+
+			ExpressionStatement: function(node, parent, scope) {
+				if(parent.sourceType === 'module' && !!node.expression && node.expression.type === 'AssignmentExpression') {
+					var assignmentExpression = node.expression;
+
+					if(!!assignmentExpression.left.object && assignmentExpression.left.object.name === 'module' && !!assignmentExpression.left.property && assignmentExpression.left.property.name === 'exports') {
+						hasCommonJSExport = true;
+					}
+				}
+				return node;
+			},
 
 			VariableDeclaration: function (node, parent, scope) {
 				var variableDeclarations = [];
@@ -153,7 +175,7 @@ module.exports = function(pluginArguments) {
 				if(!!node.rewired) {
 					return node;
 				}
-
+				hasES6Export = true;
 				isES6Module = true;
 				var originalExport = node.declaration;
 				if (!!node.declaration.id) {
@@ -165,38 +187,32 @@ module.exports = function(pluginArguments) {
 
 				var defaultExportVariableDeclaration = t.variableDeclaration('let', [t.variableDeclarator(noRewire(defaultExportVariableId), originalExport)]);
 
-				var convertToObject = convertPrimitiveToObject(t, defaultExportVariableId);
-
-				var additionalProperties = [];
-
 				t.callExpression(t.memberExpression(t.identifier('Object'), t.identifier('defineProperty'), [ defaultExportVariableId, '__Rewire__',  t.objectExpression([
 					t.property('init', t.literal('value'), t.identifier('__Rewire__'))
 				])]));
 
-				additionalProperties.push(addNonEnumerableProperty(t, defaultExportVariableId, '__Rewire__', t.identifier('__Rewire__')));
-				additionalProperties.push(addNonEnumerableProperty(t, defaultExportVariableId, '__set__', t.identifier('__Rewire__')));
-				additionalProperties.push(addNonEnumerableProperty(t, defaultExportVariableId, '__ResetDependency__', t.identifier('__ResetDependency__')));
-				additionalProperties.push(addNonEnumerableProperty(t, defaultExportVariableId, '__GetDependency__', t.identifier('__GetDependency__')));
-				additionalProperties.push(addNonEnumerableProperty(t, defaultExportVariableId, '__get__', t.identifier('__GetDependency__')));
+				var addAdditionalProperties = t.ifStatement(
+					t.logicalExpression('||',
+						t.binaryExpression('===', t.unaryExpression('typeof', defaultExportVariableId, true), t.literal('object')),
+						t.binaryExpression('===', t.unaryExpression('typeof', defaultExportVariableId, true), t.literal('function'))
+					),
+					t.blockStatement([
+						addNonEnumerableProperty(t, defaultExportVariableId, '__Rewire__', t.identifier('__Rewire__')),
+						addNonEnumerableProperty(t, defaultExportVariableId, '__set__', t.identifier('__Rewire__')),
+						addNonEnumerableProperty(t, defaultExportVariableId, '__ResetDependency__', t.identifier('__ResetDependency__')),
+						addNonEnumerableProperty(t, defaultExportVariableId, '__GetDependency__', t.identifier('__GetDependency__')),
+						addNonEnumerableProperty(t, defaultExportVariableId, '__get__', t.identifier('__GetDependency__'))
+					])
+				);
 
 				var defaultExport = t.exportDefaultDeclaration(defaultExportVariableId);
 
 				defaultExport.rewired = true;
 
-				return [defaultExportVariableDeclaration, convertToObject].concat(additionalProperties).concat([ defaultExport ]);
+				return [defaultExportVariableDeclaration, addAdditionalProperties, defaultExport];
 			}
 		}
 	});
-}
-
-function convertPrimitiveToObject(t, objectIdentifier) {
-	//({}).valueOf.call(myvar)
-
-	var objectLiteral =  t.objectExpression([]);
-	var valueOfMember = t.memberExpression(objectLiteral, t.identifier('valueOf'), false);
-	var convertToObjectCall = t.callExpression(t.memberExpression(valueOfMember, t.identifier('call'), false), [ objectIdentifier ]);
-
-	return t.expressionStatement(t.assignmentExpression('=', objectIdentifier, convertToObjectCall));
 }
 
 function addNonEnumerableProperty(t, objectIdentifier, propertyName, valueIdentifier) {
