@@ -1,10 +1,10 @@
 # babel-plugin-rewire
 
-[![Join the chat at https://gitter.im/speedskater/babel-plugin-rewire](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/speedskater/babel-plugin-rewire?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 
 A Babel plugin that adds the ability to rewire module dependencies.
 
-[![Build Status](https://travis-ci.org/speedskater/babel-plugin-rewire.svg)](https://travis-ci.org/speedskater/babel-plugin-rewire)
+[![Build Status](https://travis-ci.org/speedskater/babel-plugin-rewire.svg)](https://travis-ci.org/speedskater/babel-plugin-rewire) [![Join the chat at https://gitter.im/speedskater/babel-plugin-rewire](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/speedskater/babel-plugin-rewire?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 It is inspired by [rewire.js](https://github.com/jhnns/rewire) and transfers its concepts to es6 using babel.
 
