@@ -74,6 +74,7 @@ module.exports = function(pluginArguments) {
 						}
 						else {
 							var moduleExports = t.memberExpression(t.identifier('module'), t.identifier('exports'), false);
+							var convertToObject = convertPrimitiveToObject(t, moduleExports);
 
 							exports = [
 								addNonEnumerableProperty(t, moduleExports, '__Rewire__', t.identifier('__Rewire__')),
@@ -83,7 +84,7 @@ module.exports = function(pluginArguments) {
 								addNonEnumerableProperty(t, moduleExports, '__get__', t.identifier('__GetDependency__'))
 							]
 						}
-						node.body.push.apply(node.body, exports);
+						node.body.push.apply(node.body, [ convertToObject ].concat(exports));
 						return node;
 					}
 				}
@@ -164,13 +165,7 @@ module.exports = function(pluginArguments) {
 
 				var defaultExportVariableDeclaration = t.variableDeclaration('let', [t.variableDeclarator(noRewire(defaultExportVariableId), originalExport)]);
 
-				//({}).valueOf.call(myvar)
-
-				var objectLiteral =  t.objectExpression([]);
-				var valueOfMember = t.memberExpression(objectLiteral, t.identifier('valueOf'), false);
-				var convertToObjectCall = t.callExpression(t.memberExpression(valueOfMember, t.identifier('call'), false), [ defaultExportVariableId ]);
-
-				var convertToObject = t.expressionStatement(t.assignmentExpression('=', defaultExportVariableId, convertToObjectCall));
+				var convertToObject = convertPrimitiveToObject(t, defaultExportVariableId);
 
 				var additionalProperties = [];
 
@@ -189,18 +184,19 @@ module.exports = function(pluginArguments) {
 				defaultExport.rewired = true;
 
 				return [defaultExportVariableDeclaration, convertToObject].concat(additionalProperties).concat([ defaultExport ]);
-
-
-				/*return t.exportDefaultDeclaration(t.callExpression(t.memberExpression(t.identifier('Object'), t.identifier('assign')), [originalExport, t.objectExpression([
-					t.property('init', t.literal('__Rewire__'), t.identifier('__Rewire__')),
-					t.property('init', t.literal('__set__'), t.identifier('__Rewire__')),
-					t.property('init', t.literal('__ResetDependency__'), t.identifier('__ResetDependency__')),
-					t.property('init', t.literal('__GetDependency__'), t.identifier('__GetDependency__')),
-					t.property('init', t.literal('__get__'), t.identifier('__GetDependency__'))
-				])]));*/
 			}
 		}
 	});
+}
+
+function convertPrimitiveToObject(t, objectIdentifier) {
+	//({}).valueOf.call(myvar)
+
+	var objectLiteral =  t.objectExpression([]);
+	var valueOfMember = t.memberExpression(objectLiteral, t.identifier('valueOf'), false);
+	var convertToObjectCall = t.callExpression(t.memberExpression(valueOfMember, t.identifier('call'), false), [ objectIdentifier ]);
+
+	return t.expressionStatement(t.assignmentExpression('=', objectIdentifier, convertToObjectCall));
 }
 
 function addNonEnumerableProperty(t, objectIdentifier, propertyName, valueIdentifier) {

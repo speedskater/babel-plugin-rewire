@@ -376,6 +376,7 @@ module.exports = {
   EmailInput: EmailInput,
   URLInput: URLInput
 };
+module.exports = ({}).valueOf.call(module.exports);
 Object.defineProperty(module.exports, '__Rewire__', {
   'value': __Rewire__,
   'enumberable': false

@@ -33,6 +33,7 @@ __$Resetters__["MyModule"] = function () {
 };
 
 let _defaultExport = "";
+_defaultExport = ({}).valueOf.call(_defaultExport);
 Object.defineProperty(_defaultExport, "__Rewire__", {
   "value": __Rewire__,
   "enumberable": false

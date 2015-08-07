@@ -36,6 +36,7 @@ function helloWorld() {
 	console.log("Hello World!");
 }
 let _defaultExport = helloWorld;
+_defaultExport = ({}).valueOf.call(_defaultExport);
 Object.defineProperty(_defaultExport, "__Rewire__", {
 	"value": __Rewire__,
 	"enumberable": false

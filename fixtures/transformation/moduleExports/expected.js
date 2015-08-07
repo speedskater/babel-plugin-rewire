@@ -19,6 +19,7 @@ function __ResetDependency__(name) {
 module.exports = {
   foo: 'bar'
 };
+module.exports = ({}).valueOf.call(module.exports);
 Object.defineProperty(module.exports, '__Rewire__', {
   'value': __Rewire__,
   'enumberable': false

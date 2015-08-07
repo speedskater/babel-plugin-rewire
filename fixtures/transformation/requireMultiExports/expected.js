@@ -38,6 +38,7 @@ function out(todo) {
 
 module.exports.out = out;
 module.exports.other = 'Foo';
+module.exports = ({}).valueOf.call(module.exports);
 Object.defineProperty(module.exports, '__Rewire__', {
   'value': __Rewire__,
   'enumberable': false
