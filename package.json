@@ -26,6 +26,9 @@
     "email": "r.binna@synedra.com"
   }, {
     "name": "Peet Goddard"
+  }, {
+    "name": "Eli White",
+    "email": "eli@eli-white.com"
   }],
   "license": "ISC",
   "devDependencies": {
