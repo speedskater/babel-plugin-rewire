@@ -164,6 +164,14 @@ module.exports = function(pluginArguments) {
 
 				var defaultExportVariableDeclaration = t.variableDeclaration('let', [t.variableDeclarator(noRewire(defaultExportVariableId), originalExport)]);
 
+				//({}).valueOf.call(myvar)
+
+				var objectLiteral =  t.objectExpression([]);
+				var valueOfMember = t.memberExpression(objectLiteral, t.identifier('valueOf'), false);
+				var convertToObjectCall = t.callExpression(t.memberExpression(valueOfMember, t.identifier('call'), false), [ defaultExportVariableId ]);
+
+				var convertToObject = t.expressionStatement(t.assignmentExpression('=', defaultExportVariableId, convertToObjectCall));
+
 				var additionalProperties = [];
 
 				t.callExpression(t.memberExpression(t.identifier('Object'), t.identifier('defineProperty'), [ defaultExportVariableId, '__Rewire__',  t.objectExpression([
@@ -180,7 +188,7 @@ module.exports = function(pluginArguments) {
 
 				defaultExport.rewired = true;
 
-				return [defaultExportVariableDeclaration].concat(additionalProperties).concat([ defaultExport ]);
+				return [defaultExportVariableDeclaration, convertToObject].concat(additionalProperties).concat([ defaultExport ]);
 
 
 				/*return t.exportDefaultDeclaration(t.callExpression(t.memberExpression(t.identifier('Object'), t.identifier('assign')), [originalExport, t.objectExpression([

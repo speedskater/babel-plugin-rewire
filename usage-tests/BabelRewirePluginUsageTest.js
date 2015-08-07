@@ -35,4 +35,5 @@ require('../samples/issue18/sample.js');
 require('../samples/issue19/sample.js');
 require('../samples/issue20/sample.js');
 require('../samples/issue22/sample.js');
+require('../samples/issue28/sample.js');
 hook.unhook('.js'); // removes your own transform
