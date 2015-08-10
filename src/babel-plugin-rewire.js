@@ -62,10 +62,26 @@ module.exports = function(pluginArguments) {
 
 						node.body.unshift(gettersArrayDeclaration, settersArrayDeclaration, resettersArrayDeclaration, universalGetter,
 							universalSetter, universalResetter);
+
 						return node;
 					},
 					exit: function (node) {
 						var exports;
+
+						var functionReplacementVariables = [];
+						var remainingBodyElements = [];
+
+						node.body.forEach(function(bodyElement) {
+							if(bodyElement.type == 'VariableDeclaration' && bodyElement.declarations.length === 1 &&
+								!!bodyElement.declarations[0].id && bodyElement.declarations[0].id.functionIdentifier === true) {
+								console.log('Variable Declaration: ' + bodyElement.declarations[0].id.name);
+								functionReplacementVariables.push(bodyElement);
+							} else {
+								remainingBodyElements.push(bodyElement);
+							}
+						});
+
+						node.body = functionReplacementVariables.concat(remainingBodyElements);
 
 						if (isES6Module && (!hasCommonJSExport || hasES6Export)) {
 							exports = [
@@ -95,7 +111,7 @@ module.exports = function(pluginArguments) {
 								t.blockStatement(nonEnumerableExports)
 							)];
 						}
-						node.body.push.apply(node.body, exports);
+						node.body = functionReplacementVariables.concat(remainingBodyElements).concat(exports);
 						return node;
 					}
 				}
@@ -154,6 +170,7 @@ module.exports = function(pluginArguments) {
 
 				var replacedFunctionDeclarationIdentifier = noRewire(scope.generateUidIdentifier(declaration.id.name + 'Orig'));
 				var originalFunctionIdentifier = declaration.id;
+				originalFunctionIdentifier.functionIdentifier = true;
 				var replacedFunctionDeclaration = t.functionDeclaration(replacedFunctionDeclarationIdentifier, declaration.params, declaration.body, declaration.generator, declaration.expression)
 
 				return [replacedFunctionDeclaration, t.variableDeclaration('var', [t.variableDeclarator(originalFunctionIdentifier, replacedFunctionDeclarationIdentifier)])];

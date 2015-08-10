@@ -58,7 +58,8 @@ describe('BabelRewirePluginTest', function() {
 		'wildcardImport',
 		'requireExports',
 		'requireMultiExports',
-		'topLevelVar'
+		'topLevelVar',
+		'functionRewireScope'
 	];
 
 	featuresToTest.forEach(function(feature) {

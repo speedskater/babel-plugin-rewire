@@ -1,5 +1,6 @@
 'use strict';
 
+var out = _outOrig;
 let __$Getters__ = [];
 let __$Setters__ = [];
 let __$Resetters__ = [];
@@ -36,7 +37,6 @@ function _outOrig(todo) {
   return MyModule.something(todo);
 }
 
-var out = _outOrig;
 var _out = out;
 
 __$Getters__['out'] = function () {

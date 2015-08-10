@@ -2,6 +2,7 @@
 
 import _myDependencyTemp from 'dependency';
 
+var helloWorld = _helloWorldOrig;
 let __$Getters__ = [];
 let __$Setters__ = [];
 let __$Resetters__ = [];
@@ -36,7 +37,6 @@ function _helloWorldOrig() {
 	console.log("Hello World!");
 }
 
-var helloWorld = _helloWorldOrig;
 var _helloWorld = helloWorld;
 
 __$Getters__["helloWorld"] = function () {
