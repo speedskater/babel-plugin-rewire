@@ -49,10 +49,25 @@ __$Resetters__['Thing'] = function () {
   Thing = _Thing;
 };
 
-function out(todo) {
+function _outOrig(todo) {
   var result = Thing.process(todo);
   return MyModule.something(result);
 }
+
+let out = _outOrig;
+let _out = out;
+
+__$Getters__['out'] = function () {
+  return out;
+};
+
+__$Setters__['out'] = function (value) {
+  out = value;
+};
+
+__$Resetters__['out'] = function () {
+  out = _out;
+};
 
 module.exports = out;
 

@@ -32,9 +32,25 @@ __$Resetters__["myDependency"] = function () {
 	myDependency = _myDependencyTemp;
 };
 
-function helloWorld() {
+function _helloWorldOrig() {
 	console.log("Hello World!");
 }
+
+let helloWorld = _helloWorldOrig;
+let _helloWorld = helloWorld;
+
+__$Getters__["helloWorld"] = function () {
+	return helloWorld;
+};
+
+__$Setters__["helloWorld"] = function (value) {
+	helloWorld = value;
+};
+
+__$Resetters__["helloWorld"] = function () {
+	helloWorld = _helloWorld;
+};
+
 let _defaultExport = helloWorld;
 
 if (typeof _defaultExport === "object" || typeof _defaultExport === "function") {

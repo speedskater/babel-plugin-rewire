@@ -20,5 +20,9 @@ describe('Test for issue 33', function() {
     });
 
     expect(Functions.testSecondFunc()).to.equal(3);
+
+		Functions.__ResetDependency__('mySecondFunc');
+
+		expect(Functions.testSecondFunc()).to.equal(2);
   });
 });

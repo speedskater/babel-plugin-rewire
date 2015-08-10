@@ -27,7 +27,7 @@ module.exports = function(pluginArguments) {
 			Program: (function () {
 
 				var universalGetter = t.functionDeclaration(
-					t.identifier('__GetDependency__'),
+					noRewire(t.identifier('__GetDependency__')),
 					[t.identifier("name")],
 					t.blockStatement([
 						t.returnStatement(t.callExpression(t.memberExpression(t.identifier("__$Getters__"), t.identifier("name"), true), []))
@@ -35,7 +35,7 @@ module.exports = function(pluginArguments) {
 				);
 
 				var universalSetter = t.functionDeclaration(
-					t.identifier('__Rewire__'),
+					noRewire(t.identifier('__Rewire__')),
 					[t.identifier("name"), t.identifier("value")],
 					t.blockStatement([
 						t.expressionStatement(t.callExpression(t.memberExpression(t.identifier("__$Setters__"), t.identifier("name"), true), [t.identifier("value")]))
@@ -43,7 +43,7 @@ module.exports = function(pluginArguments) {
 				);
 
 				var universalResetter = t.functionDeclaration(
-					t.identifier('__ResetDependency__'),
+					noRewire(t.identifier('__ResetDependency__')),
 					[t.identifier("name")],
 					t.blockStatement([
 						t.expressionStatement(t.callExpression(t.memberExpression(t.identifier("__$Resetters__"), t.identifier("name"), true), []))
@@ -137,6 +137,22 @@ module.exports = function(pluginArguments) {
 				return variableDeclarations.length == 0 ? node : [node].concat(variableDeclarations).concat(accessors);
 			},
 
+			/**
+			 * Functions are replaced by a temporary function declaration and an assignment to a variable with the same name as the original function
+			 * The actual rewireing functionality is added by The Handler for VariableDeclarations which creates a temporary variable and accessors for setting resetting the function.
+			 */
+			FunctionDeclaration: function(declaration, parent, scope) {
+				if (parent.sourceType !== 'module' || declaration.id.__noRewire || !declaration.id.name || declaration.id.name.length == 0) {
+					return declaration;
+				}
+
+				var replacedFunctionDeclarationIdentifier = noRewire(scope.generateUidIdentifier(declaration.id.name + 'Orig'));
+				var originalFunctionIdentifier = declaration.id;
+				var replacedFunctionDeclaration = t.functionDeclaration(replacedFunctionDeclarationIdentifier, declaration.params, declaration.body, declaration.generator, declaration.expression)
+
+				return [replacedFunctionDeclaration, t.variableDeclaration('let', [t.variableDeclarator(originalFunctionIdentifier, replacedFunctionDeclarationIdentifier)])];
+			},
+
 			ImportDeclaration: function (node, parent, scope, file) {
 				isES6Module = true;
 				var variableDeclarations = [];
@@ -227,13 +243,13 @@ function accessorsFor(variableName, originalVar) {
 		return t.expressionStatement(t.assignmentExpression("=", t.memberExpression(array, t.literal(variableName), true), operation));
 	};
 
-	var getter = t.functionDeclaration(
+	var getter = noRewire(t.functionDeclaration(
 			getter,
 			[],
 			t.blockStatement([
 				t.returnStatement(t.identifier(variableName))
 			])
-	);
+	));
 
 	var setter = t.functionDeclaration(
 			null,

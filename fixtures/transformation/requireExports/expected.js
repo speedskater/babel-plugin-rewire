@@ -32,9 +32,24 @@ __$Resetters__['MyModule'] = function () {
   MyModule = _MyModule;
 };
 
-function out(todo) {
+function _outOrig(todo) {
   return MyModule.something(todo);
 }
+
+let out = _outOrig;
+let _out = out;
+
+__$Getters__['out'] = function () {
+  return out;
+};
+
+__$Setters__['out'] = function (value) {
+  out = value;
+};
+
+__$Resetters__['out'] = function () {
+  out = _out;
+};
 
 module.exports = out;
 
