@@ -154,6 +154,7 @@ var appBundler = browserify({
 * 0.1.16 Fixed variable scope for rewired functions.
 * 0.1.17 Fixed variable scoping for var variable declarations
 * 0.1.18 Fixed function scope for rewired functions.
+* 0.1.19 Removed debug statements.
 
 ## Contributors
 

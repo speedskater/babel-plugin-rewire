@@ -74,7 +74,6 @@ module.exports = function(pluginArguments) {
 						node.body.forEach(function(bodyElement) {
 							if(bodyElement.type == 'VariableDeclaration' && bodyElement.declarations.length === 1 &&
 								!!bodyElement.declarations[0].id && bodyElement.declarations[0].id.functionIdentifier === true) {
-								console.log('Variable Declaration: ' + bodyElement.declarations[0].id.name);
 								functionReplacementVariables.push(bodyElement);
 							} else {
 								remainingBodyElements.push(bodyElement);
