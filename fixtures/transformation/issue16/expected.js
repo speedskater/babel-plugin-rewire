@@ -16,8 +16,8 @@ function __ResetDependency__(name) {
   __$Resetters__[name]();
 }
 
-let React = require('react/addons');
-let _React = React;
+var React = require('react/addons');
+var _React = React;
 
 __$Getters__['React'] = function () {
   return React;
@@ -31,8 +31,8 @@ __$Resetters__['React'] = function () {
   React = _React;
 };
 
-let _ = require('lodash');
-let _2 = _;
+var _ = require('lodash');
+var _2 = _;
 
 __$Getters__['_'] = function () {
   return _;
@@ -46,8 +46,8 @@ __$Resetters__['_'] = function () {
   _ = _2;
 };
 
-let StyleSheet = require('react-style');
-let _StyleSheet = StyleSheet;
+var StyleSheet = require('react-style');
+var _StyleSheet = StyleSheet;
 
 __$Getters__['StyleSheet'] = function () {
   return StyleSheet;
@@ -61,9 +61,9 @@ __$Resetters__['StyleSheet'] = function () {
   StyleSheet = _StyleSheet;
 };
 
-let cx = require('classnames');
+var cx = require('classnames');
 
-let _cx = cx;
+var _cx = cx;
 
 __$Getters__['cx'] = function () {
   return cx;
@@ -77,9 +77,9 @@ __$Resetters__['cx'] = function () {
   cx = _cx;
 };
 
-let $ = require('vendor/jquery/semantic');
+var $ = require('vendor/jquery/semantic');
 
-let _$ = $;
+var _$ = $;
 
 __$Getters__['$'] = function () {
   return $;
@@ -93,9 +93,9 @@ __$Resetters__['$'] = function () {
   $ = _$;
 };
 
-let Style = require('style/index.js');
+var Style = require('style/index.js');
 
-let _Style = Style;
+var _Style = Style;
 
 __$Getters__['Style'] = function () {
   return Style;
@@ -146,8 +146,8 @@ __$Resetters__['DEFAULT_PROTOCOL'] = function () {
   DEFAULT_PROTOCOL = _DEFAULT_PROTOCOL;
 };
 
-let Mixins = require('./mixins.jsx');
-let _Mixins = Mixins;
+var Mixins = require('./mixins.jsx');
+var _Mixins = Mixins;
 
 __$Getters__['Mixins'] = function () {
   return Mixins;
@@ -161,13 +161,13 @@ __$Resetters__['Mixins'] = function () {
   Mixins = _Mixins;
 };
 
-let FormFieldMixin = Mixins.FormFieldMixin,
+var FormFieldMixin = Mixins.FormFieldMixin,
     InputMixin = Mixins.InputMixin,
     TextInputMixin = Mixins.TextInputMixin;
 
-let _FormFieldMixin = FormFieldMixin;
-let _InputMixin = InputMixin;
-let _TextInputMixin = TextInputMixin;
+var _FormFieldMixin = FormFieldMixin;
+var _InputMixin = InputMixin;
+var _TextInputMixin = TextInputMixin;
 
 __$Getters__['FormFieldMixin'] = function () {
   return FormFieldMixin;
@@ -205,7 +205,7 @@ __$Resetters__['TextInputMixin'] = function () {
   TextInputMixin = _TextInputMixin;
 };
 
-let TextInput = React.createClass({
+var TextInput = React.createClass({
   /*
     Simple text input. See comments for
     `TextInputMixin` for information about
@@ -214,7 +214,7 @@ let TextInput = React.createClass({
   mixins: [TextInputMixin]
 });
 
-let _TextInput = TextInput;
+var _TextInput = TextInput;
 
 __$Getters__['TextInput'] = function () {
   return TextInput;
@@ -228,7 +228,7 @@ __$Resetters__['TextInput'] = function () {
   TextInput = _TextInput;
 };
 
-let EmailInput = React.createClass({
+var EmailInput = React.createClass({
   /*
     Exactly the same as `TextInput` component
     except it only allows a valid email to
@@ -241,7 +241,7 @@ let EmailInput = React.createClass({
   }
 });
 
-let _EmailInput = EmailInput;
+var _EmailInput = EmailInput;
 
 __$Getters__['EmailInput'] = function () {
   return EmailInput;
@@ -255,7 +255,7 @@ __$Resetters__['EmailInput'] = function () {
   EmailInput = _EmailInput;
 };
 
-let URLInput = React.createClass({
+var URLInput = React.createClass({
   mixins: [TextInputMixin],
   baseIsValid: function (val) {
     if (!this.userHasChangedValue()) return true;
@@ -274,7 +274,7 @@ let URLInput = React.createClass({
   }
 });
 
-let _URLInput = URLInput;
+var _URLInput = URLInput;
 
 __$Getters__['URLInput'] = function () {
   return URLInput;
@@ -288,11 +288,11 @@ __$Resetters__['URLInput'] = function () {
   URLInput = _URLInput;
 };
 
-let textAreaStyle = StyleSheet.create({
+var textAreaStyle = StyleSheet.create({
   textarea: {}
 });
 
-let _textAreaStyle = textAreaStyle;
+var _textAreaStyle = textAreaStyle;
 
 __$Getters__['textAreaStyle'] = function () {
   return textAreaStyle;
@@ -306,7 +306,7 @@ __$Resetters__['textAreaStyle'] = function () {
   textAreaStyle = _textAreaStyle;
 };
 
-let TextArea = React.createClass({
+var TextArea = React.createClass({
   /*
     A simple text area component. See
     documentation for included mixins for more
@@ -330,7 +330,7 @@ let TextArea = React.createClass({
   }
 });
 
-let _TextArea = TextArea;
+var _TextArea = TextArea;
 
 __$Getters__['TextArea'] = function () {
   return TextArea;
@@ -344,7 +344,7 @@ __$Resetters__['TextArea'] = function () {
   TextArea = _TextArea;
 };
 
-let HiddenTextInput = React.createClass({
+var HiddenTextInput = React.createClass({
   /*
     Browsers often focus on first input in a form automatically.
     Sometimes, this auto focus is not desirable. This component
@@ -355,7 +355,7 @@ let HiddenTextInput = React.createClass({
   }
 });
 
-let _HiddenTextInput = HiddenTextInput;
+var _HiddenTextInput = HiddenTextInput;
 
 __$Getters__['HiddenTextInput'] = function () {
   return HiddenTextInput;

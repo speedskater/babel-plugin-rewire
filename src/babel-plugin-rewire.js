@@ -110,6 +110,7 @@ module.exports = function(pluginArguments) {
 					}
 				}
 				return node;
+
 			},
 
 			VariableDeclaration: function (node, parent, scope) {
@@ -120,18 +121,20 @@ module.exports = function(pluginArguments) {
 					if (parent.sourceType === 'module' && !declaration.id.__noRewire && declaration.init && !!declaration.id.name) {
 						var variableName = declaration.id.name;
 						var existingBinding = scope.bindings[variableName];
-						var bindingType = 'let';
+						var bindingType = node.kind === 'var' ? 'var' : 'let';
 
 						if (!!existingBinding) {
-							existingBinding.kind = 'let';
-						} else if(existingBinding.kind == 'var') {
-							bindingType = 'var';
+							if(existingBinding.kind === 'var') {
+								bindingType = 'var';
+							} else {
+								existingBinding.kind = 'let';
+							}
 						}
 						node.kind = bindingType;
 
 						var originalVar = noRewire(scope.generateUidIdentifier(variableName));
 
-						variableDeclarations.push(t.variableDeclaration('let', [t.variableDeclarator(originalVar, t.identifier(variableName))]));
+						variableDeclarations.push(t.variableDeclaration(bindingType, [t.variableDeclarator(originalVar, t.identifier(variableName))]));
 
 						accessors.push.apply(accessors, accessorsFor(variableName, originalVar));
 					}
@@ -202,9 +205,11 @@ module.exports = function(pluginArguments) {
 					originalExport = node.declaration.id;
 				}
 
+				var bindingType = node.declaration.type === 'FunctionDeclaration' || node.declaration.kind === 'var' ? 'var' : 'let';
+
 				var defaultExportVariableId = scope.generateUidIdentifier("defaultExport");
 
-				var defaultExportVariableDeclaration = t.variableDeclaration('let', [t.variableDeclarator(noRewire(defaultExportVariableId), originalExport)]);
+				var defaultExportVariableDeclaration = t.variableDeclaration(bindingType, [t.variableDeclarator(noRewire(defaultExportVariableId), originalExport)]);
 
 				t.callExpression(t.memberExpression(t.identifier('Object'), t.identifier('defineProperty'), [ defaultExportVariableId, '__Rewire__',  t.objectExpression([
 					t.property('init', t.literal('value'), t.identifier('__Rewire__'))

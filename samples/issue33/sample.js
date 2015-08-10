@@ -10,7 +10,23 @@ describe('Test for issue 33', function() {
     });
 
     expect(Functions.testMyFunc()).to.equal(3);
-  });
+
+		Functions.__ResetDependency__('myFunc');
+	});
+
+	it('should be able to rewire functions and to preserve the correct scoping', function() {
+		expect(Functions.testUseBeforeDeclaration()).to.equal(2);
+
+		Functions.__set__('myFunc', function() {
+			return 3;
+		});
+
+		expect(Functions.testUseBeforeDeclaration()).to.equal(3);
+
+		Functions.__ResetDependency__('myFunc');
+
+		expect(Functions.testUseBeforeDeclaration()).to.equal(2);
+	});
 
   it('should be able to rewire function expressions', function() {
     expect(Functions.testSecondFunc()).to.equal(2);

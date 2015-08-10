@@ -36,8 +36,8 @@ function _helloWorldOrig() {
 	console.log("Hello World!");
 }
 
-let helloWorld = _helloWorldOrig;
-let _helloWorld = helloWorld;
+var helloWorld = _helloWorldOrig;
+var _helloWorld = helloWorld;
 
 __$Getters__["helloWorld"] = function () {
 	return helloWorld;
@@ -51,7 +51,7 @@ __$Resetters__["helloWorld"] = function () {
 	helloWorld = _helloWorld;
 };
 
-let _defaultExport = helloWorld;
+var _defaultExport = helloWorld;
 
 if (typeof _defaultExport === "object" || typeof _defaultExport === "function") {
 	Object.defineProperty(_defaultExport, "__Rewire__", {

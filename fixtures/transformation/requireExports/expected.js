@@ -16,9 +16,9 @@ function __ResetDependency__(name) {
   __$Resetters__[name]();
 }
 
-let MyModule = require('MyModule');
+var MyModule = require('MyModule');
 
-let _MyModule = MyModule;
+var _MyModule = MyModule;
 
 __$Getters__['MyModule'] = function () {
   return MyModule;
@@ -36,8 +36,8 @@ function _outOrig(todo) {
   return MyModule.something(todo);
 }
 
-let out = _outOrig;
-let _out = out;
+var out = _outOrig;
+var _out = out;
 
 __$Getters__['out'] = function () {
   return out;
