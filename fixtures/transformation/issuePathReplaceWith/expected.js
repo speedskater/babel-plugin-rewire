@@ -1,8 +1,8 @@
 'use strict';
 
-export { requiredValidatorFunction };
 import { createSingleFieldValidatorFactory as _createSingleFieldValidatorFactoryTemp } from 'data/commons/ValidatorFactories.js';
 
+var requiredValidatorFunction = _requiredValidatorFunctionOrig;
 let __$Getters__ = [];
 let __$Setters__ = [];
 let __$Resetters__ = [];
@@ -33,9 +33,25 @@ __$Resetters__['createSingleFieldValidatorFactory'] = function () {
 	createSingleFieldValidatorFactory = _createSingleFieldValidatorFactoryTemp;
 };
 
-function requiredValidatorFunction(translatedFieldLabel, fieldValue) {
+function _requiredValidatorFunctionOrig(translatedFieldLabel, fieldValue) {
 	return fieldValue === undefined || fieldValue !== null && fieldValue !== '' || translatedFieldLabel + ' is required.';
 }
+
+var _requiredValidatorFunction = requiredValidatorFunction;
+
+__$Getters__['requiredValidatorFunction'] = function () {
+	return requiredValidatorFunction;
+};
+
+__$Setters__['requiredValidatorFunction'] = function (value) {
+	requiredValidatorFunction = value;
+};
+
+__$Resetters__['requiredValidatorFunction'] = function () {
+	requiredValidatorFunction = _requiredValidatorFunction;
+};
+
+export { _requiredValidatorFunctionOrig as requiredValidatorFunction };
 
 let _defaultExport = createSingleFieldValidatorFactory(requiredValidatorFunction);
 

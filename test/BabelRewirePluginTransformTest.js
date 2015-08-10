@@ -55,6 +55,8 @@ describe('BabelRewirePluginTest', function() {
 		'moduleExports',
 		'multipleImports',
 		'multipleImportsWithAliases',
+		'namedFunctionExport',
+		'namedVariableExport',
 		'wildcardImport',
 		'requireExports',
 		'requireMultiExports',

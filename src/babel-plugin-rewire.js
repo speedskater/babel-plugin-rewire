@@ -132,30 +132,40 @@ module.exports = function(pluginArguments) {
 				var variableDeclarations = [];
 				var accessors = [];
 
-				node.declarations.forEach(function (declaration) {
-					if (parent.sourceType === 'module' && !declaration.id.__noRewire && declaration.init && !!declaration.id.name) {
-						var variableName = declaration.id.name;
-						var existingBinding = scope.bindings[variableName];
-						var bindingType = node.kind === 'var' ? 'var' : 'let';
+				if(parent.type === 'ExportNamedDeclaration' || parent.sourceType === 'module') {
+					node.declarations.forEach(function (declaration) {
+						if (!declaration.id.__noRewire && declaration.init && !!declaration.id.name) {
+							var variableName = noRewire(declaration.id).name;
+							var existingBinding = scope.bindings[variableName];
+							var bindingType = node.kind === 'var' ? 'var' : 'let';
 
-						if (!!existingBinding) {
-							if(existingBinding.kind === 'var') {
-								bindingType = 'var';
-							} else {
-								existingBinding.kind = 'let';
+							if (!!existingBinding) {
+								if (existingBinding.kind === 'var') {
+									bindingType = 'var';
+								} else {
+									existingBinding.kind = 'let';
+								}
 							}
+							node.kind = bindingType;
+
+							var originalVar = noRewire(scope.generateUidIdentifier(variableName));
+
+							variableDeclarations.push(t.variableDeclaration(bindingType, [t.variableDeclarator(originalVar, t.identifier(variableName))]));
+
+							accessors.push.apply(accessors, accessorsFor(variableName, originalVar));
 						}
-						node.kind = bindingType;
+					});
+				}
 
-						var originalVar = noRewire(scope.generateUidIdentifier(variableName));
-
-						variableDeclarations.push(t.variableDeclaration(bindingType, [t.variableDeclarator(originalVar, t.identifier(variableName))]));
-
-						accessors.push.apply(accessors, accessorsFor(variableName, originalVar));
-					}
-				});
-
-				return variableDeclarations.length == 0 ? node : [node].concat(variableDeclarations).concat(accessors);
+				if(parent.type === 'ExportNamedDeclaration') {
+					var exportDeclarations = node.declarations.map(function(variableDeclaration, index) {
+						var exportId = variableDeclarations[index].declarations[0].id;
+						return t.exportNamedDeclaration(null, [t.exportSpecifier(exportId, variableDeclaration.id)]);
+					});
+					this.parentPath.replaceWithMultiple([ node].concat(variableDeclarations).concat(accessors).concat(exportDeclarations));
+				} else {
+					return variableDeclarations.length == 0 ? node : [node].concat(variableDeclarations).concat(accessors);
+				}
 			},
 
 			/**
@@ -163,16 +173,23 @@ module.exports = function(pluginArguments) {
 			 * The actual rewireing functionality is added by The Handler for VariableDeclarations which creates a temporary variable and accessors for setting resetting the function.
 			 */
 			FunctionDeclaration: function(declaration, parent, scope) {
-				if (parent.sourceType !== 'module' || declaration.id.__noRewire || !declaration.id.name || declaration.id.name.length == 0) {
+				if((parent.type !== 'ExportNamedDeclaration' && parent.sourceType !== 'module') || declaration.id.__noRewire || !declaration.id.name || declaration.id.name.length == 0) {
 					return declaration;
 				}
 
 				var replacedFunctionDeclarationIdentifier = noRewire(scope.generateUidIdentifier(declaration.id.name + 'Orig'));
 				var originalFunctionIdentifier = declaration.id;
 				originalFunctionIdentifier.functionIdentifier = true;
-				var replacedFunctionDeclaration = t.functionDeclaration(replacedFunctionDeclarationIdentifier, declaration.params, declaration.body, declaration.generator, declaration.expression)
+				var replacedFunctionDeclaration = t.functionDeclaration(replacedFunctionDeclarationIdentifier, declaration.params, declaration.body, declaration.generator, declaration.expression);
 
-				return [replacedFunctionDeclaration, t.variableDeclaration('var', [t.variableDeclarator(originalFunctionIdentifier, replacedFunctionDeclarationIdentifier)])];
+				var newFuntionDeclaration = [replacedFunctionDeclaration, t.variableDeclaration('var', [t.variableDeclarator(originalFunctionIdentifier, replacedFunctionDeclarationIdentifier)])];
+
+				if(parent.type === 'ExportNamedDeclaration') {
+					var exportSpecifier = [t.exportNamedDeclaration(null, [ t.exportSpecifier(replacedFunctionDeclarationIdentifier, originalFunctionIdentifier) ] )];
+					this.parentPath.replaceWithMultiple(newFuntionDeclaration.concat(exportSpecifier));
+				} else {
+					return newFuntionDeclaration;
+				}
 			},
 
 			ImportDeclaration: function (node, parent, scope, file) {
@@ -204,9 +221,14 @@ module.exports = function(pluginArguments) {
 				return [node].concat(variableDeclarations).concat(accessors);
 			},
 
-			'ExportNamedDeclaration|ExportAllDeclaration': function (node) {
-				isES6Module = true;
-				return [node];
+			'ExportNamedDeclaration|ExportAllDeclaration': {
+				enter: function (node) {
+					isES6Module = true;
+					return node;
+				},
+				exit: function(node) {
+					return node;
+				}
 			},
 
 			ExportDefaultDeclaration: function (node, parent, scope) {
