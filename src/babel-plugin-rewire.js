@@ -120,11 +120,14 @@ module.exports = function(pluginArguments) {
 					if (parent.sourceType === 'module' && !declaration.id.__noRewire && declaration.init && !!declaration.id.name) {
 						var variableName = declaration.id.name;
 						var existingBinding = scope.bindings[variableName];
+						var bindingType = 'let';
 
 						if (!!existingBinding) {
 							existingBinding.kind = 'let';
+						} else if(existingBinding.kind == 'var') {
+							bindingType = 'var';
 						}
-						node.kind = 'let';
+						node.kind = bindingType;
 
 						var originalVar = noRewire(scope.generateUidIdentifier(variableName));
 
@@ -150,7 +153,7 @@ module.exports = function(pluginArguments) {
 				var originalFunctionIdentifier = declaration.id;
 				var replacedFunctionDeclaration = t.functionDeclaration(replacedFunctionDeclarationIdentifier, declaration.params, declaration.body, declaration.generator, declaration.expression)
 
-				return [replacedFunctionDeclaration, t.variableDeclaration('let', [t.variableDeclarator(originalFunctionIdentifier, replacedFunctionDeclarationIdentifier)])];
+				return [replacedFunctionDeclaration, t.variableDeclaration('var', [t.variableDeclarator(originalFunctionIdentifier, replacedFunctionDeclarationIdentifier)])];
 			},
 
 			ImportDeclaration: function (node, parent, scope, file) {
