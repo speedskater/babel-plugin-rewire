@@ -1,4 +1,4 @@
-import { default as NamedVariableExport, namedVariable, namedVariable2 } from './src/ExportNamedVariable.js';
+import { default as NamedVariableExport, namedVariable, namedVariable2, namedPrimitiveNumber, namedPrimitiveBoolean, namedPrimitiveString } from './src/ExportNamedVariable.js';
 import { default as NamedFunctionExport, namedFunction } from './src/ExportNamedFunction.js';
 import expect from 'expect.js';
 
@@ -9,6 +9,22 @@ describe('Test for named exports rewiring', function() {
 
 	it('should still export namedVariable2', function() {
 		expect( namedVariable2(1) ).to.be(3);
+	});
+
+	it('should still export namedVariable2', function() {
+		expect( namedVariable2(1) ).to.be(3);
+	});
+
+	it('should still export namedPrimitiveNumber', function() {
+		expect( namedPrimitiveNumber ).to.be(4);
+	});
+
+	it('should still export namedPrimitiveBoolean', function() {
+		expect( namedPrimitiveBoolean ).to.be(false);
+	});
+
+	it('should still export namedPrimitiveString', function() {
+		expect( namedPrimitiveString ).to.be('teststring');
 	});
 
 	it('should rewire the exported named variable', function() {

@@ -7,3 +7,7 @@ export let namedVariable = function( val ) {
 export default function( val ) {
 	return namedVariable( val ) + namedVariable2(val);
 }
+
+export let namedPrimitiveNumber = 4;
+export let namedPrimitiveBoolean = false;
+export let namedPrimitiveString = 'teststring';
