@@ -13,7 +13,9 @@ It is useful for writing tests, specifically to mock the dependencies of the mod
 Therefore for each module it adds and exports the methods `__GetDependency__`, `__Rewire__`, and `__ResetDependency__`.
 For compatibility reasons with rewire.js, the methods `__get__` and `__set__` are exported as well.
 These methods allow you to rewire the module under test.
-Furthermore in case of a default export these methods are assigned to the existing default export.
+Furthermore in case of a default export these methods are assigned to the existing default export, except for default exports of primitive types (boolean, number, string, ...).
+
+An additional object named `__RewireAPI__` is exported as named export as well as a property of the default export. This object itself contains all the functions mentioned above as fields. This enables one to rewire members of the imported module itself without explicitly importing the module (see [Handling of default exports](#handling-of-default-exports) below).
 
 ##ES6 Imports and React
 
@@ -76,6 +78,114 @@ Normaliser.__Rewire__('env', 'testing');
 ....
 
 Normaliser.__ResetDependency__('Path');
+```
+
+## Named and top level function rewiring
+
+Besides top level variables also top level functions defined in the imported module can be rewired.
+
+When exported functions of a module depend on each other it can be convenient to test them independently.
+Hence, babel-plugin-rewire allows you to rewire the internal dependencies to exported named functions as shown in the example below.
+
+Be aware, that rewiring a named export does not influence imports of that same export in other modules!
+
+### Example
+Asuming you have a module `TodoOperations.js` that internaly uses an asynchronous api to fetch some information
+```js
+function fetchToDos() {
+   ...
+   return new Promise(...);
+}
+
+export function filterToDos( filterString ) {
+   return fetchToDos().then( function( todos ) {
+      // Highly fashioned filter function code ...
+      return filteredToDos;
+   });
+}
+
+export function filterAndSortToDos( filterString, sortOrder ) {
+   return fetchToDos( filterString ).then( function( filteredToDos ) { 
+      // Higly fashioned sort function
+      return filteredAndSortedToDos;
+   });
+}
+```
+
+### Test Code
+In your test you can mock your API-calls to simply return static dummy data like this
+```js
+import { filterToDos, filterAndSortToDos, __RewireAPI__ as ToDosRewireAPI } from 'TodoOperations.js';
+
+describe('api call mocking', function() {
+   it('should use the mocked api function', function(done) {
+      ToDosRewireAPI.__Rewire__('fetchToDos', function() {
+         return Promise.resolve(['Test more', 'Refine your tests', 'Tests first rocks']);
+      });
+      filterToDos('Test').then(function(filteredTodos) {
+         //check results
+         done();
+      }).catch((e) => fail());
+      ToDosRewireAPI.__ResetDependency__('fetchToDos');
+   });
+   
+   it('should use the mocked filter function', function(done) {
+      ToDosRewireAPI.__Rewire__('filterToDos', function() {
+         return Promise.resolve( ['02 Test more', '01 Test even more' ] );
+      });
+      filterAndSortToDos('Test', 'asc').then(function(filteredAndSortedTodos) {
+         //check results
+         done();
+      }).catch((e) => fail());
+      ToDosRewireAPI.__ResetDependency__('filterToDos');
+   });
+});
+```
+
+## Handling of default exports
+
+If a non primitive default export is present in the imported module, it is enriched with the API-Functions and the API-Object.
+If no default export is present, the API-Object named `__RewireAPI__` becomes the default export of the module.
+
+This object basically supports all the rewire API-Functions as described in the introduction above and allows one to rewire the module without explicitly importing the module itself.
+
+### Example
+Asuming your imported module does not have a default export specified like in this simple example
+```js
+function message() {
+   return 'Hello world';
+}
+
+export function foo() {
+   return message();
+}
+```
+
+### Test Code
+In your test you would use the default exported API-Object to rewire the function `message` of the imported module like this
+```js
+import FooModule from 'foo.js';
+import { foo, __RewireAPI__ as FooModuleRewireAPI } from 'foo.js';
+
+describe('module default export test', function() {
+   it('should demonstrate the default exported rewire api', function() {
+      expect( foo() ).to.equal('Hello world');
+      FooModule.__Rewire__('message', function() {
+         return 'my message';
+      });
+      expect( foo() ).to.equal('my message');
+      FooModule.__ResetDependency__('message');
+   });
+   
+   it('should demonstrate the rewire apis named export', function() {
+      expect( foo() ).to.equal('Hello world');
+      FooModuleRewireAPI.__Rewire__('message', function() {
+         return 'my message';
+      });
+      expect( foo() ).to.equal('my message');
+      FooModuleRewireAPI.__ResetDependency__('message');
+   });
+});
 ```
 
 ## Installation
