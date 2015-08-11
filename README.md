@@ -152,9 +152,10 @@ var appBundler = browserify({
 * 0.1.14 Added handling for non-enumerable properties to commonjs support. Support for mixed es6 and commonjs support. Handling for primitive types.
 * 0.1.15 Added functionality to rewire functions. 
 * 0.1.16 Fixed variable scope for rewired functions.
-* 0.1.17 Fixed variable scoping for var variable declarations
+* 0.1.17 Fixed variable scoping for var variable declarations.
 * 0.1.18 Fixed function scope for rewired functions.
 * 0.1.19 Removed debug statements.
+* 0.1.20 Added rewiring named exported functions and variables.
 
 ## Contributors
 
