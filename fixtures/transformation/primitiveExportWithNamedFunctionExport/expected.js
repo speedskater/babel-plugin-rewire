@@ -1,5 +1,7 @@
 "use strict";
 
+var generateOne = _generateOneOrig;
+var addOne = _addOneOrig;
 let __$Getters__ = [];
 let __$Setters__ = [];
 let __$Resetters__ = [];
@@ -23,46 +25,45 @@ let __RewireAPI__ = {
 	"__set__": __Rewire__,
 	"__ResetDependency__": __ResetDependency__
 };
-let namedVariable = function (val) {
-	return val + 1;
-},
-    namedVariable2 = function (val) {
-	return val + 2;
+
+function _generateOneOrig() {
+	return 1;
+}
+
+var _generateOne = generateOne;
+
+__$Getters__["generateOne"] = function () {
+	return generateOne;
 };
 
-let _namedVariable = namedVariable;
-let _namedVariable2 = namedVariable2;
-
-__$Getters__["namedVariable"] = function () {
-	return namedVariable;
+__$Setters__["generateOne"] = function (value) {
+	generateOne = value;
 };
 
-__$Setters__["namedVariable"] = function (value) {
-	namedVariable = value;
+__$Resetters__["generateOne"] = function () {
+	generateOne = _generateOne;
 };
 
-__$Resetters__["namedVariable"] = function () {
-	namedVariable = _namedVariable;
+function _addOneOrig(val) {
+	return val + generateOne();
+}
+
+var _addOne = addOne;
+
+__$Getters__["addOne"] = function () {
+	return addOne;
 };
 
-__$Getters__["namedVariable2"] = function () {
-	return namedVariable2;
+__$Setters__["addOne"] = function (value) {
+	addOne = value;
 };
 
-__$Setters__["namedVariable2"] = function (value) {
-	namedVariable2 = value;
+__$Resetters__["addOne"] = function () {
+	addOne = _addOne;
 };
 
-__$Resetters__["namedVariable2"] = function () {
-	namedVariable2 = _namedVariable2;
-};
-
-export { _namedVariable as namedVariable };
-export { _namedVariable2 as namedVariable2 };
-
-let _defaultExport = function (val) {
-	return namedVariable(val) + namedVariable2(val);
-};
+export { _addOneOrig as addOne };
+let _defaultExport = 4;
 
 if (typeof _defaultExport === "object" || typeof _defaultExport === "function") {
 	Object.defineProperty(_defaultExport, "__Rewire__", {

@@ -19,6 +19,13 @@ function __ResetDependency__(name) {
 	__$Resetters__[name]();
 }
 
+let __RewireAPI__ = {
+	'__GetDependency__': __GetDependency__,
+	'__get__': __GetDependency__,
+	'__Rewire__': __Rewire__,
+	'__set__': __Rewire__,
+	'__ResetDependency__': __ResetDependency__
+};
 let ComponentToTest = _ComponentToTestTemp;
 
 __$Getters__['ComponentToTest'] = function () {
@@ -50,8 +57,5 @@ __$Resetters__['expect'] = function () {
 for (let b of a) {
 	expect(ComponentToTest.__Get__('node')).to.be('hey I\'m mock');
 }
-export { __GetDependency__ };
-export { __GetDependency__ as __get__ };
-export { __Rewire__ };
-export { __Rewire__ as __set__ };
-export { __ResetDependency__ };
+export { __GetDependency__, __GetDependency__ as __get__, __Rewire__, __Rewire__ as __set__, __ResetDependency__, __RewireAPI__ };
+export default __RewireAPI__;

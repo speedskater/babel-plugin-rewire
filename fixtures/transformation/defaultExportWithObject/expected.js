@@ -23,45 +23,10 @@ let __RewireAPI__ = {
 	"__set__": __Rewire__,
 	"__ResetDependency__": __ResetDependency__
 };
-let namedVariable = function (val) {
-	return val + 1;
-},
-    namedVariable2 = function (val) {
-	return val + 2;
-};
-
-let _namedVariable = namedVariable;
-let _namedVariable2 = namedVariable2;
-
-__$Getters__["namedVariable"] = function () {
-	return namedVariable;
-};
-
-__$Setters__["namedVariable"] = function (value) {
-	namedVariable = value;
-};
-
-__$Resetters__["namedVariable"] = function () {
-	namedVariable = _namedVariable;
-};
-
-__$Getters__["namedVariable2"] = function () {
-	return namedVariable2;
-};
-
-__$Setters__["namedVariable2"] = function (value) {
-	namedVariable2 = value;
-};
-
-__$Resetters__["namedVariable2"] = function () {
-	namedVariable2 = _namedVariable2;
-};
-
-export { _namedVariable as namedVariable };
-export { _namedVariable2 as namedVariable2 };
-
-let _defaultExport = function (val) {
-	return namedVariable(val) + namedVariable2(val);
+let _defaultExport = {
+	addOne: function (val) {
+		return val + 1;
+	}
 };
 
 if (typeof _defaultExport === "object" || typeof _defaultExport === "function") {

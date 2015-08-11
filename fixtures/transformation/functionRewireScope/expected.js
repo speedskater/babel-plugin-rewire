@@ -17,6 +17,13 @@ function __ResetDependency__(name) {
 	__$Resetters__[name]();
 }
 
+let __RewireAPI__ = {
+	'__GetDependency__': __GetDependency__,
+	'__get__': __GetDependency__,
+	'__Rewire__': __Rewire__,
+	'__set__': __Rewire__,
+	'__ResetDependency__': __ResetDependency__
+};
 let test = greet('world');
 
 let _test = test;
@@ -56,6 +63,10 @@ if (typeof _defaultExport === 'object' || typeof _defaultExport === 'function') 
 		'value': __GetDependency__,
 		'enumberable': false
 	});
+	Object.defineProperty(_defaultExport, '__RewireAPI__', {
+		'value': __RewireAPI__,
+		'enumberable': false
+	});
 }
 
 export default _defaultExport;
@@ -78,8 +89,4 @@ __$Resetters__['greet'] = function () {
 	greet = _greet;
 };
 
-export { __GetDependency__ };
-export { __GetDependency__ as __get__ };
-export { __Rewire__ };
-export { __Rewire__ as __set__ };
-export { __ResetDependency__ };
+export { __GetDependency__, __GetDependency__ as __get__, __Rewire__, __Rewire__ as __set__, __ResetDependency__, __RewireAPI__ };

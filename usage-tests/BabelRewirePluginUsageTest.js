@@ -20,7 +20,8 @@ function transformSampleCodeToTestWithBabelPluginRewire(source, filename) {
 		]
 	};
 
-	/*if(isSampleCode(filename)) {
+	/*
+	if(isSampleCode(filename)) {
 		console.log("=========== " + filename + "============");
 		var code = babel.transform(source, babelTransformationOptions).code;
 		console.log(code);
@@ -41,4 +42,5 @@ require('../samples/issue30/sample.js');
 require('../samples/issue33/sample.js');
 require('../samples/functionRewireScope/sample.js');
 require('../samples/namedExportsRewire/sample.js');
+require('../samples/namedExportRewireSupport/sample.js');
 hook.unhook('.js'); // removes your own transform

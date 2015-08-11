@@ -17,6 +17,7 @@ var t           = require("babel-core").types;
 
 var isES6Module;
 var hasES6Export;
+var hasES6DefaultExport;
 var hasCommonJSExport;
 
 module.exports = function(pluginArguments) {
@@ -25,35 +26,60 @@ module.exports = function(pluginArguments) {
 	return new Plugin("rewire", {
 		visitor: {
 			Program: (function () {
+				function getUniversalGetterID() {
+					return t.identifier('__GetDependency__');
+				}
 
-				var universalGetter = t.functionDeclaration(
-					noRewire(t.identifier('__GetDependency__')),
-					[t.identifier("name")],
-					t.blockStatement([
-						t.returnStatement(t.callExpression(t.memberExpression(t.identifier("__$Getters__"), t.identifier("name"), true), []))
-					])
-				);
+				function getUniversalSetterID() {
+					return t.identifier('__Rewire__');
+				}
 
-				var universalSetter = t.functionDeclaration(
-					noRewire(t.identifier('__Rewire__')),
-					[t.identifier("name"), t.identifier("value")],
-					t.blockStatement([
-						t.expressionStatement(t.callExpression(t.memberExpression(t.identifier("__$Setters__"), t.identifier("name"), true), [t.identifier("value")]))
-					])
-				);
+				function getUniversalResetterID() {
+					return t.identifier('__ResetDependency__');
+				}
 
-				var universalResetter = t.functionDeclaration(
-					noRewire(t.identifier('__ResetDependency__')),
-					[t.identifier("name")],
-					t.blockStatement([
-						t.expressionStatement(t.callExpression(t.memberExpression(t.identifier("__$Resetters__"), t.identifier("name"), true), []))
-					])
-				);
-
+				function getAPIObjectID() {
+					return t.identifier('__RewireAPI__');
+				}
 
 				return {
 					enter: function (node) {
+						var universalGetter = t.functionDeclaration(
+							noRewire(getUniversalGetterID()),
+							[t.identifier("name")],
+							t.blockStatement([
+								t.returnStatement(t.callExpression(t.memberExpression(t.identifier("__$Getters__"), t.identifier("name"), true), []))
+							])
+						);
+
+						var universalSetter = t.functionDeclaration(
+							noRewire(getUniversalSetterID()),
+							[t.identifier("name"), t.identifier("value")],
+							t.blockStatement([
+								t.expressionStatement(t.callExpression(t.memberExpression(t.identifier("__$Setters__"), t.identifier("name"), true), [t.identifier("value")]))
+							])
+						);
+
+						var universalResetter = t.functionDeclaration(
+							noRewire( getUniversalResetterID()),
+							[t.identifier("name")],
+							t.blockStatement([
+								t.expressionStatement(t.callExpression(t.memberExpression(t.identifier("__$Resetters__"), t.identifier("name"), true), []))
+							])
+						);
+
+						var rewireAPIObject = t.variableDeclaration('let', [
+							t.variableDeclarator(noRewire(getAPIObjectID()), t.objectExpression([
+								t.property('init', t.literal(universalGetter.id.name), universalGetter.id),
+								t.property('init', t.literal('__get__'), universalGetter.id),
+								t.property('init', t.literal(universalSetter.id.name), universalSetter.id),
+								t.property('init', t.literal('__set__'), universalSetter.id),
+								t.property('init', t.literal(universalResetter.id.name), universalResetter.id)
+							]))
+						]);
+
 						isES6Module = false;
+						hasES6DefaultExport = false;
 						hasES6Export = false;
 						hasCommonJSExport = false;
 						var gettersArrayDeclaration = t.variableDeclaration('let', [t.variableDeclarator(noRewire(t.identifier("__$Getters__")), t.arrayExpression([]))]);
@@ -61,11 +87,12 @@ module.exports = function(pluginArguments) {
 						var resettersArrayDeclaration = t.variableDeclaration('let', [t.variableDeclarator(noRewire(t.identifier("__$Resetters__")), t.arrayExpression([]))]);
 
 						node.body.unshift(gettersArrayDeclaration, settersArrayDeclaration, resettersArrayDeclaration, universalGetter,
-							universalSetter, universalResetter);
+							universalSetter, universalResetter, rewireAPIObject);
 
 						return node;
 					},
-					exit: function (node) {
+					exit: function (node, parent, scope, file) {
+
 						var exports;
 
 						var functionReplacementVariables = [];
@@ -80,26 +107,32 @@ module.exports = function(pluginArguments) {
 							}
 						});
 
-						node.body = functionReplacementVariables.concat(remainingBodyElements);
-
 						if (isES6Module && (!hasCommonJSExport || hasES6Export)) {
 							exports = [
-								t.exportNamedDeclaration(null, [t.exportSpecifier(universalGetter.id, universalGetter.id)]),
-								t.exportNamedDeclaration(null, [t.exportSpecifier(universalGetter.id, t.identifier('__get__'))]),
-								t.exportNamedDeclaration(null, [t.exportSpecifier(universalSetter.id, universalSetter.id)]),
-								t.exportNamedDeclaration(null, [t.exportSpecifier(universalSetter.id, t.identifier('__set__'))]),
-								t.exportNamedDeclaration(null, [t.exportSpecifier(universalResetter.id, universalResetter.id)])
-							]
+								t.exportNamedDeclaration(null, [
+									t.exportSpecifier(getUniversalGetterID(), getUniversalGetterID()),
+									t.exportSpecifier(getUniversalGetterID(), t.identifier('__get__')),
+									t.exportSpecifier(getUniversalSetterID(), getUniversalSetterID()),
+									t.exportSpecifier(getUniversalSetterID(), t.identifier('__set__')),
+									t.exportSpecifier(getUniversalResetterID(), getUniversalResetterID()),
+									t.exportSpecifier(getAPIObjectID(), getAPIObjectID())
+								])
+							];
+
+							if(!hasES6DefaultExport) {
+								exports.push(t.exportDefaultDeclaration(getAPIObjectID()));
+							}
 						}
 						else if(!isES6Module || (!hasES6Export && hasCommonJSExport)) {
 							var moduleExports = t.memberExpression(t.identifier('module'), t.identifier('exports'), false);
 
 							nonEnumerableExports = [
-								addNonEnumerableProperty(t, moduleExports, '__Rewire__', t.identifier('__Rewire__')),
-								addNonEnumerableProperty(t, moduleExports, '__set__', t.identifier('__Rewire__')),
-								addNonEnumerableProperty(t, moduleExports, '__ResetDependency__', t.identifier('__ResetDependency__')),
-								addNonEnumerableProperty(t, moduleExports, '__GetDependency__', t.identifier('__GetDependency__')),
-								addNonEnumerableProperty(t, moduleExports, '__get__', t.identifier('__GetDependency__'))
+								addNonEnumerableProperty(t, moduleExports, '__Rewire__', getUniversalSetterID()),
+								addNonEnumerableProperty(t, moduleExports, '__set__', getUniversalSetterID()),
+								addNonEnumerableProperty(t, moduleExports, '__ResetDependency__', getUniversalResetterID()),
+								addNonEnumerableProperty(t, moduleExports, '__GetDependency__', getUniversalGetterID()),
+								addNonEnumerableProperty(t, moduleExports, '__get__', getUniversalGetterID()),
+								addNonEnumerableProperty(t, moduleExports, '__RewireAPI__', getAPIObjectID())
 							];
 
 							exports = [ t.ifStatement(
@@ -235,6 +268,7 @@ module.exports = function(pluginArguments) {
 				if(!!node.rewired) {
 					return node;
 				}
+				hasES6DefaultExport = true;
 				hasES6Export = true;
 				isES6Module = true;
 				var originalExport = node.declaration;
@@ -263,7 +297,8 @@ module.exports = function(pluginArguments) {
 						addNonEnumerableProperty(t, defaultExportVariableId, '__set__', t.identifier('__Rewire__')),
 						addNonEnumerableProperty(t, defaultExportVariableId, '__ResetDependency__', t.identifier('__ResetDependency__')),
 						addNonEnumerableProperty(t, defaultExportVariableId, '__GetDependency__', t.identifier('__GetDependency__')),
-						addNonEnumerableProperty(t, defaultExportVariableId, '__get__', t.identifier('__GetDependency__'))
+						addNonEnumerableProperty(t, defaultExportVariableId, '__get__', t.identifier('__GetDependency__')),
+						addNonEnumerableProperty(t, defaultExportVariableId, '__RewireAPI__', t.identifier('__RewireAPI__'))
 					])
 				);
 

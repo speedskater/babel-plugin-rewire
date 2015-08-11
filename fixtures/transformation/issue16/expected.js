@@ -16,6 +16,13 @@ function __ResetDependency__(name) {
   __$Resetters__[name]();
 }
 
+let __RewireAPI__ = {
+  '__GetDependency__': __GetDependency__,
+  '__get__': __GetDependency__,
+  '__Rewire__': __Rewire__,
+  '__set__': __Rewire__,
+  '__ResetDependency__': __ResetDependency__
+};
 var React = require('react/addons');
 var _React = React;
 
@@ -396,6 +403,10 @@ if (typeof module.exports === 'object' || typeof module.exports === 'function') 
   });
   Object.defineProperty(module.exports, '__get__', {
     'value': __GetDependency__,
+    'enumberable': false
+  });
+  Object.defineProperty(module.exports, '__RewireAPI__', {
+    'value': __RewireAPI__,
     'enumberable': false
   });
 }

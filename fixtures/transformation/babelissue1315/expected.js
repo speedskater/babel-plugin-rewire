@@ -40,6 +40,13 @@ function __ResetDependency__(name) {
 	__$Resetters__[name]();
 }
 
+let __RewireAPI__ = {
+	'__GetDependency__': __GetDependency__,
+	'__get__': __GetDependency__,
+	'__Rewire__': __Rewire__,
+	'__set__': __Rewire__,
+	'__ResetDependency__': __ResetDependency__
+};
 let $ = _$Temp;
 
 __$Getters__['$'] = function () {
@@ -144,8 +151,5 @@ else if (moduleName === 'outside') {
 	}
 
 $(() => ie8Icons.fix());
-export { __GetDependency__ };
-export { __GetDependency__ as __get__ };
-export { __Rewire__ };
-export { __Rewire__ as __set__ };
-export { __ResetDependency__ };
+export { __GetDependency__, __GetDependency__ as __get__, __Rewire__, __Rewire__ as __set__, __ResetDependency__, __RewireAPI__ };
+export default __RewireAPI__;
