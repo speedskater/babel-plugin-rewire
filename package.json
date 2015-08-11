@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-rewire",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "description": "A babel plugin adding the ability to rewire module dependencies. This enables to mock modules for testing purposes.",
   "main": "src/babel-plugin-rewire.js",
   "scripts": {
@@ -29,6 +29,9 @@
   }, {
     "name": "Eli White",
     "email": "github@eli-white.com"
+  }, {
+    "name": "Philip Spitzlinger",
+    "email": "p.spitzlinger@synedra.com"
   }],
   "license": "ISC",
   "devDependencies": {

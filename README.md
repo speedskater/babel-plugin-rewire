@@ -254,11 +254,11 @@ var appBundler = browserify({
 * 0.1.6 Support for rewiring top level variables. Added module.exports for non-es6 modules.
 * 0.1.7 Fixed regressions from 0.1.6.
 * 0.1.8 Ignores destructuring assignments to prevent errors.
-* 0.1.9 Removed issues with TDZ and es6.spec.blockScoping optional transformer
-* 0.1.10 Fixed tests
-* 0.1.11 Fixed issues with for-of loops
-* 0.1.12 Updated Plugin Format
-* 0.1.13 Changed rewire specific properties on default export to non-enumerable properties
+* 0.1.9 Removed issues with TDZ and es6.spec.blockScoping optional transformer.
+* 0.1.10 Fixed tests.
+* 0.1.11 Fixed issues with for-of loops.
+* 0.1.12 Updated Plugin Format.
+* 0.1.13 Changed rewire specific properties on default export to non-enumerable properties.
 * 0.1.14 Added handling for non-enumerable properties to commonjs support. Support for mixed es6 and commonjs support. Handling for primitive types.
 * 0.1.15 Added functionality to rewire functions. 
 * 0.1.16 Fixed variable scope for rewired functions.
@@ -266,12 +266,14 @@ var appBundler = browserify({
 * 0.1.18 Fixed function scope for rewired functions.
 * 0.1.19 Removed debug statements.
 * 0.1.20 Added rewiring named exported functions and variables.
+* 0.1.21 Improved default export handling, fixed commonjs default exporting, fixed ast nodes resource leaks, improved README. 
 
 ## Contributors
 
 [speedskater](https://github.com/speedskater) - author and creator of initial release
 [Peet](https://github.com/peet) - module.exports and top-level var support
 [TheSavior](https://github.com/TheSavior) - support for non-enumerable rewire properties
+[PSpSynedra](https://github.com/PSpSynedra) - support for named export and function rewiring and improvements of default imports 
 
 ## License
 
