@@ -243,6 +243,24 @@ var appBundler = browserify({
 );
 ```
 
+### isparta
+If you use [isparta](https://github.com/douglasduteil/isparta) when running your tests remember that it needs to run with this plugin or else you will get errors.
+
+If you use _.babelrc_ then it's advised that you run your tests with a specific ENV, for example "test", and add the following to your _.babelrc_.
+
+```json
+"env": {
+  "test": {
+    "plugins": ["rewire"]
+  }
+}
+```
+
+If you are using isparta together with Webpack you could also do something like this.
+```javascript
+loader: 'isparta?{ babel: { plugins: ["rewire"] } }'
+```
+
 ## Release History
 
 * 0.1.0 Initial release
