@@ -14,6 +14,7 @@ function transformSampleCodeToTestWithBabelPluginRewire(source, filename) {
 	var babelTransformationOptions = {
 		plugins: path.resolve(__dirname, '../src/babel-plugin-rewire.js'),
 		optional:[
+			'runtime',
 			'es6.spec.blockScoping',
 			'es6.spec.symbols',
 			'es6.spec.templateLiterals'
@@ -40,6 +41,7 @@ require('../samples/issue28/sample.js');
 require('../samples/issue29/sample.js');
 require('../samples/issue30/sample.js');
 require('../samples/issue33/sample.js');
+require('../samples/issue48/sample.js');
 require('../samples/functionRewireScope/sample.js');
 require('../samples/namedExportsRewire/sample.js');
 require('../samples/namedExportRewireSupport/sample.js');

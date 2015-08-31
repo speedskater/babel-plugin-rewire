@@ -213,7 +213,7 @@ module.exports = function(pluginArguments) {
 				var replacedFunctionDeclarationIdentifier = noRewire(scope.generateUidIdentifier(declaration.id.name + 'Orig'));
 				var originalFunctionIdentifier = declaration.id;
 				originalFunctionIdentifier.functionIdentifier = true;
-				var replacedFunctionDeclaration = t.functionDeclaration(replacedFunctionDeclarationIdentifier, declaration.params, declaration.body, declaration.generator, declaration.expression);
+				var replacedFunctionDeclaration = t.functionDeclaration(replacedFunctionDeclarationIdentifier, declaration.params, declaration.body, declaration.generator, declaration.async, declaration.expression);
 
 				var newFuntionDeclaration = [replacedFunctionDeclaration, t.variableDeclaration('var', [t.variableDeclarator(originalFunctionIdentifier, replacedFunctionDeclarationIdentifier)])];
 
