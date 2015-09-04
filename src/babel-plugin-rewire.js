@@ -86,8 +86,19 @@ module.exports = function(pluginArguments) {
 						var settersArrayDeclaration = t.variableDeclaration('let', [t.variableDeclarator(noRewire(t.identifier("__$Setters__")), t.arrayExpression([]))]);
 						var resettersArrayDeclaration = t.variableDeclaration('let', [t.variableDeclarator(noRewire(t.identifier("__$Resetters__")), t.arrayExpression([]))]);
 
-						node.body.unshift(gettersArrayDeclaration, settersArrayDeclaration, resettersArrayDeclaration, universalGetter,
-							universalSetter, universalResetter, rewireAPIObject);
+						var istanbulIgnoreComment = createIstanbulIgnoreComment();
+
+						node.body.unshift(gettersArrayDeclaration, 
+								settersArrayDeclaration, 
+								resettersArrayDeclaration, 
+								istanbulIgnoreComment,
+								universalGetter,
+								istanbulIgnoreComment,
+								universalSetter, 
+								istanbulIgnoreComment,
+								universalResetter, 
+								istanbulIgnoreComment,
+								rewireAPIObject);
 
 						return node;
 					},
@@ -319,6 +330,10 @@ function addNonEnumerableProperty(t, objectIdentifier, propertyName, valueIdenti
 	])]));
 }
 
+function createIstanbulIgnoreComment() {
+	return t.identifier("/* istanbul ignore next */");
+}
+
 function accessorsFor(variableName, originalVar) {
 	var accessor = function(array, variableName, operation) {
 		return t.expressionStatement(t.assignmentExpression("=", t.memberExpression(array, t.literal(variableName), true), operation));
@@ -348,9 +363,14 @@ function accessorsFor(variableName, originalVar) {
 			])
 	);
 
+	var istanbulIgnoreComment = createIstanbulIgnoreComment();
+
 	return [
+		istanbulIgnoreComment,
 		accessor(t.identifier("__$Getters__"), variableName, getter),
+		istanbulIgnoreComment,
 		accessor(t.identifier("__$Setters__"), variableName, setter),
+		istanbulIgnoreComment,
 		accessor(t.identifier("__$Resetters__"), variableName, resetter)
 	];
 }

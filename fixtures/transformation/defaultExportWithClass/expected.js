@@ -5,19 +5,25 @@ import _fetchTemp from 'isomorphic-fetch';
 let __$Getters__ = [];
 let __$Setters__ = [];
 let __$Resetters__ = [];
+/* istanbul ignore next */
 
 function __GetDependency__(name) {
     return __$Getters__[name]();
 }
 
+/* istanbul ignore next */
+
 function __Rewire__(name, value) {
     __$Setters__[name](value);
 }
+
+/* istanbul ignore next */
 
 function __ResetDependency__(name) {
     __$Resetters__[name]();
 }
 
+/* istanbul ignore next */
 let __RewireAPI__ = {
     '__GetDependency__': __GetDependency__,
     '__get__': __GetDependency__,
@@ -26,14 +32,19 @@ let __RewireAPI__ = {
     '__ResetDependency__': __ResetDependency__
 };
 let fetch = _fetchTemp;
+/* istanbul ignore next */
 
 __$Getters__['fetch'] = function () {
     return fetch;
 };
 
+/* istanbul ignore next */
+
 __$Setters__['fetch'] = function (value) {
     fetch = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__['fetch'] = function () {
     fetch = _fetchTemp;

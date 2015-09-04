@@ -6,19 +6,25 @@ var helloWorld = _helloWorldOrig;
 let __$Getters__ = [];
 let __$Setters__ = [];
 let __$Resetters__ = [];
+/* istanbul ignore next */
 
 function __GetDependency__(name) {
 	return __$Getters__[name]();
 }
 
+/* istanbul ignore next */
+
 function __Rewire__(name, value) {
 	__$Setters__[name](value);
 }
+
+/* istanbul ignore next */
 
 function __ResetDependency__(name) {
 	__$Resetters__[name]();
 }
 
+/* istanbul ignore next */
 let __RewireAPI__ = {
 	"__GetDependency__": __GetDependency__,
 	"__get__": __GetDependency__,
@@ -27,14 +33,19 @@ let __RewireAPI__ = {
 	"__ResetDependency__": __ResetDependency__
 };
 let myDependency = _myDependencyTemp;
+/* istanbul ignore next */
 
 __$Getters__["myDependency"] = function () {
 	return myDependency;
 };
 
+/* istanbul ignore next */
+
 __$Setters__["myDependency"] = function (value) {
 	myDependency = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__["myDependency"] = function () {
 	myDependency = _myDependencyTemp;
@@ -45,14 +56,19 @@ function _helloWorldOrig() {
 }
 
 var _helloWorld = helloWorld;
+/* istanbul ignore next */
 
 __$Getters__["helloWorld"] = function () {
 	return helloWorld;
 };
 
+/* istanbul ignore next */
+
 __$Setters__["helloWorld"] = function (value) {
 	helloWorld = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__["helloWorld"] = function () {
 	helloWorld = _helloWorld;

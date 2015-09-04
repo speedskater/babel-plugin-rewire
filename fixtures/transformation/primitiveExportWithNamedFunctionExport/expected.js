@@ -5,19 +5,25 @@ var addOne = _addOneOrig;
 let __$Getters__ = [];
 let __$Setters__ = [];
 let __$Resetters__ = [];
+/* istanbul ignore next */
 
 function __GetDependency__(name) {
 	return __$Getters__[name]();
 }
 
+/* istanbul ignore next */
+
 function __Rewire__(name, value) {
 	__$Setters__[name](value);
 }
+
+/* istanbul ignore next */
 
 function __ResetDependency__(name) {
 	__$Resetters__[name]();
 }
 
+/* istanbul ignore next */
 let __RewireAPI__ = {
 	"__GetDependency__": __GetDependency__,
 	"__get__": __GetDependency__,
@@ -31,14 +37,19 @@ function _generateOneOrig() {
 }
 
 var _generateOne = generateOne;
+/* istanbul ignore next */
 
 __$Getters__["generateOne"] = function () {
 	return generateOne;
 };
 
+/* istanbul ignore next */
+
 __$Setters__["generateOne"] = function (value) {
 	generateOne = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__["generateOne"] = function () {
 	generateOne = _generateOne;
@@ -49,14 +60,19 @@ function _addOneOrig(val) {
 }
 
 var _addOne = addOne;
+/* istanbul ignore next */
 
 __$Getters__["addOne"] = function () {
 	return addOne;
 };
 
+/* istanbul ignore next */
+
 __$Setters__["addOne"] = function (value) {
 	addOne = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__["addOne"] = function () {
 	addOne = _addOne;

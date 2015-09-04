@@ -3,19 +3,25 @@
 let __$Getters__ = [];
 let __$Setters__ = [];
 let __$Resetters__ = [];
+/* istanbul ignore next */
 
 function __GetDependency__(name) {
 	return __$Getters__[name]();
 }
 
+/* istanbul ignore next */
+
 function __Rewire__(name, value) {
 	__$Setters__[name](value);
 }
+
+/* istanbul ignore next */
 
 function __ResetDependency__(name) {
 	__$Resetters__[name]();
 }
 
+/* istanbul ignore next */
 let __RewireAPI__ = {
 	"__GetDependency__": __GetDependency__,
 	"__get__": __GetDependency__,
@@ -32,26 +38,37 @@ let namedVariable = function (val) {
 
 let _namedVariable = namedVariable;
 let _namedVariable2 = namedVariable2;
+/* istanbul ignore next */
 
 __$Getters__["namedVariable"] = function () {
 	return namedVariable;
 };
 
+/* istanbul ignore next */
+
 __$Setters__["namedVariable"] = function (value) {
 	namedVariable = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__["namedVariable"] = function () {
 	namedVariable = _namedVariable;
 };
 
+/* istanbul ignore next */
+
 __$Getters__["namedVariable2"] = function () {
 	return namedVariable2;
 };
 
+/* istanbul ignore next */
+
 __$Setters__["namedVariable2"] = function (value) {
 	namedVariable2 = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__["namedVariable2"] = function () {
 	namedVariable2 = _namedVariable2;
