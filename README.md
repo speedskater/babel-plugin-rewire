@@ -188,6 +188,65 @@ describe('module default export test', function() {
 });
 ```
 
+## Handling of async functions
+
+Rewiring of async functions works as one would expect using the same API as for other rewires for both default exports and namned exports.
+
+### Example
+Asuming your imported module consits of the following.
+```js
+// api.js
+export default async function asyncApiDefault() {
+   return await asyncApi();
+};
+
+export async function asyncApi() {
+   return await api();
+};
+
+function api() {
+  // Some async API call
+  return Promise.resolve('API Response');
+};
+```
+
+### Test Code
+In your test you would use the default exported API-Object to rewire the function `asyncApiDefault` and `asyncApi` of the imported module like this.
+```js
+import { default as asyncApiDefault, asyncApi,  __RewireAPI__ as AsyncApiRewireAPI } from 'api.js';
+describe('async function export test', function() {
+ it('should be able to rewire default async function', function() {
+    return asyncApiDefault().then(response => {
+      expect(response).to.equal('API Response');
+
+      AsyncApiRewireAPI.__set__('asyncApi', function() {
+        return Promise.resolve('Mock API Response');
+      });
+
+      return asyncApiDefault().then(response => {
+        expect(response).to.equal('Mock API Response');
+        AsyncApiRewireAPI.__ResetDependency__('asyncApi');
+      });
+    });
+  });
+
+  it('should be able to rewire non default async function', function() {
+    return asyncApi().then(response => {
+      expect(response).to.equal('API Response');
+
+      AsyncApiRewireAPI.__set__('api', function() {
+        return Promise.resolve('Mock API Response');
+      });
+
+      return asyncApi().then(response => {
+        expect(response).to.equal('Mock API Response');
+        AsyncApiRewireAPI.__ResetDependency__('api');
+      });
+    });
+  });
+});
+```
+
 ## Installation
 
 ```
