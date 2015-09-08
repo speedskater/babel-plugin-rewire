@@ -190,10 +190,10 @@ describe('module default export test', function() {
 
 ## Handling of async functions
 
-Rewiring of async functions works as one would expect using the same API as for other rewires for both default exports and namned exports.
+Rewiring of async functions works as one would expect using the same API as for other rewires for both default exports and named exports.
 
 ### Example
-Asuming your imported module consits of the following.
+Assuming your imported module consists of the following.
 ```js
 // api.js
 export default async function asyncApiDefault() {
@@ -346,6 +346,7 @@ loader: 'isparta?{ babel: { plugins: ["rewire"] } }'
 * 0.1.19 Removed debug statements.
 * 0.1.20 Added rewiring named exported functions and variables.
 * 0.1.21 Improved default export handling, fixed commonjs default exporting, fixed ast nodes resource leaks, improved README. 
+* 0.1.22 Added support for asynchronous functions
 
 ## Contributors
 
@@ -353,6 +354,7 @@ loader: 'isparta?{ babel: { plugins: ["rewire"] } }'
 [Peet](https://github.com/peet) - module.exports and top-level var support
 [TheSavior](https://github.com/TheSavior) - support for non-enumerable rewire properties
 [PSpSynedra](https://github.com/PSpSynedra) - support for named export and function rewiring and improvements of default imports 
+[Gustaf Dalemar](https://github.com/DLMR) - support for asynchronous functions
 
 ## License
 
