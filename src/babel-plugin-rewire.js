@@ -288,9 +288,14 @@ module.exports = function(pluginArguments) {
 				])]));
 
 				var addAdditionalProperties = t.ifStatement(
-					t.logicalExpression('||',
-						t.binaryExpression('===', t.unaryExpression('typeof', defaultExportVariableId, true), t.literal('object')),
-						t.binaryExpression('===', t.unaryExpression('typeof', defaultExportVariableId, true), t.literal('function'))
+					t.logicalExpression('&&',
+						t.parenthesizedExpression(
+							t.logicalExpression('||',
+								t.binaryExpression('===', t.unaryExpression('typeof', defaultExportVariableId, true), t.literal('object')),
+								t.binaryExpression('===', t.unaryExpression('typeof', defaultExportVariableId, true), t.literal('function'))
+							)
+						),
+						t.callExpression(t.memberExpression(t.identifier('Object'), t.identifier('isExtensible')), [defaultExportVariableId])
 					),
 					t.blockStatement([
 						addNonEnumerableProperty(t, defaultExportVariableId, '__Rewire__', t.identifier('__Rewire__')),
