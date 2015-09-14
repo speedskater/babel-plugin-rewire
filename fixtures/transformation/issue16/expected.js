@@ -3,19 +3,25 @@
 let __$Getters__ = [];
 let __$Setters__ = [];
 let __$Resetters__ = [];
+/* istanbul ignore next */
 
 function __GetDependency__(name) {
   return __$Getters__[name]();
 }
 
+/* istanbul ignore next */
+
 function __Rewire__(name, value) {
   __$Setters__[name](value);
 }
+
+/* istanbul ignore next */
 
 function __ResetDependency__(name) {
   __$Resetters__[name]();
 }
 
+/* istanbul ignore next */
 let __RewireAPI__ = {
   '__GetDependency__': __GetDependency__,
   '__get__': __GetDependency__,
@@ -25,14 +31,19 @@ let __RewireAPI__ = {
 };
 var React = require('react/addons');
 var _React = React;
+/* istanbul ignore next */
 
 __$Getters__['React'] = function () {
   return React;
 };
 
+/* istanbul ignore next */
+
 __$Setters__['React'] = function (value) {
   React = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__['React'] = function () {
   React = _React;
@@ -40,14 +51,19 @@ __$Resetters__['React'] = function () {
 
 var _ = require('lodash');
 var _2 = _;
+/* istanbul ignore next */
 
 __$Getters__['_'] = function () {
   return _;
 };
 
+/* istanbul ignore next */
+
 __$Setters__['_'] = function (value) {
   _ = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__['_'] = function () {
   _ = _2;
@@ -55,14 +71,19 @@ __$Resetters__['_'] = function () {
 
 var StyleSheet = require('react-style');
 var _StyleSheet = StyleSheet;
+/* istanbul ignore next */
 
 __$Getters__['StyleSheet'] = function () {
   return StyleSheet;
 };
 
+/* istanbul ignore next */
+
 __$Setters__['StyleSheet'] = function (value) {
   StyleSheet = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__['StyleSheet'] = function () {
   StyleSheet = _StyleSheet;
@@ -71,14 +92,19 @@ __$Resetters__['StyleSheet'] = function () {
 var cx = require('classnames');
 
 var _cx = cx;
+/* istanbul ignore next */
 
 __$Getters__['cx'] = function () {
   return cx;
 };
 
+/* istanbul ignore next */
+
 __$Setters__['cx'] = function (value) {
   cx = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__['cx'] = function () {
   cx = _cx;
@@ -87,14 +113,19 @@ __$Resetters__['cx'] = function () {
 var $ = require('vendor/jquery/semantic');
 
 var _$ = $;
+/* istanbul ignore next */
 
 __$Getters__['$'] = function () {
   return $;
 };
 
+/* istanbul ignore next */
+
 __$Setters__['$'] = function (value) {
   $ = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__['$'] = function () {
   $ = _$;
@@ -103,14 +134,19 @@ __$Resetters__['$'] = function () {
 var Style = require('style/index.js');
 
 var _Style = Style;
+/* istanbul ignore next */
 
 __$Getters__['Style'] = function () {
   return Style;
 };
 
+/* istanbul ignore next */
+
 __$Setters__['Style'] = function (value) {
   Style = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__['Style'] = function () {
   Style = _Style;
@@ -124,14 +160,19 @@ var {
 let PROTOCOLS = ['http://', 'https://', 'ftp://'];
 
 let _PROTOCOLS = PROTOCOLS;
+/* istanbul ignore next */
 
 __$Getters__['PROTOCOLS'] = function () {
   return PROTOCOLS;
 };
 
+/* istanbul ignore next */
+
 __$Setters__['PROTOCOLS'] = function (value) {
   PROTOCOLS = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__['PROTOCOLS'] = function () {
   PROTOCOLS = _PROTOCOLS;
@@ -140,14 +181,19 @@ __$Resetters__['PROTOCOLS'] = function () {
 let DEFAULT_PROTOCOL = 'http://';
 
 let _DEFAULT_PROTOCOL = DEFAULT_PROTOCOL;
+/* istanbul ignore next */
 
 __$Getters__['DEFAULT_PROTOCOL'] = function () {
   return DEFAULT_PROTOCOL;
 };
 
+/* istanbul ignore next */
+
 __$Setters__['DEFAULT_PROTOCOL'] = function (value) {
   DEFAULT_PROTOCOL = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__['DEFAULT_PROTOCOL'] = function () {
   DEFAULT_PROTOCOL = _DEFAULT_PROTOCOL;
@@ -155,14 +201,19 @@ __$Resetters__['DEFAULT_PROTOCOL'] = function () {
 
 var Mixins = require('./mixins.jsx');
 var _Mixins = Mixins;
+/* istanbul ignore next */
 
 __$Getters__['Mixins'] = function () {
   return Mixins;
 };
 
+/* istanbul ignore next */
+
 __$Setters__['Mixins'] = function (value) {
   Mixins = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__['Mixins'] = function () {
   Mixins = _Mixins;
@@ -175,38 +226,55 @@ var FormFieldMixin = Mixins.FormFieldMixin,
 var _FormFieldMixin = FormFieldMixin;
 var _InputMixin = InputMixin;
 var _TextInputMixin = TextInputMixin;
+/* istanbul ignore next */
 
 __$Getters__['FormFieldMixin'] = function () {
   return FormFieldMixin;
 };
 
+/* istanbul ignore next */
+
 __$Setters__['FormFieldMixin'] = function (value) {
   FormFieldMixin = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__['FormFieldMixin'] = function () {
   FormFieldMixin = _FormFieldMixin;
 };
 
+/* istanbul ignore next */
+
 __$Getters__['InputMixin'] = function () {
   return InputMixin;
 };
+
+/* istanbul ignore next */
 
 __$Setters__['InputMixin'] = function (value) {
   InputMixin = value;
 };
 
+/* istanbul ignore next */
+
 __$Resetters__['InputMixin'] = function () {
   InputMixin = _InputMixin;
 };
+
+/* istanbul ignore next */
 
 __$Getters__['TextInputMixin'] = function () {
   return TextInputMixin;
 };
 
+/* istanbul ignore next */
+
 __$Setters__['TextInputMixin'] = function (value) {
   TextInputMixin = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__['TextInputMixin'] = function () {
   TextInputMixin = _TextInputMixin;
@@ -222,14 +290,19 @@ var TextInput = React.createClass({
 });
 
 var _TextInput = TextInput;
+/* istanbul ignore next */
 
 __$Getters__['TextInput'] = function () {
   return TextInput;
 };
 
+/* istanbul ignore next */
+
 __$Setters__['TextInput'] = function (value) {
   TextInput = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__['TextInput'] = function () {
   TextInput = _TextInput;
@@ -249,14 +322,19 @@ var EmailInput = React.createClass({
 });
 
 var _EmailInput = EmailInput;
+/* istanbul ignore next */
 
 __$Getters__['EmailInput'] = function () {
   return EmailInput;
 };
 
+/* istanbul ignore next */
+
 __$Setters__['EmailInput'] = function (value) {
   EmailInput = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__['EmailInput'] = function () {
   EmailInput = _EmailInput;
@@ -282,14 +360,19 @@ var URLInput = React.createClass({
 });
 
 var _URLInput = URLInput;
+/* istanbul ignore next */
 
 __$Getters__['URLInput'] = function () {
   return URLInput;
 };
 
+/* istanbul ignore next */
+
 __$Setters__['URLInput'] = function (value) {
   URLInput = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__['URLInput'] = function () {
   URLInput = _URLInput;
@@ -300,14 +383,19 @@ var textAreaStyle = StyleSheet.create({
 });
 
 var _textAreaStyle = textAreaStyle;
+/* istanbul ignore next */
 
 __$Getters__['textAreaStyle'] = function () {
   return textAreaStyle;
 };
 
+/* istanbul ignore next */
+
 __$Setters__['textAreaStyle'] = function (value) {
   textAreaStyle = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__['textAreaStyle'] = function () {
   textAreaStyle = _textAreaStyle;
@@ -338,14 +426,19 @@ var TextArea = React.createClass({
 });
 
 var _TextArea = TextArea;
+/* istanbul ignore next */
 
 __$Getters__['TextArea'] = function () {
   return TextArea;
 };
 
+/* istanbul ignore next */
+
 __$Setters__['TextArea'] = function (value) {
   TextArea = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__['TextArea'] = function () {
   TextArea = _TextArea;
@@ -363,14 +456,19 @@ var HiddenTextInput = React.createClass({
 });
 
 var _HiddenTextInput = HiddenTextInput;
+/* istanbul ignore next */
 
 __$Getters__['HiddenTextInput'] = function () {
   return HiddenTextInput;
 };
 
+/* istanbul ignore next */
+
 __$Setters__['HiddenTextInput'] = function (value) {
   HiddenTextInput = value;
 };
+
+/* istanbul ignore next */
 
 __$Resetters__['HiddenTextInput'] = function () {
   HiddenTextInput = _HiddenTextInput;
