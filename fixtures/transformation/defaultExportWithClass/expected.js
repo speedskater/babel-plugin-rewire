@@ -51,7 +51,7 @@ class EclipseClient {
 }
 let _defaultExport = EclipseClient;
 
-if (typeof _defaultExport === 'object' || typeof _defaultExport === 'function') {
+if ((typeof _defaultExport === 'object' || typeof _defaultExport === 'function') && Object.isExtensible(_defaultExport)) {
     Object.defineProperty(_defaultExport, '__Rewire__', {
         'value': __Rewire__,
         'enumberable': false
