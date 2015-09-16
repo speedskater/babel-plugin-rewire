@@ -46,4 +46,5 @@ require('../samples/functionRewireScope/sample.js');
 require('../samples/namedExportsRewire/sample.js');
 require('../samples/namedExportRewireSupport/sample.js');
 require('../samples/defaultExportNonExtensible/sample.js');
+require('../samples/defaultExportImport/sample.js');
 hook.unhook('.js'); // removes your own transform
