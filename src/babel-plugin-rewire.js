@@ -229,6 +229,11 @@ module.exports = function(pluginArguments) {
 				isES6Module = true;
 				var variableDeclarations = [];
 				var accessors = [];
+				
+				// refs #47
+				if (node.importKind && node.importKind === 'type') {
+					return [];
+				}
 
 				node.specifiers.forEach(function (specifier) {
 					var importedSpecifierName = (specifier.imported && specifier.imported.name) || null;
