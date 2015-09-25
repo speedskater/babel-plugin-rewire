@@ -320,7 +320,8 @@ module.exports = function(pluginArguments) {
 function addNonEnumerableProperty(t, objectIdentifier, propertyName, valueIdentifier) {
 	return t.expressionStatement(t.callExpression(t.memberExpression(t.identifier('Object'), t.identifier('defineProperty')), [ objectIdentifier, t.literal(propertyName),  t.objectExpression([
 		t.property('init', t.literal('value'), valueIdentifier),
-		t.property('init', t.literal('enumberable'), t.literal(false))
+		t.property('init', t.literal('enumberable'), t.literal(false)),
+		t.property('init', t.literal('configurable'), t.literal(true))
 	])]));
 }
 

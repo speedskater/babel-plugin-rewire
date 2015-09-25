@@ -30,26 +30,32 @@ module.exports = {
 if (typeof module.exports === 'object' || typeof module.exports === 'function') {
   Object.defineProperty(module.exports, '__Rewire__', {
     'value': __Rewire__,
-    'enumberable': false
+    'enumberable': false,
+    'configurable': true
   });
   Object.defineProperty(module.exports, '__set__', {
     'value': __Rewire__,
-    'enumberable': false
+    'enumberable': false,
+    'configurable': true
   });
   Object.defineProperty(module.exports, '__ResetDependency__', {
     'value': __ResetDependency__,
-    'enumberable': false
+    'enumberable': false,
+    'configurable': true
   });
   Object.defineProperty(module.exports, '__GetDependency__', {
     'value': __GetDependency__,
-    'enumberable': false
+    'enumberable': false,
+    'configurable': true
   });
   Object.defineProperty(module.exports, '__get__', {
     'value': __GetDependency__,
-    'enumberable': false
+    'enumberable': false,
+    'configurable': true
   });
   Object.defineProperty(module.exports, '__RewireAPI__', {
     'value': __RewireAPI__,
-    'enumberable': false
+    'enumberable': false,
+    'configurable': true
   });
 }

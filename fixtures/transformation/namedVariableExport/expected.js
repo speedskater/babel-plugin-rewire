@@ -67,27 +67,33 @@ let _defaultExport = function (val) {
 if ((typeof _defaultExport === "object" || typeof _defaultExport === "function") && Object.isExtensible(_defaultExport)) {
 	Object.defineProperty(_defaultExport, "__Rewire__", {
 		"value": __Rewire__,
-		"enumberable": false
+		"enumberable": false,
+		"configurable": true
 	});
 	Object.defineProperty(_defaultExport, "__set__", {
 		"value": __Rewire__,
-		"enumberable": false
+		"enumberable": false,
+		"configurable": true
 	});
 	Object.defineProperty(_defaultExport, "__ResetDependency__", {
 		"value": __ResetDependency__,
-		"enumberable": false
+		"enumberable": false,
+		"configurable": true
 	});
 	Object.defineProperty(_defaultExport, "__GetDependency__", {
 		"value": __GetDependency__,
-		"enumberable": false
+		"enumberable": false,
+		"configurable": true
 	});
 	Object.defineProperty(_defaultExport, "__get__", {
 		"value": __GetDependency__,
-		"enumberable": false
+		"enumberable": false,
+		"configurable": true
 	});
 	Object.defineProperty(_defaultExport, "__RewireAPI__", {
 		"value": __RewireAPI__,
-		"enumberable": false
+		"enumberable": false,
+		"configurable": true
 	});
 }
 
