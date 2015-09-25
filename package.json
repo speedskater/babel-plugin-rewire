@@ -37,6 +37,7 @@
   }],
   "license": "ISC",
   "devDependencies": {
+    "babel-core": ">=5.7.0",
     "babel-runtime": "^5.8.20",
     "core-js": "^1.0.0",
     "expect.js": "^0.3.1",
