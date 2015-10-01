@@ -135,16 +135,13 @@ module.exports = function(pluginArguments) {
 								addNonEnumerableProperty(t, moduleExports, '__RewireAPI__', getAPIObjectID())
 							];
 
-                                                        exports = [ t.ifStatement(
-                                                            t.logicalExpression('&&',
-                                                                t.logicalExpression('||',
-                                                                    t.binaryExpression('===', t.unaryExpression('typeof', moduleExports, true), t.literal('object')),
-                                                                    t.binaryExpression('===', t.unaryExpression('typeof', moduleExports, true), t.literal('function'))
-                                                                ),
-                                                                t.unaryExpression('!', t.callExpression(t.memberExpression(moduleExports, t.identifier('hasOwnProperty')), [t.literal('__RewireAPI__') ]))
-                                                            ),
-                                                            t.blockStatement(nonEnumerableExports)
-                                                        )];
+							exports = [ t.ifStatement(
+								t.logicalExpression('||',
+									t.binaryExpression('===', t.unaryExpression('typeof', moduleExports, true), t.literal('object')),
+									t.binaryExpression('===', t.unaryExpression('typeof', moduleExports, true), t.literal('function'))
+								),
+								t.blockStatement(nonEnumerableExports)
+							)];
 						}
 						node.body = functionReplacementVariables.concat(remainingBodyElements).concat(exports);
 						return node;
@@ -232,7 +229,7 @@ module.exports = function(pluginArguments) {
 				isES6Module = true;
 				var variableDeclarations = [];
 				var accessors = [];
-				
+
 				// refs #47
 				if (node.importKind && node.importKind === 'type') {
 					return [];
@@ -303,8 +300,7 @@ module.exports = function(pluginArguments) {
 								t.binaryExpression('===', t.unaryExpression('typeof', defaultExportVariableId, true), t.literal('function'))
 							)
 						),
-						t.callExpression(t.memberExpression(t.identifier('Object'), t.identifier('isExtensible')), [defaultExportVariableId]),
-                                                t.unaryExpression('!', t.callExpression(t.memberExpression(defaultExportVariableId, t.identifier('hasOwnProperty')), [t.literal('__RewireAPI__') ]))
+						t.callExpression(t.memberExpression(t.identifier('Object'), t.identifier('isExtensible')), [defaultExportVariableId])
 					),
 					t.blockStatement([
 						addNonEnumerableProperty(t, defaultExportVariableId, '__Rewire__', t.identifier('__Rewire__')),
