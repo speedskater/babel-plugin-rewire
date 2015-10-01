@@ -47,4 +47,5 @@ require('../samples/namedExportsRewire/sample.js');
 require('../samples/namedExportRewireSupport/sample.js');
 require('../samples/defaultExportNonExtensible/sample.js');
 require('../samples/typedExport/sample.js');
+require('../samples/nonEnumerableProperties/sample.js');
 hook.unhook('.js'); // removes your own transform
