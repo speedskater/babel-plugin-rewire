@@ -5,24 +5,24 @@ let __$Getters__ = [];
 let __$Setters__ = [];
 let __$Resetters__ = [];
 
-function __GetDependency__(name) {
+function _GetDependency__(name) {
   return __$Getters__[name]();
 }
 
-function __Rewire__(name, value) {
+function _Rewire__(name, value) {
   __$Setters__[name](value);
 }
 
-function __ResetDependency__(name) {
+function _ResetDependency__(name) {
   __$Resetters__[name]();
 }
 
-let __RewireAPI__ = {
-  '__GetDependency__': __GetDependency__,
-  '__get__': __GetDependency__,
-  '__Rewire__': __Rewire__,
-  '__set__': __Rewire__,
-  '__ResetDependency__': __ResetDependency__
+let _RewireAPI__ = {
+  '__GetDependency__': _GetDependency__,
+  '__get__': _GetDependency__,
+  '__Rewire__': _Rewire__,
+  '__set__': _Rewire__,
+  '__ResetDependency__': _ResetDependency__
 };
 var MyModule = require('MyModule');
 
@@ -62,32 +62,32 @@ module.exports = out;
 
 if (typeof module.exports === 'object' || typeof module.exports === 'function') {
   Object.defineProperty(module.exports, '__Rewire__', {
-    'value': __Rewire__,
+    'value': _Rewire__,
     'enumerable': false,
     'configurable': true
   });
   Object.defineProperty(module.exports, '__set__', {
-    'value': __Rewire__,
+    'value': _Rewire__,
     'enumerable': false,
     'configurable': true
   });
   Object.defineProperty(module.exports, '__ResetDependency__', {
-    'value': __ResetDependency__,
+    'value': _ResetDependency__,
     'enumerable': false,
     'configurable': true
   });
   Object.defineProperty(module.exports, '__GetDependency__', {
-    'value': __GetDependency__,
+    'value': _GetDependency__,
     'enumerable': false,
     'configurable': true
   });
   Object.defineProperty(module.exports, '__get__', {
-    'value': __GetDependency__,
+    'value': _GetDependency__,
     'enumerable': false,
     'configurable': true
   });
   Object.defineProperty(module.exports, '__RewireAPI__', {
-    'value': __RewireAPI__,
+    'value': _RewireAPI__,
     'enumerable': false,
     'configurable': true
   });

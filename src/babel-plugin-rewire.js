@@ -19,6 +19,9 @@ var isES6Module;
 var hasES6Export;
 var hasES6DefaultExport;
 var hasCommonJSExport;
+var lifeBindings = {};
+var universalAccessors = {};
+
 
 module.exports = function(pluginArguments) {
 	var Plugin = pluginArguments.Plugin;
@@ -26,24 +29,32 @@ module.exports = function(pluginArguments) {
 	return new Plugin("rewire", {
 		visitor: {
 			Program: (function () {
+				function initializeUniversalAccessors(scope) {
+					universalAccessors['__GetDependency__'] = scope.generateUidIdentifier("__GetDependency__");
+					universalAccessors['__Rewire__'] = scope.generateUidIdentifier("__Rewire__");
+					universalAccessors['__ResetDependency__'] = scope.generateUidIdentifier("__ResetDependency__");
+					universalAccessors['__RewireAPI__'] = scope.generateUidIdentifier("__RewireAPI__");
+				}
+
 				function getUniversalGetterID() {
-					return t.identifier('__GetDependency__');
+					return universalAccessors['__GetDependency__'];
 				}
 
 				function getUniversalSetterID() {
-					return t.identifier('__Rewire__');
+					return universalAccessors['__Rewire__'];
 				}
 
 				function getUniversalResetterID() {
-					return t.identifier('__ResetDependency__');
+					return universalAccessors['__ResetDependency__'];
 				}
 
 				function getAPIObjectID() {
-					return t.identifier('__RewireAPI__');
+					return universalAccessors['__RewireAPI__'];
 				}
 
 				return {
-					enter: function (node) {
+					enter: function (node, parent, scope) {
+						initializeUniversalAccessors(scope);
 						var universalGetter = t.functionDeclaration(
 							noRewire(getUniversalGetterID()),
 							[t.identifier("name")],
@@ -70,14 +81,15 @@ module.exports = function(pluginArguments) {
 
 						var rewireAPIObject = t.variableDeclaration('let', [
 							t.variableDeclarator(noRewire(getAPIObjectID()), t.objectExpression([
-								t.property('init', t.literal(universalGetter.id.name), universalGetter.id),
+								t.property('init', t.literal('__GetDependency__'), universalGetter.id),
 								t.property('init', t.literal('__get__'), universalGetter.id),
-								t.property('init', t.literal(universalSetter.id.name), universalSetter.id),
+								t.property('init', t.literal('__Rewire__'), universalSetter.id),
 								t.property('init', t.literal('__set__'), universalSetter.id),
-								t.property('init', t.literal(universalResetter.id.name), universalResetter.id)
+								t.property('init', t.literal('__ResetDependency__'), universalResetter.id)
 							]))
 						]);
 
+						lifeBindings = {};
 						isES6Module = false;
 						hasES6DefaultExport = false;
 						hasES6Export = false;
@@ -110,12 +122,12 @@ module.exports = function(pluginArguments) {
 						if (isES6Module && (!hasCommonJSExport || hasES6Export)) {
 							exports = [
 								t.exportNamedDeclaration(null, [
-									t.exportSpecifier(getUniversalGetterID(), getUniversalGetterID()),
+									t.exportSpecifier(getUniversalGetterID(), t.identifier('__GetDependency__')),
 									t.exportSpecifier(getUniversalGetterID(), t.identifier('__get__')),
-									t.exportSpecifier(getUniversalSetterID(), getUniversalSetterID()),
+									t.exportSpecifier(getUniversalSetterID(), t.identifier('__Rewire__')),
 									t.exportSpecifier(getUniversalSetterID(), t.identifier('__set__')),
-									t.exportSpecifier(getUniversalResetterID(), getUniversalResetterID()),
-									t.exportSpecifier(getAPIObjectID(), getAPIObjectID())
+									t.exportSpecifier(getUniversalResetterID(), t.identifier('__ResetDependency__')),
+									t.exportSpecifier(getAPIObjectID(), t.identifier('__RewireAPI__'))
 								])
 							];
 
@@ -144,6 +156,9 @@ module.exports = function(pluginArguments) {
 							)];
 						}
 						node.body = functionReplacementVariables.concat(remainingBodyElements).concat(exports);
+
+						lifeBindings = {};
+						universalAccessors = {};
 						return node;
 					}
 				}
@@ -225,6 +240,18 @@ module.exports = function(pluginArguments) {
 				}
 			},
 
+			Identifier: function(node, parent, scope, file) {
+				var isLiveBindingActive = lifeBindings[node.name] === true;
+				if(isLiveBindingActive && !node.__noRewire && !node.noLifeBinding
+					&& !(parent.type === 'AssignmentExpression' && parent.left == node)
+					&& !(parent.type !== 'VariableDeclarator' && parent.id == node)
+				&& !(parent.type === 'MemberExpression' && parent.property === node)
+				&& !(parent.type === 'ClassDeclaration' && parent.id === node)) {
+					return t.callExpression(noRewire(universalAccessors['__GetDependency__']), [ t.literal(node.name) ]);
+				}
+				return node;
+			},
+
 			ImportDeclaration: function (node, parent, scope, file) {
 				isES6Module = true;
 				var variableDeclarations = [];
@@ -240,10 +267,13 @@ module.exports = function(pluginArguments) {
 					var localVariable = specifier.local;
 					var localVariableName = localVariable.name;
 
-					var actualImport = scope.generateUidIdentifier(localVariableName + "Temp");
+					var actualImport = scope.generateUidIdentifier(localVariableName + "Temp$Import");
+					var isLifeBindingActive = scope.generateUidIdentifier(localVariableName + "$IsLifeBindingActive");
+
 					scope.bindings[localVariableName].constant = false;
 					scope.bindings[localVariableName].kind = 'let';
 
+					lifeBindings[localVariableName] = true;
 					//scope.rename(localVariableName, actualImport.name);
 
 					if (importedSpecifierName === localVariableName) {
@@ -251,9 +281,12 @@ module.exports = function(pluginArguments) {
 					}
 					specifier.local = actualImport;
 
+					variableDeclarations.push(t.variableDeclaration('let', [t.variableDeclarator(noRewire(isLifeBindingActive), t.literal(true))]));
 					variableDeclarations.push(t.variableDeclaration('let', [t.variableDeclarator(noRewire(t.identifier(localVariableName)), actualImport)]));
 
-					accessors.push.apply(accessors, accessorsFor(localVariableName, actualImport));
+
+
+					accessors.push.apply(accessors, accessorsFor(localVariableName, actualImport, isLifeBindingActive));
 				});
 
 				return [node].concat(variableDeclarations).concat(accessors);
@@ -303,12 +336,12 @@ module.exports = function(pluginArguments) {
 						t.callExpression(t.memberExpression(t.identifier('Object'), t.identifier('isExtensible')), [defaultExportVariableId])
 					),
 					t.blockStatement([
-						addNonEnumerableProperty(t, defaultExportVariableId, '__Rewire__', t.identifier('__Rewire__')),
-						addNonEnumerableProperty(t, defaultExportVariableId, '__set__', t.identifier('__Rewire__')),
-						addNonEnumerableProperty(t, defaultExportVariableId, '__ResetDependency__', t.identifier('__ResetDependency__')),
-						addNonEnumerableProperty(t, defaultExportVariableId, '__GetDependency__', t.identifier('__GetDependency__')),
-						addNonEnumerableProperty(t, defaultExportVariableId, '__get__', t.identifier('__GetDependency__')),
-						addNonEnumerableProperty(t, defaultExportVariableId, '__RewireAPI__', t.identifier('__RewireAPI__'))
+						addNonEnumerableProperty(t, defaultExportVariableId, '__Rewire__', universalAccessors['__Rewire__']),
+						addNonEnumerableProperty(t, defaultExportVariableId, '__set__', universalAccessors['__Rewire__']),
+						addNonEnumerableProperty(t, defaultExportVariableId, '__ResetDependency__', universalAccessors['__ResetDependency__']),
+						addNonEnumerableProperty(t, defaultExportVariableId, '__GetDependency__', universalAccessors['__GetDependency__']),
+						addNonEnumerableProperty(t, defaultExportVariableId, '__get__', universalAccessors['__GetDependency__']),
+						addNonEnumerableProperty(t, defaultExportVariableId, '__RewireAPI__', universalAccessors['__RewireAPI__'])
 					])
 				);
 
@@ -330,34 +363,72 @@ function addNonEnumerableProperty(t, objectIdentifier, propertyName, valueIdenti
 	])]));
 }
 
-function accessorsFor(variableName, originalVar) {
+function accessorsFor(variableName, originalVar, isLifeBindingActive) {
 	var accessor = function(array, variableName, operation) {
 		return t.expressionStatement(t.assignmentExpression("=", t.memberExpression(array, t.literal(variableName), true), operation));
 	};
 
-	var getter = noRewire(t.functionDeclaration(
+	var noLifeBindingVariableName = noRewire(t.identifier(variableName));
+	noLifeBindingVariableName.noLifeBinding = true;
+
+	var getter;
+	if(!isLifeBindingActive) {
+		getter = noRewire(t.functionDeclaration(
 			getter,
 			[],
 			t.blockStatement([
 				t.returnStatement(t.identifier(variableName))
 			])
-	));
+		));
+	} else {
+		getter = noRewire(t.functionDeclaration(
+			getter,
+			[],
+			t.blockStatement([
+				t.returnStatement(t.conditionalExpression(isLifeBindingActive, originalVar, noLifeBindingVariableName))
+			])
+		));
+	}
 
-	var setter = t.functionDeclaration(
+	var setter;
+	if(!isLifeBindingActive) {
+		setter = t.functionDeclaration(
 			null,
 			[t.identifier("value")],
 			t.blockStatement([
 				t.expressionStatement(t.assignmentExpression("=", t.identifier(variableName), t.identifier("value")))
 			])
-	);
+		);
+	} else {
+		setter = t.functionDeclaration(
+			null,
+			[t.identifier("value")],
+			t.blockStatement([
+				t.expressionStatement(t.assignmentExpression("=", isLifeBindingActive, t.literal(false))),
+				t.expressionStatement(t.assignmentExpression("=", noLifeBindingVariableName, t.identifier("value")))
+			])
+		);
+	}
 
-	var resetter = t.functionDeclaration(
+	var resetter;
+	if(!isLifeBindingActive) {
+		resetter = t.functionDeclaration(
 			null,
 			[],
 			t.blockStatement([
 				t.expressionStatement(t.assignmentExpression("=", t.identifier(variableName), originalVar))
 			])
-	);
+		);
+	} else {
+		resetter = t.functionDeclaration(
+			null,
+			[],
+			t.blockStatement([
+				t.expressionStatement(t.assignmentExpression("=", isLifeBindingActive, t.literal(true))),
+				t.expressionStatement(t.assignmentExpression("=", noLifeBindingVariableName, originalVar))
+			])
+		);
+	}
 
 	return [
 		accessor(t.identifier("__$Getters__"), variableName, getter),

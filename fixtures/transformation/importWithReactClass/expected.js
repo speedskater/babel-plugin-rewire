@@ -1,6 +1,8 @@
 'use strict';
 
-var greet = _greetOrig;
+import { node as _nodeTemp$Import } from './DomUtils.js';
+import _CardTemp$Import from './Card.js';
+
 let __$Getters__ = [];
 let __$Setters__ = [];
 let __$Resetters__ = [];
@@ -24,23 +26,59 @@ let _RewireAPI__ = {
 	'__set__': _Rewire__,
 	'__ResetDependency__': _ResetDependency__
 };
-let test = greet('world');
+let _node$IsLifeBindingActive = true;
+let node = _nodeTemp$Import;
 
-let _test = test;
-
-__$Getters__['test'] = function () {
-	return test;
+__$Getters__['node'] = function () {
+	return _node$IsLifeBindingActive ? _nodeTemp$Import : node;
 };
 
-__$Setters__['test'] = function (value) {
-	test = value;
+__$Setters__['node'] = function (value) {
+	_node$IsLifeBindingActive = false;
+	node = value;
 };
 
-__$Resetters__['test'] = function () {
-	test = _test;
+__$Resetters__['node'] = function () {
+	_node$IsLifeBindingActive = true;
+	node = _nodeTemp$Import;
 };
 
-let _defaultExport = test;
+let _Card$IsLifeBindingActive = true;
+let Card = _CardTemp$Import;
+
+__$Getters__['Card'] = function () {
+	return _Card$IsLifeBindingActive ? _CardTemp$Import : Card;
+};
+
+__$Setters__['Card'] = function (value) {
+	_Card$IsLifeBindingActive = false;
+	Card = value;
+};
+
+__$Resetters__['Card'] = function () {
+	_Card$IsLifeBindingActive = true;
+	Card = _CardTemp$Import;
+};
+
+class WelcomePanel extends _GetDependency__('Card') {
+	constructor(props) {
+		super(props);
+	}
+
+	render() {
+		return <div className='welcome-panel'>
+				<Card content={_GetDependency__('node').toString()} />
+			</div>;
+	}
+
+	initPanel(el, content) {
+		this.initEl = el;
+		this.initContent = content;
+	}
+};
+
+//export default WelcomePanel;
+let _defaultExport = { WelcomePanel };
 
 if ((typeof _defaultExport === 'object' || typeof _defaultExport === 'function') && Object.isExtensible(_defaultExport)) {
 	Object.defineProperty(_defaultExport, '__Rewire__', {
@@ -76,23 +114,4 @@ if ((typeof _defaultExport === 'object' || typeof _defaultExport === 'function')
 }
 
 export default _defaultExport;
-
-function _greetOrig(whoToGreet) {
-	return 'Hello ' + whoToGreet;
-}
-
-var _greet = greet;
-
-__$Getters__['greet'] = function () {
-	return greet;
-};
-
-__$Setters__['greet'] = function (value) {
-	greet = value;
-};
-
-__$Resetters__['greet'] = function () {
-	greet = _greet;
-};
-
 export { _GetDependency__ as __GetDependency__, _GetDependency__ as __get__, _Rewire__ as __Rewire__, _Rewire__ as __set__, _ResetDependency__ as __ResetDependency__, _RewireAPI__ as __RewireAPI__ };

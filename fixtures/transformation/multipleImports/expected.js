@@ -1,55 +1,61 @@
 'use strict';
 
-import { first as _firstTemp, second as _secondTemp } from 'path/to/another/LargeModules.js';
+import { first as _firstTemp$Import, second as _secondTemp$Import } from 'path/to/another/LargeModules.js';
 let __$Getters__ = [];
 let __$Setters__ = [];
 let __$Resetters__ = [];
 
-function __GetDependency__(name) {
+function _GetDependency__(name) {
   return __$Getters__[name]();
 }
 
-function __Rewire__(name, value) {
+function _Rewire__(name, value) {
   __$Setters__[name](value);
 }
 
-function __ResetDependency__(name) {
+function _ResetDependency__(name) {
   __$Resetters__[name]();
 }
 
-let __RewireAPI__ = {
-  '__GetDependency__': __GetDependency__,
-  '__get__': __GetDependency__,
-  '__Rewire__': __Rewire__,
-  '__set__': __Rewire__,
-  '__ResetDependency__': __ResetDependency__
+let _RewireAPI__ = {
+  '__GetDependency__': _GetDependency__,
+  '__get__': _GetDependency__,
+  '__Rewire__': _Rewire__,
+  '__set__': _Rewire__,
+  '__ResetDependency__': _ResetDependency__
 };
-let first = _firstTemp;
-let second = _secondTemp;
+let _first$IsLifeBindingActive = true;
+let first = _firstTemp$Import;
+let _second$IsLifeBindingActive = true;
+let second = _secondTemp$Import;
 
 __$Getters__['first'] = function () {
-  return first;
+  return _first$IsLifeBindingActive ? _firstTemp$Import : first;
 };
 
 __$Setters__['first'] = function (value) {
+  _first$IsLifeBindingActive = false;
   first = value;
 };
 
 __$Resetters__['first'] = function () {
-  first = _firstTemp;
+  _first$IsLifeBindingActive = true;
+  first = _firstTemp$Import;
 };
 
 __$Getters__['second'] = function () {
-  return second;
+  return _second$IsLifeBindingActive ? _secondTemp$Import : second;
 };
 
 __$Setters__['second'] = function (value) {
+  _second$IsLifeBindingActive = false;
   second = value;
 };
 
 __$Resetters__['second'] = function () {
-  second = _secondTemp;
+  _second$IsLifeBindingActive = true;
+  second = _secondTemp$Import;
 };
 
-export { __GetDependency__, __GetDependency__ as __get__, __Rewire__, __Rewire__ as __set__, __ResetDependency__, __RewireAPI__ };
-export default __RewireAPI__;
+export { _GetDependency__ as __GetDependency__, _GetDependency__ as __get__, _Rewire__ as __Rewire__, _Rewire__ as __set__, _ResetDependency__ as __ResetDependency__, _RewireAPI__ as __RewireAPI__ };
+export default _RewireAPI__;
