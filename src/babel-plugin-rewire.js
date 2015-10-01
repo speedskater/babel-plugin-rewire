@@ -294,6 +294,12 @@ module.exports = function(pluginArguments) {
 
 			'ExportNamedDeclaration|ExportAllDeclaration': {
 				enter: function (node) {
+					var hasDefaultExport = node.specifiers.some(function(specifier) {
+						return specifier.local.name === 'default';
+					});
+					if(hasDefaultExport) {
+						hasES6DefaultExport = true;
+					}
 					isES6Module = true;
 					return node;
 				},

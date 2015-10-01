@@ -56,6 +56,7 @@ describe('BabelRewirePluginTest', function() {
 		'forOf',
 		'defaultImport',
 		'defaultExport',
+		'defaultExportImport',
 		'defaultExportWithClass',
 		'defaultExportWithNamedFunction',
 		'defaultExportWithObject',
