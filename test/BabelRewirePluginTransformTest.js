@@ -37,7 +37,7 @@ describe('BabelRewirePluginTest', function() {
 
 		fs.writeFileSync(tempDir + '/testexpected' + testName + '.js', transformationOutput, 'utf-8');
 
-		if(expected != transformationOutput) {
+		if(expected.trim() != transformationOutput.trim()) {
 			console.log(transformationOutput);
 		}
 		expect(transformationOutput.trim()).to.be(expected.trim());
