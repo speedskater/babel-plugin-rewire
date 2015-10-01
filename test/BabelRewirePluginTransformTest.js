@@ -1,6 +1,7 @@
 var babel = require('babel-core');
 var path = require('path');
 var fs = require('fs');
+var os = require('os');
 var expect = require('expect.js');
 
 
@@ -28,8 +29,8 @@ describe('BabelRewirePluginTest', function() {
 			expect().fail("Transformation failed: \n" + error.stack)
 		}
 
-		var tempDir = '/tmp/babel-plugin-rewire';
-
+		var tempDir = path.resolve(os.tmpdir(), 'babel-plugin-rewire');
+		console.log('TempDir: ' + tempDir);
 		try {
 			fs.mkdirSync(tempDir);
 		} catch(error) {}
@@ -39,7 +40,7 @@ describe('BabelRewirePluginTest', function() {
 		if(expected != transformationOutput) {
 			console.log(transformationOutput);
 		}
-		expect(transformationOutput).to.be(expected);
+		expect(transformationOutput.trim()).to.be(expected.trim());
 	}
 
 	function testSuccessfulTranslation(testName) {
