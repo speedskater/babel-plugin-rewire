@@ -28,7 +28,13 @@ describe('BabelRewirePluginTest', function() {
 			expect().fail("Transformation failed: \n" + error.stack)
 		}
 
-		fs.writeFileSync('/tmp/testexpected' + testName + '.js', transformationOutput, 'utf-8');
+		var tempDir = '/tmp/babel-plugin-rewire';
+
+		try {
+			fs.mkdirSync(tempDir);
+		} catch(error) {}
+
+		fs.writeFileSync(tempDir + '/testexpected' + testName + '.js', transformationOutput, 'utf-8');
 
 		if(expected != transformationOutput) {
 			console.log(transformationOutput);
@@ -74,8 +80,4 @@ describe('BabelRewirePluginTest', function() {
 	featuresToTest.forEach(function(feature) {
 		it('test successful translation babel-plugin-rewire for ' + feature, testSuccessfulTranslation.bind(null, feature));
 	});
-
-
-
-
-	});
+});
