@@ -249,6 +249,7 @@ module.exports = function(pluginArguments) {
 				&& !(parent.type === 'MemberExpression' && parent.property === node)
 				&& !(parent.type === 'ClassDeclaration' && parent.id === node)
 				&& !(parent.type === 'Property' && parent.key === node)
+				&& !(parent.type === 'ExportSpecifier' && parent.exported === node)
 				&& (scope.hasBinding(node.name) && scope.getBinding(node.name).path.node.type.match(/^Import.*/))) {
 					return t.callExpression(noRewire(universalAccessors['__GetDependency__']), [ t.literal(node.name) ]);
 				}
@@ -307,6 +308,7 @@ module.exports = function(pluginArguments) {
 						hasES6DefaultExport = true;
 					}
 					isES6Module = true;
+
 					return node;
 				},
 				exit: function(node) {

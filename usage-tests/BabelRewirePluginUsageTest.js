@@ -46,6 +46,7 @@ require('../samples/issue59/sample.js');
 require('../samples/functionRewireScope/sample.js');
 require('../samples/namedExportsRewire/sample.js');
 require('../samples/namedExportRewireSupport/sample.js');
+require('../samples/namedExportsWithNameClash/sample.js');
 require('../samples/nestedScopes/sample.js');
 require('../samples/objectLiteralNameClash/sample.js');
 require('../samples/defaultExportNonExtensible/sample.js');
