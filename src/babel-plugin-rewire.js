@@ -241,12 +241,15 @@ module.exports = function(pluginArguments) {
 			},
 
 			Identifier: function(node, parent, scope, file) {
+
 				var isLiveBindingActive = lifeBindings[node.name] === true;
 				if(isLiveBindingActive && !node.__noRewire && !node.noLifeBinding
 					&& !(parent.type === 'AssignmentExpression' && parent.left == node)
 					&& !(parent.type !== 'VariableDeclarator' && parent.id == node)
 				&& !(parent.type === 'MemberExpression' && parent.property === node)
-				&& !(parent.type === 'ClassDeclaration' && parent.id === node)) {
+				&& !(parent.type === 'ClassDeclaration' && parent.id === node)
+				&& !(parent.type === 'Property' && parent.key === node)
+				&& (scope.hasBinding(node.name) && scope.getBinding(node.name).path.node.type.match(/^Import.*/))) {
 					return t.callExpression(noRewire(universalAccessors['__GetDependency__']), [ t.literal(node.name) ]);
 				}
 				return node;
@@ -281,7 +284,10 @@ module.exports = function(pluginArguments) {
 					}
 					specifier.local = actualImport;
 
-					variableDeclarations.push(t.variableDeclaration('let', [t.variableDeclarator(noRewire(isLifeBindingActive), t.literal(true))]));
+					var importVariableDeclaration = t.variableDeclaration('let', [t.variableDeclarator(noRewire(isLifeBindingActive), t.literal(true))]);
+					importVariableDeclaration.lifeBinding = true;
+
+					variableDeclarations.push(importVariableDeclaration);
 					variableDeclarations.push(t.variableDeclaration('let', [t.variableDeclarator(noRewire(t.identifier(localVariableName)), actualImport)]));
 
 
