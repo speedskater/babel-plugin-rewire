@@ -54,4 +54,5 @@ require('../samples/typedExport/sample.js');
 require('../samples/nonEnumerableProperties/sample.js');
 require('../samples/redefinedRewireProperties/sample.js');
 require('../samples/defaultExportImport/sample.js');
+require('../samples/redux-issue/sample.js');
 hook.unhook('.js'); // removes your own transform
