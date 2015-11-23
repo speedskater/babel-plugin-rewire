@@ -22,13 +22,13 @@ function transformSampleCodeToTestWithBabelPluginRewire(source, filename) {
 		]
 	};
 
-	/*
+
 	if(isSampleCode(filename)) {
 		console.log("=========== " + filename + "============");
 		var code = babel.transform(source, babelTransformationOptions).code;
 		console.log(code);
 		return code;
-	}*/
+	}
 	return isSampleCode(filename) ? babel.transform(source, babelTransformationOptions).code : source;
 }
 
