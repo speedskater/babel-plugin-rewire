@@ -24,9 +24,8 @@ var universalAccessors = {};
 
 
 module.exports = function(pluginArguments) {
-	var Plugin = pluginArguments.Plugin;
 	var t = pluginArguments.types;
-	return new Plugin("rewire", {
+	return {
 		visitor: {
 			Program: (function () {
 				function initializeUniversalAccessors(scope) {
@@ -53,7 +52,11 @@ module.exports = function(pluginArguments) {
 				}
 
 				return {
-					enter: function (node, parent, scope) {
+					enter: function (path, file) {
+						var node = path.node;
+						var parent = path.parent;
+						var scope = path.scope;
+
 						initializeUniversalAccessors(scope);
 						var universalGetter = t.functionDeclaration(
 							noRewire(getUniversalGetterID()),
@@ -81,11 +84,11 @@ module.exports = function(pluginArguments) {
 
 						var rewireAPIObject = t.variableDeclaration('let', [
 							t.variableDeclarator(noRewire(getAPIObjectID()), t.objectExpression([
-								t.property('init', t.literal('__GetDependency__'), universalGetter.id),
-								t.property('init', t.literal('__get__'), universalGetter.id),
-								t.property('init', t.literal('__Rewire__'), universalSetter.id),
-								t.property('init', t.literal('__set__'), universalSetter.id),
-								t.property('init', t.literal('__ResetDependency__'), universalResetter.id)
+								t.objectProperty(t.stringLiteral('__GetDependency__'), universalGetter.id),
+								t.objectProperty(t.stringLiteral('__get__'), universalGetter.id),
+								t.objectProperty(t.stringLiteral('__Rewire__'), universalSetter.id),
+								t.objectProperty(t.stringLiteral('__set__'), universalSetter.id),
+								t.objectProperty(t.stringLiteral('__ResetDependency__'), universalResetter.id)
 							]))
 						]);
 
@@ -103,7 +106,10 @@ module.exports = function(pluginArguments) {
 
 						return node;
 					},
-					exit: function (node, parent, scope, file) {
+					exit:  function exit(path, file) {
+						var node = path.node;
+						var parent = path.parent;
+						var scope = path.scope;
 
 						var exports;
 
@@ -149,8 +155,8 @@ module.exports = function(pluginArguments) {
 
 							exports = [ t.ifStatement(
 								t.logicalExpression('||',
-									t.binaryExpression('===', t.unaryExpression('typeof', moduleExports, true), t.literal('object')),
-									t.binaryExpression('===', t.unaryExpression('typeof', moduleExports, true), t.literal('function'))
+									t.binaryExpression('===', t.unaryExpression('typeof', moduleExports, true), t.stringLiteral('object')),
+									t.binaryExpression('===', t.unaryExpression('typeof', moduleExports, true), t.stringLiteral('function'))
 								),
 								t.blockStatement(nonEnumerableExports)
 							)];
@@ -164,7 +170,11 @@ module.exports = function(pluginArguments) {
 				}
 			})(),
 
-			ExpressionStatement: function(node, parent, scope) {
+			ExpressionStatement: function(path) {
+				var node = path.node;
+				var parent = path.parent;
+				var scope = path.scope;
+
 				if(parent.sourceType === 'module' && !!node.expression && node.expression.type === 'AssignmentExpression') {
 					var assignmentExpression = node.expression;
 
@@ -176,7 +186,11 @@ module.exports = function(pluginArguments) {
 
 			},
 
-			VariableDeclaration: function (node, parent, scope) {
+			VariableDeclaration: function (path) {
+				var node = path.node;
+				var parent = path.parent;
+				var scope = path.scope;
+
 				var variableDeclarations = [];
 				var accessors = [];
 
@@ -220,7 +234,11 @@ module.exports = function(pluginArguments) {
 			 * Functions are replaced by a temporary function declaration and an assignment to a variable with the same name as the original function
 			 * The actual rewireing functionality is added by The Handler for VariableDeclarations which creates a temporary variable and accessors for setting resetting the function.
 			 */
-			FunctionDeclaration: function(declaration, parent, scope) {
+			FunctionDeclaration: function(path) {
+				var declaration = path.node;
+				var parent = path.parent;
+				var scope = path.scope;
+
 				if((parent.type !== 'ExportNamedDeclaration' && parent.sourceType !== 'module') || declaration.id.__noRewire || !declaration.id.name || declaration.id.name.length == 0) {
 					return declaration;
 				}
@@ -240,7 +258,10 @@ module.exports = function(pluginArguments) {
 				}
 			},
 
-			Identifier: function(node, parent, scope, file) {
+			Identifier: function(path, file) {
+				var node = path.node;
+				var parent = path.parent;
+				var scope = path.scope;
 
 				var isLiveBindingActive = lifeBindings[node.name] === true;
 				if(isLiveBindingActive && !node.__noRewire && !node.noLifeBinding
@@ -251,12 +272,16 @@ module.exports = function(pluginArguments) {
 				&& !(parent.type === 'Property' && parent.key === node)
 				&& !(parent.type === 'ExportSpecifier' && parent.exported === node)
 				&& (scope.hasBinding(node.name) && scope.getBinding(node.name).path.node.type.match(/^Import.*/))) {
-					return t.callExpression(noRewire(universalAccessors['__GetDependency__']), [ t.literal(node.name) ]);
+					return t.callExpression(noRewire(universalAccessors['__GetDependency__']), [ t.stringLiteral(node.name) ]);
 				}
 				return node;
 			},
 
-			ImportDeclaration: function (node, parent, scope, file) {
+			ImportDeclaration: function (path, file) {
+				var node = path.node;
+				var parent = path.parent;
+				var scope = path.scope;
+
 				isES6Module = true;
 				var variableDeclarations = [];
 				var accessors = [];
@@ -285,7 +310,7 @@ module.exports = function(pluginArguments) {
 					}
 					specifier.local = actualImport;
 
-					var importVariableDeclaration = t.variableDeclaration('let', [t.variableDeclarator(noRewire(isLifeBindingActive), t.literal(true))]);
+					var importVariableDeclaration = t.variableDeclaration('let', [t.variableDeclarator(noRewire(isLifeBindingActive), t.booleanLiteral(true))]);
 					importVariableDeclaration.lifeBinding = true;
 
 					variableDeclarations.push(importVariableDeclaration);
@@ -300,7 +325,9 @@ module.exports = function(pluginArguments) {
 			},
 
 			'ExportNamedDeclaration|ExportAllDeclaration': {
-				enter: function (node) {
+				enter: function (path) {
+					var node = path.node;
+
 					var hasDefaultExport = node.specifiers.some(function(specifier) {
 						return specifier.local.name === 'default';
 					});
@@ -316,7 +343,11 @@ module.exports = function(pluginArguments) {
 				}
 			},
 
-			ExportDefaultDeclaration: function (node, parent, scope) {
+			ExportDefaultDeclaration: function (path) {
+				var node = path.node;
+				var parent = path.parent;
+				var scope = path.scope;
+
 				if(!!node.rewired) {
 					return node;
 				}
@@ -336,15 +367,15 @@ module.exports = function(pluginArguments) {
 				var defaultExportVariableDeclaration = t.variableDeclaration(bindingType, [t.variableDeclarator(noRewire(defaultExportVariableId), originalExport)]);
 
 				t.callExpression(t.memberExpression(t.identifier('Object'), t.identifier('defineProperty'), [ defaultExportVariableId, '__Rewire__',  t.objectExpression([
-					t.property('init', t.literal('value'), t.identifier('__Rewire__'))
+					t.objectProperty(t.stringLiteral('value'), t.identifier('__Rewire__'))
 				])]));
 
 				var addAdditionalProperties = t.ifStatement(
 					t.logicalExpression('&&',
 						t.parenthesizedExpression(
 							t.logicalExpression('||',
-								t.binaryExpression('===', t.unaryExpression('typeof', defaultExportVariableId, true), t.literal('object')),
-								t.binaryExpression('===', t.unaryExpression('typeof', defaultExportVariableId, true), t.literal('function'))
+								t.binaryExpression('===', t.unaryExpression('typeof', defaultExportVariableId, true), t.stringLiteral('object')),
+								t.binaryExpression('===', t.unaryExpression('typeof', defaultExportVariableId, true), t.stringLiteral('function'))
 							)
 						),
 						t.callExpression(t.memberExpression(t.identifier('Object'), t.identifier('isExtensible')), [defaultExportVariableId])
@@ -366,20 +397,20 @@ module.exports = function(pluginArguments) {
 				return [defaultExportVariableDeclaration, addAdditionalProperties, defaultExport];
 			}
 		}
-	});
+	}
 }
 
 function addNonEnumerableProperty(t, objectIdentifier, propertyName, valueIdentifier) {
-	return t.expressionStatement(t.callExpression(t.memberExpression(t.identifier('Object'), t.identifier('defineProperty')), [ objectIdentifier, t.literal(propertyName),  t.objectExpression([
-		t.property('init', t.literal('value'), valueIdentifier),
-		t.property('init', t.literal('enumerable'), t.literal(false)),
-		t.property('init', t.literal('configurable'), t.literal(true))
+	return t.expressionStatement(t.callExpression(t.memberExpression(t.identifier('Object'), t.identifier('defineProperty')), [ objectIdentifier, t.stringLiteral(propertyName),  t.objectExpression([
+		t.objectProperty(t.stringLiteral('value'), valueIdentifier),
+		t.objectProperty(t.stringLiteral('enumerable'), t.booleanLiteral(false)),
+		t.objectProperty(t.stringLiteral('configurable'), t.booleanLiteral(true))
 	])]));
 }
 
 function accessorsFor(variableName, originalVar, isLifeBindingActive) {
 	var accessor = function(array, variableName, operation) {
-		return t.expressionStatement(t.assignmentExpression("=", t.memberExpression(array, t.literal(variableName), true), operation));
+		return t.expressionStatement(t.assignmentExpression("=", t.memberExpression(array, t.stringLiteral(variableName), true), operation));
 	};
 
 	var noLifeBindingVariableName = noRewire(t.identifier(variableName));
@@ -418,7 +449,7 @@ function accessorsFor(variableName, originalVar, isLifeBindingActive) {
 			null,
 			[t.identifier("value")],
 			t.blockStatement([
-				t.expressionStatement(t.assignmentExpression("=", isLifeBindingActive, t.literal(false))),
+				t.expressionStatement(t.assignmentExpression("=", isLifeBindingActive, t.booleanLiteral(false))),
 				t.expressionStatement(t.assignmentExpression("=", noLifeBindingVariableName, t.identifier("value")))
 			])
 		);
@@ -438,7 +469,7 @@ function accessorsFor(variableName, originalVar, isLifeBindingActive) {
 			null,
 			[],
 			t.blockStatement([
-				t.expressionStatement(t.assignmentExpression("=", isLifeBindingActive, t.literal(true))),
+				t.expressionStatement(t.assignmentExpression("=", isLifeBindingActive, t.booleanLiteral(true))),
 				t.expressionStatement(t.assignmentExpression("=", noLifeBindingVariableName, originalVar))
 			])
 		);

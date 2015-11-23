@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-rewire",
-  "version": "0.1.23-beta-3",
+  "version": "1.0.0-beta-1",
   "description": "A babel plugin adding the ability to rewire module dependencies. This enables to mock modules for testing purposes.",
   "main": "src/babel-plugin-rewire.js",
   "scripts": {
@@ -21,29 +21,40 @@
     "modules"
   ],
   "author": "r.binna@synedra.com",
-  "contributors": [{
-    "name": "Robert Binna",
-    "email": "r.binna@synedra.com"
-  }, {
-    "name": "Peet Goddard"
-  }, {
-    "name": "Eli White",
-    "email": "github@eli-white.com"
-  }, {
-    "name": "Philip Spitzlinger",
-    "email": "p.spitzlinger@synedra.com"
-  }, {
-    "name": "Gustaf Dalemar"
-  }],
+  "contributors": [
+    {
+      "name": "Robert Binna",
+      "email": "r.binna@synedra.com"
+    },
+    {
+      "name": "Peet Goddard"
+    },
+    {
+      "name": "Eli White",
+      "email": "github@eli-white.com"
+    },
+    {
+      "name": "Philip Spitzlinger",
+      "email": "p.spitzlinger@synedra.com"
+    },
+    {
+      "name": "Gustaf Dalemar"
+    }
+  ],
   "license": "ISC",
   "devDependencies": {
-    "babel-runtime": "^5.8.20",
+    "babel-plugin-transform-es2015-block-scoping": "^6.1.18",
+    "babel-plugin-transform-es2015-template-literals": "^6.1.18",
+    "babel-plugin-transform-es2015-typeof-symbol": "^6.1.18",
+    "babel-plugin-transform-runtime": "^6.1.18",
+    "babel-preset-es2015": "^6.1.18",
+    "babel-runtime": "^6.0.0",
     "core-js": "^1.0.0",
     "expect.js": "^0.3.1",
     "mocha": "^2.2.4",
     "node-hook": "^0.1.0"
   },
   "peerDependencies": {
-    "babel-core": ">=5.7.0"
+    "babel-core": ">=6.0.0"
   }
 }
