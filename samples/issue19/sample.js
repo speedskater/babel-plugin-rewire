@@ -6,8 +6,8 @@ import { run, __Rewire__, __GetDependency__, __ResetDependency__,  } from './src
 function createPseudoSpy(name) {
 	let calls = [];
 
-	let spy = function() {
-		calls.push(arguments);
+	let spy = function(...args) {
+		calls.push(args);
 	};
 
 	spy.toHaveBeenCalled = function() {

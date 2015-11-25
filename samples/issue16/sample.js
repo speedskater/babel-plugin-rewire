@@ -13,6 +13,7 @@ describe('sample rewire issue 16', () => {
 	var rewireExample;
 
 	beforeEach(() => {
+		console.log('test');
 		RewireExample.__Rewire__('Database', FakeDatabase);
 		expect(RewireExample.__GetDependency__('Database')).to.equal(FakeDatabase);
 		rewireExample = new RewireExample();

@@ -3,6 +3,7 @@ var path = require('path');
 var fs = require('fs');
 var expect = require('expect.js');
 var hook = require('node-hook');
+var babelPluginRewire = require('./getBabelPluginRewire.js');
 require('core-js');
 
 function isSampleCode(filename) {
@@ -10,15 +11,18 @@ function isSampleCode(filename) {
 	return (filename.substr(0, samplesPath.length) === samplesPath);
 }
 
+
 function transformSampleCodeToTestWithBabelPluginRewire(source, filename) {
 	var babelTransformationOptions = {
-		"presets": ["es2015"],
+		"presets": ["es2015", "react"], //,
 		"plugins": [
+			babelPluginRewire,
+			"syntax-async-functions",
 			"transform-runtime",
 			"transform-es2015-block-scoping",
 			"transform-es2015-template-literals",
 			"transform-es2015-typeof-symbol",
-			path.resolve(__dirname, '../src/babel-plugin-rewire.js')
+			"transform-regenerator"
 		]
 	};
 
@@ -33,8 +37,8 @@ function transformSampleCodeToTestWithBabelPluginRewire(source, filename) {
 }
 
 hook.hook('.js', transformSampleCodeToTestWithBabelPluginRewire);
-require('../samples/issue16/sample.js');
-/*require('../samples/issue18/sample.js');
+/*require('../samples/issue16/sample.js');
+require('../samples/issue18/sample.js');
 require('../samples/issue19/sample.js');
 require('../samples/issue20/sample.js');
 require('../samples/issue22/sample.js');
@@ -45,9 +49,9 @@ require('../samples/issue33/sample.js');
 require('../samples/issue48/sample.js');
 require('../samples/issue59/sample.js');
 require('../samples/functionRewireScope/sample.js');
-require('../samples/namedExportsRewire/sample.js');
+require('../samples/namedExportsRewire/sample.js');*/
 require('../samples/namedExportRewireSupport/sample.js');
-require('../samples/namedExportsWithNameClash/sample.js');
+/*require('../samples/namedExportsWithNameClash/sample.js');
 require('../samples/nestedScopes/sample.js');
 require('../samples/objectLiteralNameClash/sample.js');
 require('../samples/defaultExportNonExtensible/sample.js');

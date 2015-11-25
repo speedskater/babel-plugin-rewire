@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import { default as asyncFunctionDefault, asyncFunction,  __RewireAPI__ as AsyncFunctionRewireAPI  } from './src/AsyncFunction.js';
 import expect from 'expect.js';
 
