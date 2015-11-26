@@ -44,6 +44,7 @@
   "license": "ISC",
   "devDependencies": {
     "babel-plugin-syntax-async-functions": "^6.1.18",
+    "babel-plugin-syntax-flow": "^6.1.18",
     "babel-plugin-syntax-jsx": "^6.1.18",
     "babel-plugin-transform-es2015-block-scoping": "^6.1.18",
     "babel-plugin-transform-es2015-template-literals": "^6.1.18",

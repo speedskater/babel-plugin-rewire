@@ -32,6 +32,7 @@ module.exports = function({ types: t }) {
 				&& !(parent.type === 'ObjectProperty' && path.parentPath && path.parentPath.parent && path.parentPath.parent.type === 'ObjectPattern')
 				&& !(parent.type === 'ExportSpecifier')
 				&& !(parent.type === 'ImportSpecifier')
+				&& !(parent.type === 'ObjectTypeProperty')
 				&& !(parent.type === 'ClassMethod')) {
 
 				if (variableBinding === undefined ||
@@ -128,10 +129,12 @@ module.exports = function({ types: t }) {
 
 				path.traverse(BodyVisitor, rewireState);
 
-				rewireState.appendUniversalAccessors(scope);
-				rewireState.appendExports();
+				if(rewireState.containsDependenciesToRewire()) {
+					rewireState.appendUniversalAccessors(scope);
+					rewireState.appendExports();
 
-				path.replaceWith(noRewire(t.Program(program.body.concat(rewireState.nodesToAppendToProgramBody), program.directives)));
+					path.replaceWith(noRewire(t.Program(program.body.concat(rewireState.nodesToAppendToProgramBody), program.directives)));
+				}
 			}
 		}
 	};

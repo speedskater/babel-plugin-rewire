@@ -94,6 +94,10 @@ export default class RewireState {
 		]);
 	}
 
+	containsDependenciesToRewire() {
+		return Object.keys(this.accessors).length > 0;
+	}
+
 	getUniversalGetterID() {
 		return this.universalAccessors['__GetDependency__'];
 	}

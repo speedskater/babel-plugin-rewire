@@ -1,4 +1,6 @@
+let foo='foo';
+
 export default {
-  foo: 'foo',
+  foo,
   bar: 'bar'
 };

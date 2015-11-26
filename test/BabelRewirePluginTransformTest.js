@@ -12,6 +12,7 @@ describe('BabelRewirePluginTest', function() {
 		"plugins": [
 			babelPluginRewire,
 			"syntax-async-functions",
+			"syntax-flow",
 			"syntax-jsx"
 		]
 	};
@@ -88,7 +89,9 @@ describe('BabelRewirePluginTest', function() {
 		'requireMultiExports',
 		'topLevelVar',
 		'functionRewireScope',
-		'issue69'
+		'issue69',
+		'flowTypeExport',
+		 'flowTypeImport'
 	];
 
 	featuresToTest.forEach(function(feature) {
