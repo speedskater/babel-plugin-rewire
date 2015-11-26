@@ -3,18 +3,30 @@ var path = require('path');
 var fs = require('fs');
 var os = require('os');
 var expect = require('expect.js');
+var babelPluginRewire = require('../test-helpers/getBabelPluginRewire.js');
 
 
 describe('BabelRewirePluginTest', function() {
 
 	var babelTranslationOptions = {
-		blacklist: 'es6.modules',
-		whitelist: [ 'strict' ],
-		plugins: path.resolve(__dirname, '../src/babel-plugin-rewire.js')
+		"plugins": [
+			babelPluginRewire,
+			"syntax-async-functions",
+			"syntax-jsx"
+		]
 	};
 
 	var babelTranslationOptionsAllEnabled = {
-		plugins: path.resolve(__dirname, '../src/babel-plugin-rewire.js')
+		"presets": ["es2015", "react"], //,
+		"plugins": [
+			babelPluginRewire,
+			"syntax-async-functions",
+			"transform-runtime",
+			"transform-es2015-block-scoping",
+			"transform-es2015-template-literals",
+			"transform-es2015-typeof-symbol",
+			"transform-regenerator"
+		]
 	};
 
 	function testTranslation(testName) {

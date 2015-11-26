@@ -12,6 +12,8 @@ var {
   validateURL
 } = require('util/validators');
 
+var [one, two, three] = Style;
+
 
 const PROTOCOLS = [
   'http://',

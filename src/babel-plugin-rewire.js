@@ -13,7 +13,7 @@
  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.*/
 
 import RewireState from './RewireState.js';
-import { wasProcessed, noRewire } from './RewireHelpers.js';
+import { wasProcessed, noRewire, contains } from './RewireHelpers.js';
 
 module.exports = function({ types: t }) {
 	const BodyVisitor = {
@@ -28,16 +28,13 @@ module.exports = function({ types: t }) {
 				&& !(parent.type !== 'VariableDeclarator' && parent.id == node)
 				&& !(parent.type === 'MemberExpression' && parent.property === node)
 				&& !(parent.type === 'ObjectProperty' && parent.key === node)
+				&& !(parent.type === 'ObjectProperty' && path.parentPath && path.parentPath.parent && path.parentPath.parent.type === 'ObjectPattern')
 				&& !(parent.type === 'ExportSpecifier')
 				&& !(parent.type === 'ImportSpecifier')
 				&& !(parent.type === 'ClassMethod')) {
 
-				function referenceMatcher(referencPath) {
-					return referencPath === path;
-				}
-
 				if (variableBinding === undefined ||
-					(variableBinding.scope.block.type === 'Program' && variableBinding.referencePaths.find(referenceMatcher) !== undefined)) {
+					(variableBinding.scope.block.type === 'Program' && variableBinding.referencePaths !== null && contains(variableBinding.referencePaths, path))) {
 					path.replaceWith(t.callExpression(rewireInformation.ensureAccessor(path, variableName), []));
 				}
 			}

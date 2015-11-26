@@ -1,335 +1,90 @@
-'use strict';
+var React = _get_require()('react/addons');
+var _ = _get_require()('lodash');
+var StyleSheet = _get_require()('react-style');
+var cx = _get_require()('classnames');
 
-let __$Getters__ = [];
-let __$Setters__ = [];
-let __$Resetters__ = [];
+var $ = _get_require()('vendor/jquery/semantic');
 
-function _GetDependency__(name) {
-  return __$Getters__[name]();
-}
-
-function _Rewire__(name, value) {
-  __$Setters__[name](value);
-}
-
-function _ResetDependency__(name) {
-  __$Resetters__[name]();
-}
-
-let _RewireAPI__ = {
-  '__GetDependency__': _GetDependency__,
-  '__get__': _GetDependency__,
-  '__Rewire__': _Rewire__,
-  '__set__': _Rewire__,
-  '__ResetDependency__': _ResetDependency__
-};
-var React = require('react/addons');
-var _React = React;
-
-__$Getters__['React'] = function () {
-  return React;
-};
-
-__$Setters__['React'] = function (value) {
-  React = value;
-};
-
-__$Resetters__['React'] = function () {
-  React = _React;
-};
-
-var _ = require('lodash');
-var _2 = _;
-
-__$Getters__['_'] = function () {
-  return _;
-};
-
-__$Setters__['_'] = function (value) {
-  _ = value;
-};
-
-__$Resetters__['_'] = function () {
-  _ = _2;
-};
-
-var StyleSheet = require('react-style');
-var _StyleSheet = StyleSheet;
-
-__$Getters__['StyleSheet'] = function () {
-  return StyleSheet;
-};
-
-__$Setters__['StyleSheet'] = function (value) {
-  StyleSheet = value;
-};
-
-__$Resetters__['StyleSheet'] = function () {
-  StyleSheet = _StyleSheet;
-};
-
-var cx = require('classnames');
-
-var _cx = cx;
-
-__$Getters__['cx'] = function () {
-  return cx;
-};
-
-__$Setters__['cx'] = function (value) {
-  cx = value;
-};
-
-__$Resetters__['cx'] = function () {
-  cx = _cx;
-};
-
-var $ = require('vendor/jquery/semantic');
-
-var _$ = $;
-
-__$Getters__['$'] = function () {
-  return $;
-};
-
-__$Setters__['$'] = function (value) {
-  $ = value;
-};
-
-__$Resetters__['$'] = function () {
-  $ = _$;
-};
-
-var Style = require('style/index.js');
-
-var _Style = Style;
-
-__$Getters__['Style'] = function () {
-  return Style;
-};
-
-__$Setters__['Style'] = function (value) {
-  Style = value;
-};
-
-__$Resetters__['Style'] = function () {
-  Style = _Style;
-};
+var Style = _get_require()('style/index.js');
 
 var {
   validateEmail,
   validateURL
-} = require('util/validators');
+} = _get_require()('util/validators');
 
-let PROTOCOLS = ['http://', 'https://', 'ftp://'];
+var [one, two, three] = _get_Style();
 
-let _PROTOCOLS = PROTOCOLS;
+const PROTOCOLS = ['http://', 'https://', 'ftp://'];
 
-__$Getters__['PROTOCOLS'] = function () {
-  return PROTOCOLS;
-};
+const DEFAULT_PROTOCOL = 'http://';
 
-__$Setters__['PROTOCOLS'] = function (value) {
-  PROTOCOLS = value;
-};
+var Mixins = _get_require()('./mixins.jsx');
+var FormFieldMixin = _get_Mixins().FormFieldMixin,
+    InputMixin = _get_Mixins().InputMixin,
+    TextInputMixin = _get_Mixins().TextInputMixin;
 
-__$Resetters__['PROTOCOLS'] = function () {
-  PROTOCOLS = _PROTOCOLS;
-};
-
-let DEFAULT_PROTOCOL = 'http://';
-
-let _DEFAULT_PROTOCOL = DEFAULT_PROTOCOL;
-
-__$Getters__['DEFAULT_PROTOCOL'] = function () {
-  return DEFAULT_PROTOCOL;
-};
-
-__$Setters__['DEFAULT_PROTOCOL'] = function (value) {
-  DEFAULT_PROTOCOL = value;
-};
-
-__$Resetters__['DEFAULT_PROTOCOL'] = function () {
-  DEFAULT_PROTOCOL = _DEFAULT_PROTOCOL;
-};
-
-var Mixins = require('./mixins.jsx');
-var _Mixins = Mixins;
-
-__$Getters__['Mixins'] = function () {
-  return Mixins;
-};
-
-__$Setters__['Mixins'] = function (value) {
-  Mixins = value;
-};
-
-__$Resetters__['Mixins'] = function () {
-  Mixins = _Mixins;
-};
-
-var FormFieldMixin = Mixins.FormFieldMixin,
-    InputMixin = Mixins.InputMixin,
-    TextInputMixin = Mixins.TextInputMixin;
-
-var _FormFieldMixin = FormFieldMixin;
-var _InputMixin = InputMixin;
-var _TextInputMixin = TextInputMixin;
-
-__$Getters__['FormFieldMixin'] = function () {
-  return FormFieldMixin;
-};
-
-__$Setters__['FormFieldMixin'] = function (value) {
-  FormFieldMixin = value;
-};
-
-__$Resetters__['FormFieldMixin'] = function () {
-  FormFieldMixin = _FormFieldMixin;
-};
-
-__$Getters__['InputMixin'] = function () {
-  return InputMixin;
-};
-
-__$Setters__['InputMixin'] = function (value) {
-  InputMixin = value;
-};
-
-__$Resetters__['InputMixin'] = function () {
-  InputMixin = _InputMixin;
-};
-
-__$Getters__['TextInputMixin'] = function () {
-  return TextInputMixin;
-};
-
-__$Setters__['TextInputMixin'] = function (value) {
-  TextInputMixin = value;
-};
-
-__$Resetters__['TextInputMixin'] = function () {
-  TextInputMixin = _TextInputMixin;
-};
-
-var TextInput = React.createClass({
+var TextInput = _get_React().createClass({
   /*
     Simple text input. See comments for
     `TextInputMixin` for information about
     props and usage.
   */
-  mixins: [TextInputMixin]
+  mixins: [_get_TextInputMixin()]
 });
 
-var _TextInput = TextInput;
-
-__$Getters__['TextInput'] = function () {
-  return TextInput;
-};
-
-__$Setters__['TextInput'] = function (value) {
-  TextInput = value;
-};
-
-__$Resetters__['TextInput'] = function () {
-  TextInput = _TextInput;
-};
-
-var EmailInput = React.createClass({
+var EmailInput = _get_React().createClass({
   /*
     Exactly the same as `TextInput` component
     except it only allows a valid email to
     be entered and submitted.
   */
-  mixins: [TextInputMixin],
+  mixins: [_get_TextInputMixin()],
   baseIsValid: function (val) {
     if (!this.userHasChangedValue()) return true;
-    return validateEmail(val);
+    return _get_validateEmail()(val);
   }
 });
 
-var _EmailInput = EmailInput;
-
-__$Getters__['EmailInput'] = function () {
-  return EmailInput;
-};
-
-__$Setters__['EmailInput'] = function (value) {
-  EmailInput = value;
-};
-
-__$Resetters__['EmailInput'] = function () {
-  EmailInput = _EmailInput;
-};
-
-var URLInput = React.createClass({
-  mixins: [TextInputMixin],
+var URLInput = _get_React().createClass({
+  mixins: [_get_TextInputMixin()],
   baseIsValid: function (val) {
     if (!this.userHasChangedValue()) return true;
-    return validateURL(val);
+    return _get_validateURL()(val);
   },
   baseClean: function (val) {
     // Add default protocol if none is supplied by user
     var hasProtocol = false;
-    PROTOCOLS.forEach(protocol => {
-      if (_.startsWith(val, protocol)) {
+    _get_PROTOCOLS().forEach(protocol => {
+      if (_get__().startsWith(val, protocol)) {
         hasProtocol = true;
       }
     });
-    if (!hasProtocol) return DEFAULT_PROTOCOL + val;
+    if (!hasProtocol) return _get_DEFAULT_PROTOCOL() + val;
     return val;
   }
 });
 
-var _URLInput = URLInput;
-
-__$Getters__['URLInput'] = function () {
-  return URLInput;
-};
-
-__$Setters__['URLInput'] = function (value) {
-  URLInput = value;
-};
-
-__$Resetters__['URLInput'] = function () {
-  URLInput = _URLInput;
-};
-
-var textAreaStyle = StyleSheet.create({
+var textAreaStyle = _get_StyleSheet().create({
   textarea: {}
 });
 
-var _textAreaStyle = textAreaStyle;
-
-__$Getters__['textAreaStyle'] = function () {
-  return textAreaStyle;
-};
-
-__$Setters__['textAreaStyle'] = function (value) {
-  textAreaStyle = value;
-};
-
-__$Resetters__['textAreaStyle'] = function () {
-  textAreaStyle = _textAreaStyle;
-};
-
-var TextArea = React.createClass({
+var TextArea = _get_React().createClass({
   /*
     A simple text area component. See
     documentation for included mixins for more
     information.
   */
-  mixins: [InputMixin],
+  mixins: [_get_InputMixin()],
   propTypes: {
-    style: React.PropTypes.object,
-    height: React.PropTypes.string
+    style: _get_React().PropTypes.object,
+    height: _get_React().PropTypes.string
   },
   render: function () {
-    var taStyle = _.extend({}, textAreaStyle.textarea, this.props.style.textarea);
-    var labelStyle = _.extend({}, textAreaStyle.label, this.props.style.label);
+    var taStyle = _get__().extend({}, _get_textAreaStyle().textarea, this.props.style.textarea);
+    var labelStyle = _get__().extend({}, _get_textAreaStyle().label, this.props.style.label);
     if (this.props.height) taStyle.height = this.props.height;
     var error = !this.isValid() && this.userHasChangedValue();
-    var classNames = cx("field", { error: error });
+    var classNames = _get_cx()("field", { error: error });
     return <div className={classNames}>
         {this.getLabelEl(labelStyle)}
         <textarea onBlur={this.onBlur} onFocus={this.onFocus} onChange={this.onChange} style={taStyle} value={this.state.value} />
@@ -337,21 +92,7 @@ var TextArea = React.createClass({
   }
 });
 
-var _TextArea = TextArea;
-
-__$Getters__['TextArea'] = function () {
-  return TextArea;
-};
-
-__$Setters__['TextArea'] = function (value) {
-  TextArea = value;
-};
-
-__$Resetters__['TextArea'] = function () {
-  TextArea = _TextArea;
-};
-
-var HiddenTextInput = React.createClass({
+var HiddenTextInput = _get_React().createClass({
   /*
     Browsers often focus on first input in a form automatically.
     Sometimes, this auto focus is not desirable. This component
@@ -362,57 +103,190 @@ var HiddenTextInput = React.createClass({
   }
 });
 
-var _HiddenTextInput = HiddenTextInput;
-
-__$Getters__['HiddenTextInput'] = function () {
-  return HiddenTextInput;
+_get_module().exports = {
+  TextInput: _get_TextInput(),
+  TextArea: _get_TextArea(),
+  HiddenTextInput: _get_HiddenTextInput(),
+  EmailInput: _get_EmailInput(),
+  URLInput: _get_URLInput()
 };
 
-__$Setters__['HiddenTextInput'] = function (value) {
-  HiddenTextInput = value;
+function _get_require() {
+  return _RewiredData__ === undefined || _RewiredData__['require'] === undefined ? require : _RewiredData__['require'];
+}
+
+function _get_Style() {
+  return _RewiredData__ === undefined || _RewiredData__['Style'] === undefined ? Style : _RewiredData__['Style'];
+}
+
+function _get_Mixins() {
+  return _RewiredData__ === undefined || _RewiredData__['Mixins'] === undefined ? Mixins : _RewiredData__['Mixins'];
+}
+
+function _get_React() {
+  return _RewiredData__ === undefined || _RewiredData__['React'] === undefined ? React : _RewiredData__['React'];
+}
+
+function _get_TextInputMixin() {
+  return _RewiredData__ === undefined || _RewiredData__['TextInputMixin'] === undefined ? TextInputMixin : _RewiredData__['TextInputMixin'];
+}
+
+function _get_validateEmail() {
+  return _RewiredData__ === undefined || _RewiredData__['validateEmail'] === undefined ? validateEmail : _RewiredData__['validateEmail'];
+}
+
+function _get_validateURL() {
+  return _RewiredData__ === undefined || _RewiredData__['validateURL'] === undefined ? validateURL : _RewiredData__['validateURL'];
+}
+
+function _get_PROTOCOLS() {
+  return _RewiredData__ === undefined || _RewiredData__['PROTOCOLS'] === undefined ? PROTOCOLS : _RewiredData__['PROTOCOLS'];
+}
+
+function _get__() {
+  return _RewiredData__ === undefined || _RewiredData__['_'] === undefined ? _ : _RewiredData__['_'];
+}
+
+function _get_DEFAULT_PROTOCOL() {
+  return _RewiredData__ === undefined || _RewiredData__['DEFAULT_PROTOCOL'] === undefined ? DEFAULT_PROTOCOL : _RewiredData__['DEFAULT_PROTOCOL'];
+}
+
+function _get_StyleSheet() {
+  return _RewiredData__ === undefined || _RewiredData__['StyleSheet'] === undefined ? StyleSheet : _RewiredData__['StyleSheet'];
+}
+
+function _get_InputMixin() {
+  return _RewiredData__ === undefined || _RewiredData__['InputMixin'] === undefined ? InputMixin : _RewiredData__['InputMixin'];
+}
+
+function _get_textAreaStyle() {
+  return _RewiredData__ === undefined || _RewiredData__['textAreaStyle'] === undefined ? textAreaStyle : _RewiredData__['textAreaStyle'];
+}
+
+function _get_cx() {
+  return _RewiredData__ === undefined || _RewiredData__['cx'] === undefined ? cx : _RewiredData__['cx'];
+}
+
+function _get_module() {
+  return _RewiredData__ === undefined || _RewiredData__['module'] === undefined ? module : _RewiredData__['module'];
+}
+
+function _get_TextInput() {
+  return _RewiredData__ === undefined || _RewiredData__['TextInput'] === undefined ? TextInput : _RewiredData__['TextInput'];
+}
+
+function _get_TextArea() {
+  return _RewiredData__ === undefined || _RewiredData__['TextArea'] === undefined ? TextArea : _RewiredData__['TextArea'];
+}
+
+function _get_HiddenTextInput() {
+  return _RewiredData__ === undefined || _RewiredData__['HiddenTextInput'] === undefined ? HiddenTextInput : _RewiredData__['HiddenTextInput'];
+}
+
+function _get_EmailInput() {
+  return _RewiredData__ === undefined || _RewiredData__['EmailInput'] === undefined ? EmailInput : _RewiredData__['EmailInput'];
+}
+
+function _get_URLInput() {
+  return _RewiredData__ === undefined || _RewiredData__['URLInput'] === undefined ? URLInput : _RewiredData__['URLInput'];
+}
+
+let _RewiredData__ = {};
+let _GETTERS__ = {
+  'require': _get_require,
+  'Style': _get_Style,
+  'Mixins': _get_Mixins,
+  'React': _get_React,
+  'TextInputMixin': _get_TextInputMixin,
+  'validateEmail': _get_validateEmail,
+  'validateURL': _get_validateURL,
+  'PROTOCOLS': _get_PROTOCOLS,
+  '_': _get__,
+  'DEFAULT_PROTOCOL': _get_DEFAULT_PROTOCOL,
+  'StyleSheet': _get_StyleSheet,
+  'InputMixin': _get_InputMixin,
+  'textAreaStyle': _get_textAreaStyle,
+  'cx': _get_cx,
+  'module': _get_module,
+  'TextInput': _get_TextInput,
+  'TextArea': _get_TextArea,
+  'HiddenTextInput': _get_HiddenTextInput,
+  'EmailInput': _get_EmailInput,
+  'URLInput': _get_URLInput
 };
 
-__$Resetters__['HiddenTextInput'] = function () {
-  HiddenTextInput = _HiddenTextInput;
-};
+function _GetDependency__(variableName) {
+  return _GETTERS__[variableName]();
+}
 
-module.exports = {
-  TextInput: TextInput,
-  TextArea: TextArea,
-  HiddenTextInput: HiddenTextInput,
-  EmailInput: EmailInput,
-  URLInput: URLInput
-};
+function _Rewire__(variableName, value) {
+  return _RewiredData__[variableName] = value;
+}
 
-if (typeof module.exports === 'object' || typeof module.exports === 'function') {
-  Object.defineProperty(module.exports, '__Rewire__', {
-    'value': _Rewire__,
-    'enumerable': false,
-    'configurable': true
+function _ResetDependency__(variableName) {
+  delete _RewiredData__[variableName];
+}
+
+function _with__(object) {
+  var rewiredVariableNames = Object.keys(object);
+  var previousValues = {};
+
+  function reset() {
+    rewiredVariableNames.forEach(function (variableName) {
+      REWIRED_DATA[variableName] = previousValues[variableName];
+    });
+  }
+
+  return function (callback) {
+    rewiredVariableNames.forEach(function (variableName) {
+      previousValues[variableName] = REWIRED_DATA[variableName];
+      REWIRED_DATA[variableName] = object[variableName];
+    });
+    let result = callback();
+
+    if (typeof result.then == 'function') {
+      result.then(reset).catch(reset);
+    } else {
+      reset();
+    }
+  };
+}
+
+let _RewireAPI__ = {};
+
+(function () {
+  function addPropertyToAPIObject(name, value) {
+    Object.defineProperty(_RewireAPI__, name, {
+      value: value,
+      enumerable: false,
+      configurable: true
+    });
+  }
+
+  addPropertyToAPIObject('__get__', _GetDependency__);
+  addPropertyToAPIObject('__GetDependency__', _GetDependency__);
+  addPropertyToAPIObject('__Rewire__', _Rewire__);
+  addPropertyToAPIObject('__set__', _Rewire__);
+  addPropertyToAPIObject('__ResetDependency__', _ResetDependency__);
+  addPropertyToAPIObject('__with__', _with__);
+})();
+
+let typeOfOriginalExport = typeof module.exports;
+
+function addNonEnumerableProperty(name, value) {
+  Object.defineProperty(module.exports, name, {
+    value: value,
+    enumerable: false,
+    configurable: true
   });
-  Object.defineProperty(module.exports, '__set__', {
-    'value': _Rewire__,
-    'enumerable': false,
-    'configurable': true
-  });
-  Object.defineProperty(module.exports, '__ResetDependency__', {
-    'value': _ResetDependency__,
-    'enumerable': false,
-    'configurable': true
-  });
-  Object.defineProperty(module.exports, '__GetDependency__', {
-    'value': _GetDependency__,
-    'enumerable': false,
-    'configurable': true
-  });
-  Object.defineProperty(module.exports, '__get__', {
-    'value': _GetDependency__,
-    'enumerable': false,
-    'configurable': true
-  });
-  Object.defineProperty(module.exports, '__RewireAPI__', {
-    'value': _RewireAPI__,
-    'enumerable': false,
-    'configurable': true
-  });
+}
+
+if ((typeOfOriginalExport === 'object' || typeOfOriginalExport === 'function') && Object.isExtensible(module.exports)) {
+  addNonEnumerableProperty('__get__', _GetDependency__);
+  addNonEnumerableProperty('__GetDependency__', _GetDependency__);
+  addNonEnumerableProperty('__Rewire__', _Rewire__);
+  addNonEnumerableProperty('__set__', _Rewire__);
+  addNonEnumerableProperty('__ResetDependency__', _ResetDependency__);
+  addNonEnumerableProperty('__with__', _with__);
+  addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
 }

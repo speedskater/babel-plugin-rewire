@@ -1,67 +1,84 @@
-'use strict';
+import ComponentToTest from './src/ComponentToTest.js';
+import expect from 'expect.js';
 
-import _ComponentToTestTemp$Import from './src/ComponentToTest.js';
-import _expectTemp$Import from 'expect.js';
-
-let __$Getters__ = [];
-let __$Setters__ = [];
-let __$Resetters__ = [];
-
-function _GetDependency__(name) {
-	return __$Getters__[name]();
+for (let b of _get_a()) {
+	_get_expect()(_get_ComponentToTest().__Get__('node')).to.be('hey I\'m mock');
 }
 
-function _Rewire__(name, value) {
-	__$Setters__[name](value);
+function _get_a() {
+	return _RewiredData__ === undefined || _RewiredData__['a'] === undefined ? a : _RewiredData__['a'];
 }
 
-function _ResetDependency__(name) {
-	__$Resetters__[name]();
+function _get_expect() {
+	return _RewiredData__ === undefined || _RewiredData__['expect'] === undefined ? expect : _RewiredData__['expect'];
 }
 
-let _RewireAPI__ = {
-	'__GetDependency__': _GetDependency__,
-	'__get__': _GetDependency__,
-	'__Rewire__': _Rewire__,
-	'__set__': _Rewire__,
-	'__ResetDependency__': _ResetDependency__
-};
-let _ComponentToTest$IsLifeBindingActive = true;
-let ComponentToTest = _ComponentToTestTemp$Import;
-
-__$Getters__['ComponentToTest'] = function () {
-	return _ComponentToTest$IsLifeBindingActive ? _ComponentToTestTemp$Import : ComponentToTest;
-};
-
-__$Setters__['ComponentToTest'] = function (value) {
-	_ComponentToTest$IsLifeBindingActive = false;
-	ComponentToTest = value;
-};
-
-__$Resetters__['ComponentToTest'] = function () {
-	_ComponentToTest$IsLifeBindingActive = true;
-	ComponentToTest = _ComponentToTestTemp$Import;
-};
-
-let _expect$IsLifeBindingActive = true;
-let expect = _expectTemp$Import;
-
-__$Getters__['expect'] = function () {
-	return _expect$IsLifeBindingActive ? _expectTemp$Import : expect;
-};
-
-__$Setters__['expect'] = function (value) {
-	_expect$IsLifeBindingActive = false;
-	expect = value;
-};
-
-__$Resetters__['expect'] = function () {
-	_expect$IsLifeBindingActive = true;
-	expect = _expectTemp$Import;
-};
-
-for (let b of a) {
-	_GetDependency__('expect')(_GetDependency__('ComponentToTest').__Get__('node')).to.be('hey I\'m mock');
+function _get_ComponentToTest() {
+	return _RewiredData__ === undefined || _RewiredData__['ComponentToTest'] === undefined ? ComponentToTest : _RewiredData__['ComponentToTest'];
 }
-export { _GetDependency__ as __GetDependency__, _GetDependency__ as __get__, _Rewire__ as __Rewire__, _Rewire__ as __set__, _ResetDependency__ as __ResetDependency__, _RewireAPI__ as __RewireAPI__ };
+
+let _RewiredData__ = {};
+let _GETTERS__ = {
+	'a': _get_a,
+	'expect': _get_expect,
+	'ComponentToTest': _get_ComponentToTest
+};
+
+function _GetDependency__(variableName) {
+	return _GETTERS__[variableName]();
+}
+
+function _Rewire__(variableName, value) {
+	return _RewiredData__[variableName] = value;
+}
+
+function _ResetDependency__(variableName) {
+	delete _RewiredData__[variableName];
+}
+
+function _with__(object) {
+	var rewiredVariableNames = Object.keys(object);
+	var previousValues = {};
+
+	function reset() {
+		rewiredVariableNames.forEach(function (variableName) {
+			REWIRED_DATA[variableName] = previousValues[variableName];
+		});
+	}
+
+	return function (callback) {
+		rewiredVariableNames.forEach(function (variableName) {
+			previousValues[variableName] = REWIRED_DATA[variableName];
+			REWIRED_DATA[variableName] = object[variableName];
+		});
+		let result = callback();
+
+		if (typeof result.then == 'function') {
+			result.then(reset).catch(reset);
+		} else {
+			reset();
+		}
+	};
+}
+
+let _RewireAPI__ = {};
+
+(function () {
+	function addPropertyToAPIObject(name, value) {
+		Object.defineProperty(_RewireAPI__, name, {
+			value: value,
+			enumerable: false,
+			configurable: true
+		});
+	}
+
+	addPropertyToAPIObject('__get__', _GetDependency__);
+	addPropertyToAPIObject('__GetDependency__', _GetDependency__);
+	addPropertyToAPIObject('__Rewire__', _Rewire__);
+	addPropertyToAPIObject('__set__', _Rewire__);
+	addPropertyToAPIObject('__ResetDependency__', _ResetDependency__);
+	addPropertyToAPIObject('__with__', _with__);
+})();
+
+export { _GetDependency__ as __get__, _GetDependency__ as __GetDependency__, _Rewire__ as __Rewire__, _Rewire__ as __set__, _ResetDependency__ as __ResetDependency__, _RewireAPI__ as __RewireAPI__ };
 export default _RewireAPI__;

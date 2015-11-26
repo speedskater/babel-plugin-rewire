@@ -1,73 +1,14 @@
-'use strict';
+import { node } from './DomUtils.js';
+import Card from './Card.js';
 
-import { node as _nodeTemp$Import } from './DomUtils.js';
-import _CardTemp$Import from './Card.js';
-
-let __$Getters__ = [];
-let __$Setters__ = [];
-let __$Resetters__ = [];
-
-function _GetDependency__(name) {
-	return __$Getters__[name]();
-}
-
-function _Rewire__(name, value) {
-	__$Setters__[name](value);
-}
-
-function _ResetDependency__(name) {
-	__$Resetters__[name]();
-}
-
-let _RewireAPI__ = {
-	'__GetDependency__': _GetDependency__,
-	'__get__': _GetDependency__,
-	'__Rewire__': _Rewire__,
-	'__set__': _Rewire__,
-	'__ResetDependency__': _ResetDependency__
-};
-let _node$IsLifeBindingActive = true;
-let node = _nodeTemp$Import;
-
-__$Getters__['node'] = function () {
-	return _node$IsLifeBindingActive ? _nodeTemp$Import : node;
-};
-
-__$Setters__['node'] = function (value) {
-	_node$IsLifeBindingActive = false;
-	node = value;
-};
-
-__$Resetters__['node'] = function () {
-	_node$IsLifeBindingActive = true;
-	node = _nodeTemp$Import;
-};
-
-let _Card$IsLifeBindingActive = true;
-let Card = _CardTemp$Import;
-
-__$Getters__['Card'] = function () {
-	return _Card$IsLifeBindingActive ? _CardTemp$Import : Card;
-};
-
-__$Setters__['Card'] = function (value) {
-	_Card$IsLifeBindingActive = false;
-	Card = value;
-};
-
-__$Resetters__['Card'] = function () {
-	_Card$IsLifeBindingActive = true;
-	Card = _CardTemp$Import;
-};
-
-class WelcomePanel extends _GetDependency__('Card') {
+class WelcomePanel extends _get_Card() {
 	constructor(props) {
 		super(props);
 	}
 
 	render() {
 		return <div className='welcome-panel'>
-				<Card content={_GetDependency__('node').toString()} />
+				<Card content={_get_node().toString()} />
 			</div>;
 	}
 
@@ -78,40 +19,102 @@ class WelcomePanel extends _GetDependency__('Card') {
 };
 
 //export default WelcomePanel;
-let _defaultExport = { WelcomePanel };
+let _DefaultExportValue = { WelcomePanel: _get_WelcomePanel() };
+export default _DefaultExportValue;
 
-if ((typeof _defaultExport === 'object' || typeof _defaultExport === 'function') && Object.isExtensible(_defaultExport)) {
-	Object.defineProperty(_defaultExport, '__Rewire__', {
-		'value': _Rewire__,
-		'enumerable': false,
-		'configurable': true
-	});
-	Object.defineProperty(_defaultExport, '__set__', {
-		'value': _Rewire__,
-		'enumerable': false,
-		'configurable': true
-	});
-	Object.defineProperty(_defaultExport, '__ResetDependency__', {
-		'value': _ResetDependency__,
-		'enumerable': false,
-		'configurable': true
-	});
-	Object.defineProperty(_defaultExport, '__GetDependency__', {
-		'value': _GetDependency__,
-		'enumerable': false,
-		'configurable': true
-	});
-	Object.defineProperty(_defaultExport, '__get__', {
-		'value': _GetDependency__,
-		'enumerable': false,
-		'configurable': true
-	});
-	Object.defineProperty(_defaultExport, '__RewireAPI__', {
-		'value': _RewireAPI__,
-		'enumerable': false,
-		'configurable': true
+function _get_node() {
+	return _RewiredData__ === undefined || _RewiredData__['node'] === undefined ? node : _RewiredData__['node'];
+}
+
+function _get_Card() {
+	return _RewiredData__ === undefined || _RewiredData__['Card'] === undefined ? Card : _RewiredData__['Card'];
+}
+
+let typeOfOriginalExport = typeof _DefaultExportValue;
+
+function addNonEnumerableProperty(name, value) {
+	Object.defineProperty(_DefaultExportValue, name, {
+		value: value,
+		enumerable: false,
+		configurable: true
 	});
 }
 
-export default _defaultExport;
-export { _GetDependency__ as __GetDependency__, _GetDependency__ as __get__, _Rewire__ as __Rewire__, _Rewire__ as __set__, _ResetDependency__ as __ResetDependency__, _RewireAPI__ as __RewireAPI__ };
+if ((typeOfOriginalExport === 'object' || typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
+	addNonEnumerableProperty('__get__', _GetDependency__);
+	addNonEnumerableProperty('__GetDependency__', _GetDependency__);
+	addNonEnumerableProperty('__Rewire__', _Rewire__);
+	addNonEnumerableProperty('__set__', _Rewire__);
+	addNonEnumerableProperty('__ResetDependency__', _ResetDependency__);
+	addNonEnumerableProperty('__with__', _with__);
+	addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
+}
+
+function _get_WelcomePanel() {
+	return _RewiredData__ === undefined || _RewiredData__['WelcomePanel'] === undefined ? WelcomePanel : _RewiredData__['WelcomePanel'];
+}
+
+let _RewiredData__ = {};
+let _GETTERS__ = {
+	'node': _get_node,
+	'Card': _get_Card,
+	'WelcomePanel': _get_WelcomePanel
+};
+
+function _GetDependency__(variableName) {
+	return _GETTERS__[variableName]();
+}
+
+function _Rewire__(variableName, value) {
+	return _RewiredData__[variableName] = value;
+}
+
+function _ResetDependency__(variableName) {
+	delete _RewiredData__[variableName];
+}
+
+function _with__(object) {
+	var rewiredVariableNames = Object.keys(object);
+	var previousValues = {};
+
+	function reset() {
+		rewiredVariableNames.forEach(function (variableName) {
+			REWIRED_DATA[variableName] = previousValues[variableName];
+		});
+	}
+
+	return function (callback) {
+		rewiredVariableNames.forEach(function (variableName) {
+			previousValues[variableName] = REWIRED_DATA[variableName];
+			REWIRED_DATA[variableName] = object[variableName];
+		});
+		let result = callback();
+
+		if (typeof result.then == 'function') {
+			result.then(reset).catch(reset);
+		} else {
+			reset();
+		}
+	};
+}
+
+let _RewireAPI__ = {};
+
+(function () {
+	function addPropertyToAPIObject(name, value) {
+		Object.defineProperty(_RewireAPI__, name, {
+			value: value,
+			enumerable: false,
+			configurable: true
+		});
+	}
+
+	addPropertyToAPIObject('__get__', _GetDependency__);
+	addPropertyToAPIObject('__GetDependency__', _GetDependency__);
+	addPropertyToAPIObject('__Rewire__', _Rewire__);
+	addPropertyToAPIObject('__set__', _Rewire__);
+	addPropertyToAPIObject('__ResetDependency__', _ResetDependency__);
+	addPropertyToAPIObject('__with__', _with__);
+})();
+
+export { _GetDependency__ as __get__, _GetDependency__ as __GetDependency__, _Rewire__ as __Rewire__, _Rewire__ as __set__, _ResetDependency__ as __ResetDependency__, _RewireAPI__ as __RewireAPI__ };

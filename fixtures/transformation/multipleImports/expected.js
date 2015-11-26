@@ -1,61 +1,62 @@
-'use strict';
+import { first, second } from 'path/to/another/LargeModules.js';
+let _RewiredData__ = {};
+let _GETTERS__ = {};
 
-import { first as _firstTemp$Import, second as _secondTemp$Import } from 'path/to/another/LargeModules.js';
-let __$Getters__ = [];
-let __$Setters__ = [];
-let __$Resetters__ = [];
-
-function _GetDependency__(name) {
-  return __$Getters__[name]();
+function _GetDependency__(variableName) {
+  return _GETTERS__[variableName]();
 }
 
-function _Rewire__(name, value) {
-  __$Setters__[name](value);
+function _Rewire__(variableName, value) {
+  return _RewiredData__[variableName] = value;
 }
 
-function _ResetDependency__(name) {
-  __$Resetters__[name]();
+function _ResetDependency__(variableName) {
+  delete _RewiredData__[variableName];
 }
 
-let _RewireAPI__ = {
-  '__GetDependency__': _GetDependency__,
-  '__get__': _GetDependency__,
-  '__Rewire__': _Rewire__,
-  '__set__': _Rewire__,
-  '__ResetDependency__': _ResetDependency__
-};
-let _first$IsLifeBindingActive = true;
-let first = _firstTemp$Import;
-let _second$IsLifeBindingActive = true;
-let second = _secondTemp$Import;
+function _with__(object) {
+  var rewiredVariableNames = Object.keys(object);
+  var previousValues = {};
 
-__$Getters__['first'] = function () {
-  return _first$IsLifeBindingActive ? _firstTemp$Import : first;
-};
+  function reset() {
+    rewiredVariableNames.forEach(function (variableName) {
+      REWIRED_DATA[variableName] = previousValues[variableName];
+    });
+  }
 
-__$Setters__['first'] = function (value) {
-  _first$IsLifeBindingActive = false;
-  first = value;
-};
+  return function (callback) {
+    rewiredVariableNames.forEach(function (variableName) {
+      previousValues[variableName] = REWIRED_DATA[variableName];
+      REWIRED_DATA[variableName] = object[variableName];
+    });
+    let result = callback();
 
-__$Resetters__['first'] = function () {
-  _first$IsLifeBindingActive = true;
-  first = _firstTemp$Import;
-};
+    if (typeof result.then == 'function') {
+      result.then(reset).catch(reset);
+    } else {
+      reset();
+    }
+  };
+}
 
-__$Getters__['second'] = function () {
-  return _second$IsLifeBindingActive ? _secondTemp$Import : second;
-};
+let _RewireAPI__ = {};
 
-__$Setters__['second'] = function (value) {
-  _second$IsLifeBindingActive = false;
-  second = value;
-};
+(function () {
+  function addPropertyToAPIObject(name, value) {
+    Object.defineProperty(_RewireAPI__, name, {
+      value: value,
+      enumerable: false,
+      configurable: true
+    });
+  }
 
-__$Resetters__['second'] = function () {
-  _second$IsLifeBindingActive = true;
-  second = _secondTemp$Import;
-};
+  addPropertyToAPIObject('__get__', _GetDependency__);
+  addPropertyToAPIObject('__GetDependency__', _GetDependency__);
+  addPropertyToAPIObject('__Rewire__', _Rewire__);
+  addPropertyToAPIObject('__set__', _Rewire__);
+  addPropertyToAPIObject('__ResetDependency__', _ResetDependency__);
+  addPropertyToAPIObject('__with__', _with__);
+})();
 
-export { _GetDependency__ as __GetDependency__, _GetDependency__ as __get__, _Rewire__ as __Rewire__, _Rewire__ as __set__, _ResetDependency__ as __ResetDependency__, _RewireAPI__ as __RewireAPI__ };
+export { _GetDependency__ as __get__, _GetDependency__ as __GetDependency__, _Rewire__ as __Rewire__, _Rewire__ as __set__, _ResetDependency__ as __ResetDependency__, _RewireAPI__ as __RewireAPI__ };
 export default _RewireAPI__;

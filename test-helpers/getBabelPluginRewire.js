@@ -18,9 +18,3 @@ hook.hook('.js', function(source, filename) {
 });
 module.exports = require(pluginPath);
 hook.unhook('.js'); // removes babel hook
-
-
-
-
-
-

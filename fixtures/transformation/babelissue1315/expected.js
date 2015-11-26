@@ -1,5 +1,3 @@
-'use strict';
-
 import "babel/polyfill";
 
 import 'underscore-wrapper';
@@ -20,145 +18,120 @@ import 'script!vendor/scripts/highcharts/adapters/standalone-framework.src.js';
 import 'script!vendor/scripts/highcharts/highcharts.src.js';
 
 // Kick off the application
-import _$Temp$Import from 'jquery';
-import _ie8IconsTemp$Import from 'utils/ie8-icons';
-import _UserModelTemp$Import from 'models/user';
-
-let __$Getters__ = [];
-let __$Setters__ = [];
-let __$Resetters__ = [];
-
-function _GetDependency__(name) {
-	return __$Getters__[name]();
-}
-
-function _Rewire__(name, value) {
-	__$Setters__[name](value);
-}
-
-function _ResetDependency__(name) {
-	__$Resetters__[name]();
-}
-
-let _RewireAPI__ = {
-	'__GetDependency__': _GetDependency__,
-	'__get__': _GetDependency__,
-	'__Rewire__': _Rewire__,
-	'__set__': _Rewire__,
-	'__ResetDependency__': _ResetDependency__
-};
-let _$$IsLifeBindingActive = true;
-let $ = _$Temp$Import;
-
-__$Getters__['$'] = function () {
-	return _$$IsLifeBindingActive ? _$Temp$Import : $;
-};
-
-__$Setters__['$'] = function (value) {
-	_$$IsLifeBindingActive = false;
-	$ = value;
-};
-
-__$Resetters__['$'] = function () {
-	_$$IsLifeBindingActive = true;
-	$ = _$Temp$Import;
-};
-
-let _ie8Icons$IsLifeBindingActive = true;
-let ie8Icons = _ie8IconsTemp$Import;
-
-__$Getters__['ie8Icons'] = function () {
-	return _ie8Icons$IsLifeBindingActive ? _ie8IconsTemp$Import : ie8Icons;
-};
-
-__$Setters__['ie8Icons'] = function (value) {
-	_ie8Icons$IsLifeBindingActive = false;
-	ie8Icons = value;
-};
-
-__$Resetters__['ie8Icons'] = function () {
-	_ie8Icons$IsLifeBindingActive = true;
-	ie8Icons = _ie8IconsTemp$Import;
-};
-
-let _UserModel$IsLifeBindingActive = true;
-let UserModel = _UserModelTemp$Import;
-
-__$Getters__['UserModel'] = function () {
-	return _UserModel$IsLifeBindingActive ? _UserModelTemp$Import : UserModel;
-};
-
-__$Setters__['UserModel'] = function (value) {
-	_UserModel$IsLifeBindingActive = false;
-	UserModel = value;
-};
-
-__$Resetters__['UserModel'] = function () {
-	_UserModel$IsLifeBindingActive = true;
-	UserModel = _UserModelTemp$Import;
-};
+import $ from 'jquery';
+import ie8Icons from 'utils/ie8-icons';
+import UserModel from 'models/user';
 
 let a = 'b';
 
-let _a = a;
-
-__$Getters__['a'] = function () {
-	return a;
-};
-
-__$Setters__['a'] = function (value) {
-	a = value;
-};
-
-__$Resetters__['a'] = function () {
-	a = _a;
-};
-
-let user = UserModel.getCurrent();
-let _user = user;
-
-__$Getters__['user'] = function () {
-	return user;
-};
-
-__$Setters__['user'] = function (value) {
-	user = value;
-};
-
-__$Resetters__['user'] = function () {
-	user = _user;
-};
-
-let moduleName = user && user.inState('activated') ? 'inside' : 'outside';
+const user = _get_UserModel().getCurrent();
+const moduleName = _get_user() && _get_user().inState('activated') ? 'inside' : 'outside';
 
 // Main app entryPoint
-let _moduleName = moduleName;
-
-__$Getters__['moduleName'] = function () {
-	return moduleName;
-};
-
-__$Setters__['moduleName'] = function (value) {
-	moduleName = value;
-};
-
-__$Resetters__['moduleName'] = function () {
-	moduleName = _moduleName;
-};
-
-if (moduleName === 'inside') {
-	require.ensure([], function () {
-		require('inside')();
+if (_get_moduleName() === 'inside') {
+	_get_require().ensure([], function () {
+		_get_require()('inside')();
 	});
 }
 
 // Login or register entryPoint
-else if (moduleName === 'outside') {
-		require.ensure([], function () {
-			require('outside')();
+else if (_get_moduleName() === 'outside') {
+		_get_require().ensure([], function () {
+			_get_require()('outside')();
 		});
 	}
 
-_GetDependency__('$')(() => _GetDependency__('ie8Icons').fix());
-export { _GetDependency__ as __GetDependency__, _GetDependency__ as __get__, _Rewire__ as __Rewire__, _Rewire__ as __set__, _ResetDependency__ as __ResetDependency__, _RewireAPI__ as __RewireAPI__ };
+_get_$()(() => _get_ie8Icons().fix());
+
+function _get_UserModel() {
+	return _RewiredData__ === undefined || _RewiredData__['UserModel'] === undefined ? UserModel : _RewiredData__['UserModel'];
+}
+
+function _get_user() {
+	return _RewiredData__ === undefined || _RewiredData__['user'] === undefined ? user : _RewiredData__['user'];
+}
+
+function _get_moduleName() {
+	return _RewiredData__ === undefined || _RewiredData__['moduleName'] === undefined ? moduleName : _RewiredData__['moduleName'];
+}
+
+function _get_require() {
+	return _RewiredData__ === undefined || _RewiredData__['require'] === undefined ? require : _RewiredData__['require'];
+}
+
+function _get_$() {
+	return _RewiredData__ === undefined || _RewiredData__['$'] === undefined ? $ : _RewiredData__['$'];
+}
+
+function _get_ie8Icons() {
+	return _RewiredData__ === undefined || _RewiredData__['ie8Icons'] === undefined ? ie8Icons : _RewiredData__['ie8Icons'];
+}
+
+let _RewiredData__ = {};
+let _GETTERS__ = {
+	'UserModel': _get_UserModel,
+	'user': _get_user,
+	'moduleName': _get_moduleName,
+	'require': _get_require,
+	'$': _get_$,
+	'ie8Icons': _get_ie8Icons
+};
+
+function _GetDependency__(variableName) {
+	return _GETTERS__[variableName]();
+}
+
+function _Rewire__(variableName, value) {
+	return _RewiredData__[variableName] = value;
+}
+
+function _ResetDependency__(variableName) {
+	delete _RewiredData__[variableName];
+}
+
+function _with__(object) {
+	var rewiredVariableNames = Object.keys(object);
+	var previousValues = {};
+
+	function reset() {
+		rewiredVariableNames.forEach(function (variableName) {
+			REWIRED_DATA[variableName] = previousValues[variableName];
+		});
+	}
+
+	return function (callback) {
+		rewiredVariableNames.forEach(function (variableName) {
+			previousValues[variableName] = REWIRED_DATA[variableName];
+			REWIRED_DATA[variableName] = object[variableName];
+		});
+		let result = callback();
+
+		if (typeof result.then == 'function') {
+			result.then(reset).catch(reset);
+		} else {
+			reset();
+		}
+	};
+}
+
+let _RewireAPI__ = {};
+
+(function () {
+	function addPropertyToAPIObject(name, value) {
+		Object.defineProperty(_RewireAPI__, name, {
+			value: value,
+			enumerable: false,
+			configurable: true
+		});
+	}
+
+	addPropertyToAPIObject('__get__', _GetDependency__);
+	addPropertyToAPIObject('__GetDependency__', _GetDependency__);
+	addPropertyToAPIObject('__Rewire__', _Rewire__);
+	addPropertyToAPIObject('__set__', _Rewire__);
+	addPropertyToAPIObject('__ResetDependency__', _ResetDependency__);
+	addPropertyToAPIObject('__with__', _with__);
+})();
+
+export { _GetDependency__ as __get__, _GetDependency__ as __GetDependency__, _Rewire__ as __Rewire__, _Rewire__ as __set__, _ResetDependency__ as __ResetDependency__, _RewireAPI__ as __RewireAPI__ };
 export default _RewireAPI__;

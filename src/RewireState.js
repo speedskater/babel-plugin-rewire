@@ -18,7 +18,7 @@ export default class RewireState {
 			__Rewire__: scope.generateUidIdentifier("__Rewire__"),
 			__ResetDependency__: scope.generateUidIdentifier("__ResetDependency__"),
 			__RewireAPI__: scope.generateUidIdentifier("__RewireAPI__"),
-			__With__: scope.generateUidIdentifier("__with__")
+			__with__: scope.generateUidIdentifier("__with__")
 		};
 	}
 

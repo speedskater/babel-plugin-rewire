@@ -1,50 +1,8 @@
-'use strict';
+import fetch from 'isomorphic-fetch';
 
-import _fetchTemp$Import from 'isomorphic-fetch';
-
-let __$Getters__ = [];
-let __$Setters__ = [];
-let __$Resetters__ = [];
-
-function _GetDependency__(name) {
-    return __$Getters__[name]();
-}
-
-function _Rewire__(name, value) {
-    __$Setters__[name](value);
-}
-
-function _ResetDependency__(name) {
-    __$Resetters__[name]();
-}
-
-let _RewireAPI__ = {
-    '__GetDependency__': _GetDependency__,
-    '__get__': _GetDependency__,
-    '__Rewire__': _Rewire__,
-    '__set__': _Rewire__,
-    '__ResetDependency__': _ResetDependency__
-};
-let _fetch$IsLifeBindingActive = true;
-let fetch = _fetchTemp$Import;
-
-__$Getters__['fetch'] = function () {
-    return _fetch$IsLifeBindingActive ? _fetchTemp$Import : fetch;
-};
-
-__$Setters__['fetch'] = function (value) {
-    _fetch$IsLifeBindingActive = false;
-    fetch = value;
-};
-
-__$Resetters__['fetch'] = function () {
-    _fetch$IsLifeBindingActive = true;
-    fetch = _fetchTemp$Import;
-};
-
-class EclipseClient {
+export default class EclipseClient {
     constructor() {
-        if (process.env.NODE_ENV !== 'production') {
+        if (_get_process().env.NODE_ENV !== 'production') {
             this.apiUrl = 'http:///';
         } else {
             this.apiUrl = 'http:///';
@@ -52,40 +10,89 @@ class EclipseClient {
     }
 
 }
-let _defaultExport = EclipseClient;
+let typeOfOriginalExport = typeof EclipseClient;
 
-if ((typeof _defaultExport === 'object' || typeof _defaultExport === 'function') && Object.isExtensible(_defaultExport)) {
-    Object.defineProperty(_defaultExport, '__Rewire__', {
-        'value': _Rewire__,
-        'enumerable': false,
-        'configurable': true
-    });
-    Object.defineProperty(_defaultExport, '__set__', {
-        'value': _Rewire__,
-        'enumerable': false,
-        'configurable': true
-    });
-    Object.defineProperty(_defaultExport, '__ResetDependency__', {
-        'value': _ResetDependency__,
-        'enumerable': false,
-        'configurable': true
-    });
-    Object.defineProperty(_defaultExport, '__GetDependency__', {
-        'value': _GetDependency__,
-        'enumerable': false,
-        'configurable': true
-    });
-    Object.defineProperty(_defaultExport, '__get__', {
-        'value': _GetDependency__,
-        'enumerable': false,
-        'configurable': true
-    });
-    Object.defineProperty(_defaultExport, '__RewireAPI__', {
-        'value': _RewireAPI__,
-        'enumerable': false,
-        'configurable': true
+function addNonEnumerableProperty(name, value) {
+    Object.defineProperty(EclipseClient, name, {
+        value: value,
+        enumerable: false,
+        configurable: true
     });
 }
 
-export default _defaultExport;
-export { _GetDependency__ as __GetDependency__, _GetDependency__ as __get__, _Rewire__ as __Rewire__, _Rewire__ as __set__, _ResetDependency__ as __ResetDependency__, _RewireAPI__ as __RewireAPI__ };
+if ((typeOfOriginalExport === 'object' || typeOfOriginalExport === 'function') && Object.isExtensible(EclipseClient)) {
+    addNonEnumerableProperty('__get__', _GetDependency__);
+    addNonEnumerableProperty('__GetDependency__', _GetDependency__);
+    addNonEnumerableProperty('__Rewire__', _Rewire__);
+    addNonEnumerableProperty('__set__', _Rewire__);
+    addNonEnumerableProperty('__ResetDependency__', _ResetDependency__);
+    addNonEnumerableProperty('__with__', _with__);
+    addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
+}
+
+function _get_process() {
+    return _RewiredData__ === undefined || _RewiredData__['process'] === undefined ? process : _RewiredData__['process'];
+}
+
+let _RewiredData__ = {};
+let _GETTERS__ = {
+    'process': _get_process
+};
+
+function _GetDependency__(variableName) {
+    return _GETTERS__[variableName]();
+}
+
+function _Rewire__(variableName, value) {
+    return _RewiredData__[variableName] = value;
+}
+
+function _ResetDependency__(variableName) {
+    delete _RewiredData__[variableName];
+}
+
+function _with__(object) {
+    var rewiredVariableNames = Object.keys(object);
+    var previousValues = {};
+
+    function reset() {
+        rewiredVariableNames.forEach(function (variableName) {
+            REWIRED_DATA[variableName] = previousValues[variableName];
+        });
+    }
+
+    return function (callback) {
+        rewiredVariableNames.forEach(function (variableName) {
+            previousValues[variableName] = REWIRED_DATA[variableName];
+            REWIRED_DATA[variableName] = object[variableName];
+        });
+        let result = callback();
+
+        if (typeof result.then == 'function') {
+            result.then(reset).catch(reset);
+        } else {
+            reset();
+        }
+    };
+}
+
+let _RewireAPI__ = {};
+
+(function () {
+    function addPropertyToAPIObject(name, value) {
+        Object.defineProperty(_RewireAPI__, name, {
+            value: value,
+            enumerable: false,
+            configurable: true
+        });
+    }
+
+    addPropertyToAPIObject('__get__', _GetDependency__);
+    addPropertyToAPIObject('__GetDependency__', _GetDependency__);
+    addPropertyToAPIObject('__Rewire__', _Rewire__);
+    addPropertyToAPIObject('__set__', _Rewire__);
+    addPropertyToAPIObject('__ResetDependency__', _ResetDependency__);
+    addPropertyToAPIObject('__with__', _with__);
+})();
+
+export { _GetDependency__ as __get__, _GetDependency__ as __GetDependency__, _Rewire__ as __Rewire__, _Rewire__ as __set__, _ResetDependency__ as __ResetDependency__, _RewireAPI__ as __RewireAPI__ };

@@ -1,69 +1,78 @@
-'use strict';
-
-import { foo as _fooTemp$Import } from './dependency';
-
-/** Executes the module. */
-var run = _runOrig;
-let __$Getters__ = [];
-let __$Setters__ = [];
-let __$Resetters__ = [];
-
-function _GetDependency__(name) {
-	return __$Getters__[name]();
-}
-
-function _Rewire__(name, value) {
-	__$Setters__[name](value);
-}
-
-function _ResetDependency__(name) {
-	__$Resetters__[name]();
-}
-
-let _RewireAPI__ = {
-	'__GetDependency__': _GetDependency__,
-	'__get__': _GetDependency__,
-	'__Rewire__': _Rewire__,
-	'__set__': _Rewire__,
-	'__ResetDependency__': _ResetDependency__
-};
 /** @module main */
 
-'use strict';let _foo$IsLifeBindingActive = true;
-let foo = _fooTemp$Import;
+'use strict';
 
-__$Getters__['foo'] = function () {
-	return _foo$IsLifeBindingActive ? _fooTemp$Import : foo;
-};
+import { foo } from './dependency';
 
-__$Setters__['foo'] = function (value) {
-	_foo$IsLifeBindingActive = false;
-	foo = value;
-};
-
-__$Resetters__['foo'] = function () {
-	_foo$IsLifeBindingActive = true;
-	foo = _fooTemp$Import;
-};
-
-function _runOrig() {
-	_GetDependency__('foo')('bar');
+/** Executes the module. */
+export function run() {
+	_get_foo()('bar');
 }
 
-var _run = run;
+function _get_foo() {
+	return _RewiredData__ === undefined || _RewiredData__['foo'] === undefined ? foo : _RewiredData__['foo'];
+}
 
-__$Getters__['run'] = function () {
-	return run;
+let _RewiredData__ = {};
+let _GETTERS__ = {
+	'foo': _get_foo
 };
 
-__$Setters__['run'] = function (value) {
-	run = value;
-};
+function _GetDependency__(variableName) {
+	return _GETTERS__[variableName]();
+}
 
-__$Resetters__['run'] = function () {
-	run = _run;
-};
+function _Rewire__(variableName, value) {
+	return _RewiredData__[variableName] = value;
+}
 
-export { _runOrig as run };
-export { _GetDependency__ as __GetDependency__, _GetDependency__ as __get__, _Rewire__ as __Rewire__, _Rewire__ as __set__, _ResetDependency__ as __ResetDependency__, _RewireAPI__ as __RewireAPI__ };
+function _ResetDependency__(variableName) {
+	delete _RewiredData__[variableName];
+}
+
+function _with__(object) {
+	var rewiredVariableNames = Object.keys(object);
+	var previousValues = {};
+
+	function reset() {
+		rewiredVariableNames.forEach(function (variableName) {
+			REWIRED_DATA[variableName] = previousValues[variableName];
+		});
+	}
+
+	return function (callback) {
+		rewiredVariableNames.forEach(function (variableName) {
+			previousValues[variableName] = REWIRED_DATA[variableName];
+			REWIRED_DATA[variableName] = object[variableName];
+		});
+		let result = callback();
+
+		if (typeof result.then == 'function') {
+			result.then(reset).catch(reset);
+		} else {
+			reset();
+		}
+	};
+}
+
+let _RewireAPI__ = {};
+
+(function () {
+	function addPropertyToAPIObject(name, value) {
+		Object.defineProperty(_RewireAPI__, name, {
+			value: value,
+			enumerable: false,
+			configurable: true
+		});
+	}
+
+	addPropertyToAPIObject('__get__', _GetDependency__);
+	addPropertyToAPIObject('__GetDependency__', _GetDependency__);
+	addPropertyToAPIObject('__Rewire__', _Rewire__);
+	addPropertyToAPIObject('__set__', _Rewire__);
+	addPropertyToAPIObject('__ResetDependency__', _ResetDependency__);
+	addPropertyToAPIObject('__with__', _with__);
+})();
+
+export { _GetDependency__ as __get__, _GetDependency__ as __GetDependency__, _Rewire__ as __Rewire__, _Rewire__ as __set__, _ResetDependency__ as __ResetDependency__, _RewireAPI__ as __RewireAPI__ };
 export default _RewireAPI__;
