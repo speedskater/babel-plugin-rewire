@@ -1,6 +1,10 @@
 fixtures
 .idea
 node_modules
+samples
 test
+test-helpers
+usage-tests
+src
 .travis.yml
 .gitignore
