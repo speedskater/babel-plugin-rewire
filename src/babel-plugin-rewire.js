@@ -33,8 +33,9 @@ module.exports = function({ types: t }) {
 				&& !(parent.type === 'ExportSpecifier')
 				&& !(parent.type === 'ImportSpecifier')
 				&& !(parent.type === 'ObjectTypeProperty')
-				&& !(parent.type === 'ClassMethod')) {
-
+				&& !(parent.type === 'ClassMethod')
+				&& !(parent.type === 'UpdateExpression')
+			) {
 				if (variableBinding === undefined ||
 					(variableBinding.scope.block.type === 'Program' && variableBinding.referencePaths !== null && contains(variableBinding.referencePaths, path))) {
 					rewireInformation.ensureAccessor(variableName);
