@@ -156,7 +156,6 @@ function generateNamedExports(rewireInformation, t) {
 		t.exportSpecifier(rewireInformation.getUniversalResetterID(), t.identifier('__ResetDependency__')),
 		t.exportSpecifier(rewireInformation.getAPIObjectID(), t.identifier('__RewireAPI__')),
 	]);
-	return es6ExportsTemplate(getExportTemplateParameter(rewireInformation));
 }
 
 function enrichExport(rewireInformation, exportValue) {
@@ -180,7 +179,6 @@ module.exports = function(pluginArguments) {
 				&& !(parent.type === 'AssignmentExpression' && parent.left == node)
 				&& !(parent.type !== 'VariableDeclarator' && parent.id == node)
 				&& !(parent.type === 'MemberExpression' && parent.property === node)
-				&& !(parent.type === 'Property' && parent.key === node) //TODO maxbe duplicated
 				&& !(parent.type === 'ObjectProperty' && parent.key === node)
 				&& !(parent.type === 'ExportSpecifier')
 				&& !(parent.type === 'ImportSpecifier')
@@ -193,18 +191,18 @@ module.exports = function(pluginArguments) {
 				if (variableBinding === undefined ||
 					(variableBinding.scope.block.type === 'Program' && variableBinding.referencePaths.find(referenceMatcher) !== undefined)) {
 					path.replaceWith(t.callExpression(rewireInformation.ensureAccessor(rewireInformation, path, variableName), []));
-
-					if(parent.type === 'ExportSpecifier') {
-						console.log("----------------- ExportSpecifier ----------------- :: " + JSON.stringify(parent.exported));
-					}
-
-					console.log(variableName + ":" + ": " + JSON.stringify(path.node.loc) + ": global variable" + " parent type: " + path.parent.type);
 				}
 			}
 		},
 
 		'ExportNamedDeclaration|ExportAllDeclaration': function (path, rewireInformation) {
-				rewireInformation.isES6Module = true;
+			var hasDefaultExport = path.node.specifiers.some(function(specifier) {
+				return specifier.local.name === 'default';
+			});
+			if(hasDefaultExport) {
+				rewireInformation.hasES6DefaultExport = true;
+			}
+			rewireInformation.isES6Module = true;
 		},
 
 		AssignmentExpression: function(path, rewireInformation) {
@@ -216,30 +214,61 @@ module.exports = function(pluginArguments) {
 
 		ExportDefaultDeclaration: function (path, rewireInformation) {
 			if(!wasProcessed(path)) {
-				var exportIdentifier
+				var exportIdentifier = null;
 
 				rewireInformation.hasES6DefaultExport = true;
 				rewireInformation.hasES6Export = true;
 				rewireInformation.isES6Module = true;
 
-				var originalDeclaration = path.node.declaration;
-				if (originalDeclaration.type === 'ClassDeclaration' || originalDeclaration.type === 'FunctionDeclaration') {
-					exportIdentifier = originalDeclaration.id;
-					if(exportIdentifier === null) { //TODO clean up and generator new node instead of replacement
-						exportIdentifier = originalDeclaration.id = path.scope.generateUidIdentifier("DefaultExportValue");
+				var declarationVisitors = {
+					ClassDeclaration: function(path, rewireInformation) {
+						if(path.node.id === null && path.parent.type === 'ExportDefaultDeclaration') {
+							let existingClassDeclaration = path.node;
+							exportIdentifier = path.scope.generateUidIdentifier("DefaultExportValue");
+							path.replaceWith(
+								t.classDeclaration(
+									exportIdentifier,
+									existingClassDeclaration.superClass,
+									existingClassDeclaration.body,
+									existingClassDeclaration.decorators || []
+								)
+							);
+						} else {
+							exportIdentifier = path.node.id;
+						}
+					},
+					FunctionDeclaration: function(path, rewireInformation) {
+						if(path.node.id === null && path.parent.type === 'ExportDefaultDeclaration') {
+							let existingFunctionDeclaration = path.node;
+							exportIdentifier = path.scope.generateUidIdentifier("DefaultExportValue");
+							path.replaceWith(
+								t.functionDeclaration(
+									exportIdentifier,
+									existingFunctionDeclaration.params,
+									existingFunctionDeclaration.body,
+									existingFunctionDeclaration.generator,
+									existingFunctionDeclaration.async
+								)
+							);
+						} else {
+							exportIdentifier = path.node.id;
+						}
+					},
+					Identifier: function(path, rewireInformation) {
+						if(path.parent.type === 'ExportDefaultDeclaration') {
+							exportIdentifier = path.node;
+						}
 					}
+				};
+
+				path.traverse(declarationVisitors, rewireInformation);
+				if(exportIdentifier === null) {
+					exportIdentifier = noRewire(path.scope.generateUidIdentifier("DefaultExportValue"));
 					path.replaceWithMultiple([
-						path.node.declaration,
-						noRewire(t.exportDefaultDeclaration(exportIdentifier))
-					]);
-				} else {
-					exportIdentifier =  noRewire(path.scope.generateUidIdentifier("DefaultExportValue"));
-					path.replaceWithMultiple([
-						t.variableDeclaration('let', [t.variableDeclarator(exportIdentifier, originalDeclaration)]),
+						t.variableDeclaration('let', [t.variableDeclarator(exportIdentifier, path.node.declaration)]),
 						noRewire(t.exportDefaultDeclaration(exportIdentifier))
 					]);
 				}
-
 				rewireInformation.appendToProgramBody(enrichExport(rewireInformation, exportIdentifier));
 			}
 		},
@@ -254,7 +283,7 @@ module.exports = function(pluginArguments) {
 			rewireInformation.appendToProgramBody(generateNamedExports(rewireInformation, t));
 
 			if(!rewireInformation.hasES6DefaultExport) {
-				//TODO :: exports.push(t.exportDefaultDeclaration(rewireInformation.getAPIObjectID()));
+				rewireInformation.appendToProgramBody(t.exportDefaultDeclaration(rewireInformation.getAPIObjectID()));
 			}
 		}
 		else if(!rewireInformation.isES6Module || (!rewireInformation.hasES6Export && rewireInformation.hasCommonJSExport)) {
@@ -286,7 +315,6 @@ module.exports = function(pluginArguments) {
 
 						appendToProgramBody: function(nodes) {
 							if(!Array.isArray(nodes)) {
-								console.log("NODES :: " + nodes);
 								nodes = [ nodes ];
 							}
 							this.nodesToAppendToProgramBody = this.nodesToAppendToProgramBody.concat(nodes);

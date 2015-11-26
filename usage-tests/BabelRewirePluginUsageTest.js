@@ -27,17 +27,17 @@ function transformSampleCodeToTestWithBabelPluginRewire(source, filename) {
 	};
 
 
-	if(isSampleCode(filename)) {
+	/*if(isSampleCode(filename)) {
 		console.log("=========== " + filename + "============");
 		var code = babel.transform(source, babelTransformationOptions).code;
 		console.log(code);
 		return code;
-	}
+	}*/
 	return isSampleCode(filename) ? babel.transform(source, babelTransformationOptions).code : source;
 }
 
 hook.hook('.js', transformSampleCodeToTestWithBabelPluginRewire);
-/*require('../samples/issue16/sample.js');
+require('../samples/issue16/sample.js');
 require('../samples/issue18/sample.js');
 require('../samples/issue19/sample.js');
 require('../samples/issue20/sample.js');
@@ -49,14 +49,15 @@ require('../samples/issue33/sample.js');
 require('../samples/issue48/sample.js');
 require('../samples/issue59/sample.js');
 require('../samples/functionRewireScope/sample.js');
-require('../samples/namedExportsRewire/sample.js');*/
+require('../samples/namedExportsRewire/sample.js');
 require('../samples/namedExportRewireSupport/sample.js');
-/*require('../samples/namedExportsWithNameClash/sample.js');
+require('../samples/namedExportsWithNameClash/sample.js');
 require('../samples/nestedScopes/sample.js');
 require('../samples/objectLiteralNameClash/sample.js');
 require('../samples/defaultExportNonExtensible/sample.js');
 require('../samples/typedExport/sample.js');
 require('../samples/nonEnumerableProperties/sample.js');
 require('../samples/redefinedRewireProperties/sample.js');
-require('../samples/defaultExportImport/sample.js');*/
+require('../samples/defaultExportImport/sample.js');
+require('../samples/rewireGlobalVariable/sample.js');
 hook.unhook('.js'); // removes your own transform
