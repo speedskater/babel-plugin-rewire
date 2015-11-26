@@ -52,7 +52,6 @@ function getUnexpectedStateKeyWarningMessage(inputState, outputState, action) {
 function assertReducerSanity(reducers) {
   Object.keys(reducers).forEach(function (key) {
     var reducer = reducers[key];
-    console.log("REDUCER:: " + reducer);
     var initialState = reducer(undefined, { type: _createStore.ActionTypes.INIT });
 
     if (typeof initialState === 'undefined') {
