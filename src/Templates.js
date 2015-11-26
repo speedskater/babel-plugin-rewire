@@ -14,19 +14,14 @@
 
 import template from 'babel-template';
 
-export const getterTemplate = template(`
-	function GETTER_NAME() {
-		return (REWIRED_DATA_IDENTIFIER === undefined || REWIRED_DATA_IDENTIFIER[VARIABLENAME] === undefined) ? VARIABLE : REWIRED_DATA_IDENTIFIER[VARIABLENAME];
-	}
-`);
-
 export const universalAccesorsTemplate = template(`
 let REWIRED_DATA_IDENTIFIER = {};
-let GETTERS_IDENTIFIER = ALL_GETTERS;
 
 function UNIVERSAL_GETTER_ID(variableName) {
-	return GETTERS_IDENTIFIER[variableName]();
+	return (REWIRED_DATA_IDENTIFIER === undefined || REWIRED_DATA_IDENTIFIER[variableName] === undefined) ? ORIGINAL_VARIABLE_ACCESSOR_IDENTIFIER(variableName) : REWIRED_DATA_IDENTIFIER[variableName];
 }
+
+ORIGINAL_ACCESSOR
 
 function UNIVERSAL_SETTER_ID(variableName, value) {
 	return REWIRED_DATA_IDENTIFIER[variableName] = value;

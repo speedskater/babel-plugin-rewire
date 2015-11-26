@@ -1,53 +1,46 @@
-var MyModule = _get_require()('MyModule');
+var MyModule = _get__('require')('MyModule');
 
 var Temp,
-    Thing = _get_MyModule().doDah;
+    Thing = _get__('MyModule').doDah;
 
 function out(todo) {
-  var result = _get_Thing().process(todo);
-  return _get_MyModule().something(result);
+  var result = _get__('Thing').process(todo);
+  return _get__('MyModule').something(result);
 }
 
-_get_module().exports = _get_out();
-
-function _get_require() {
-  return _RewiredData__ === undefined || _RewiredData__['require'] === undefined ? require : _RewiredData__['require'];
-}
-
-function _get_MyModule() {
-  return _RewiredData__ === undefined || _RewiredData__['MyModule'] === undefined ? MyModule : _RewiredData__['MyModule'];
-}
-
-function _get_Thing() {
-  return _RewiredData__ === undefined || _RewiredData__['Thing'] === undefined ? Thing : _RewiredData__['Thing'];
-}
-
-function _get_module() {
-  return _RewiredData__ === undefined || _RewiredData__['module'] === undefined ? module : _RewiredData__['module'];
-}
-
-function _get_out() {
-  return _RewiredData__ === undefined || _RewiredData__['out'] === undefined ? out : _RewiredData__['out'];
-}
-
+_get__('module').exports = _get__('out');
 let _RewiredData__ = {};
-let _GETTERS__ = {
-  'require': _get_require,
-  'MyModule': _get_MyModule,
-  'Thing': _get_Thing,
-  'module': _get_module,
-  'out': _get_out
-};
 
-function _GetDependency__(variableName) {
-  return _GETTERS__[variableName]();
+function _get__(variableName) {
+  return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
 }
 
-function _Rewire__(variableName, value) {
+function _get_original__(variableName) {
+  switch (variableName) {
+    case 'require':
+      return require;
+
+    case 'MyModule':
+      return MyModule;
+
+    case 'Thing':
+      return Thing;
+
+    case 'module':
+      return module;
+
+    case 'out':
+      return out;
+  }
+
+  return undefined;
+}
+
+function _set__(variableName, value) {
   return _RewiredData__[variableName] = value;
 }
 
-function _ResetDependency__(variableName) {
+function _reset__(variableName) {
   delete _RewiredData__[variableName];
 }
 
@@ -89,11 +82,11 @@ let _RewireAPI__ = {};
     });
   }
 
-  addPropertyToAPIObject('__get__', _GetDependency__);
-  addPropertyToAPIObject('__GetDependency__', _GetDependency__);
-  addPropertyToAPIObject('__Rewire__', _Rewire__);
-  addPropertyToAPIObject('__set__', _Rewire__);
-  addPropertyToAPIObject('__ResetDependency__', _ResetDependency__);
+  addPropertyToAPIObject('__get__', _get__);
+  addPropertyToAPIObject('__GetDependency__', _get__);
+  addPropertyToAPIObject('__Rewire__', _set__);
+  addPropertyToAPIObject('__set__', _set__);
+  addPropertyToAPIObject('__ResetDependency__', _reset__);
   addPropertyToAPIObject('__with__', _with__);
 })();
 
@@ -108,11 +101,11 @@ function addNonEnumerableProperty(name, value) {
 }
 
 if ((typeOfOriginalExport === 'object' || typeOfOriginalExport === 'function') && Object.isExtensible(module.exports)) {
-  addNonEnumerableProperty('__get__', _GetDependency__);
-  addNonEnumerableProperty('__GetDependency__', _GetDependency__);
-  addNonEnumerableProperty('__Rewire__', _Rewire__);
-  addNonEnumerableProperty('__set__', _Rewire__);
-  addNonEnumerableProperty('__ResetDependency__', _ResetDependency__);
+  addNonEnumerableProperty('__get__', _get__);
+  addNonEnumerableProperty('__GetDependency__', _get__);
+  addNonEnumerableProperty('__Rewire__', _set__);
+  addNonEnumerableProperty('__set__', _set__);
+  addNonEnumerableProperty('__ResetDependency__', _reset__);
   addNonEnumerableProperty('__with__', _with__);
   addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
 }

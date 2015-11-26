@@ -1,15 +1,10 @@
-let test = _get_greet()('world');
+let test = _get__('greet')('world');
 
-export default _get_test();
+export default _get__('test');
 
 function greet(whoToGreet) {
 	return 'Hello ' + whoToGreet;
 }
-
-function _get_greet() {
-	return _RewiredData__ === undefined || _RewiredData__['greet'] === undefined ? greet : _RewiredData__['greet'];
-}
-
 let typeOfOriginalExport = typeof test;
 
 function addNonEnumerableProperty(name, value) {
@@ -21,34 +16,38 @@ function addNonEnumerableProperty(name, value) {
 }
 
 if ((typeOfOriginalExport === 'object' || typeOfOriginalExport === 'function') && Object.isExtensible(test)) {
-	addNonEnumerableProperty('__get__', _GetDependency__);
-	addNonEnumerableProperty('__GetDependency__', _GetDependency__);
-	addNonEnumerableProperty('__Rewire__', _Rewire__);
-	addNonEnumerableProperty('__set__', _Rewire__);
-	addNonEnumerableProperty('__ResetDependency__', _ResetDependency__);
+	addNonEnumerableProperty('__get__', _get__);
+	addNonEnumerableProperty('__GetDependency__', _get__);
+	addNonEnumerableProperty('__Rewire__', _set__);
+	addNonEnumerableProperty('__set__', _set__);
+	addNonEnumerableProperty('__ResetDependency__', _reset__);
 	addNonEnumerableProperty('__with__', _with__);
 	addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
 }
 
-function _get_test() {
-	return _RewiredData__ === undefined || _RewiredData__['test'] === undefined ? test : _RewiredData__['test'];
-}
-
 let _RewiredData__ = {};
-let _GETTERS__ = {
-	'greet': _get_greet,
-	'test': _get_test
-};
 
-function _GetDependency__(variableName) {
-	return _GETTERS__[variableName]();
+function _get__(variableName) {
+	return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
 }
 
-function _Rewire__(variableName, value) {
+function _get_original__(variableName) {
+	switch (variableName) {
+		case 'greet':
+			return greet;
+
+		case 'test':
+			return test;
+	}
+
+	return undefined;
+}
+
+function _set__(variableName, value) {
 	return _RewiredData__[variableName] = value;
 }
 
-function _ResetDependency__(variableName) {
+function _reset__(variableName) {
 	delete _RewiredData__[variableName];
 }
 
@@ -90,12 +89,12 @@ let _RewireAPI__ = {};
 		});
 	}
 
-	addPropertyToAPIObject('__get__', _GetDependency__);
-	addPropertyToAPIObject('__GetDependency__', _GetDependency__);
-	addPropertyToAPIObject('__Rewire__', _Rewire__);
-	addPropertyToAPIObject('__set__', _Rewire__);
-	addPropertyToAPIObject('__ResetDependency__', _ResetDependency__);
+	addPropertyToAPIObject('__get__', _get__);
+	addPropertyToAPIObject('__GetDependency__', _get__);
+	addPropertyToAPIObject('__Rewire__', _set__);
+	addPropertyToAPIObject('__set__', _set__);
+	addPropertyToAPIObject('__ResetDependency__', _reset__);
 	addPropertyToAPIObject('__with__', _with__);
 })();
 
-export { _GetDependency__ as __get__, _GetDependency__ as __GetDependency__, _Rewire__ as __Rewire__, _Rewire__ as __set__, _ResetDependency__ as __ResetDependency__, _RewireAPI__ as __RewireAPI__ };
+export { _get__ as __get__, _get__ as __GetDependency__, _set__ as __Rewire__, _set__ as __set__, _reset__ as __ResetDependency__, _RewireAPI__ as __RewireAPI__ };

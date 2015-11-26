@@ -4,7 +4,7 @@
  purpose with or without fee is hereby granted, provided that the above
  copyright notice and this permission notice appear in all copies.
 
- THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ THE SOFTWARE IS PROVIDED 'AS IS' AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
@@ -12,9 +12,9 @@
  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.*/
 
-import { getterTemplate, universalAccesorsTemplate, enrichExportTemplate } from './Templates.js';
+import { universalAccesorsTemplate, enrichExportTemplate } from './Templates.js';
 import { wasProcessed, noRewire } from './RewireHelpers.js';
-import * as t from "babel-types";
+import * as t from 'babel-types';
 
 export default class RewireState {
 	
@@ -25,14 +25,15 @@ export default class RewireState {
 		this.nodesToAppendToProgramBody = [];
 		this.hasCommonJSExport = false;
 		this.accessors = {};
-		this.rewiredDataIdentifier = scope.generateUidIdentifier("__RewiredData__");
+		this.rewiredDataIdentifier = scope.generateUidIdentifier('__RewiredData__');
+		this.originalVariableAccessorIdentifier = scope.generateUidIdentifier('__get_original__');
 
 		this.universalAccessors = {
-			__GetDependency__: scope.generateUidIdentifier("__GetDependency__"),
-			__Rewire__: scope.generateUidIdentifier("__Rewire__"),
-			__ResetDependency__: scope.generateUidIdentifier("__ResetDependency__"),
-			__RewireAPI__: scope.generateUidIdentifier("__RewireAPI__"),
-			__with__: scope.generateUidIdentifier("__with__")
+			__get__: noRewire(scope.generateUidIdentifier('__get__')),
+			__set__: noRewire(scope.generateUidIdentifier('__set__')),
+			__reset__: noRewire(scope.generateUidIdentifier('__reset__')),
+			__with__: noRewire(scope.generateUidIdentifier('__with__')),
+			__RewireAPI__: noRewire(scope.generateUidIdentifier('__RewireAPI__'))
 		};
 	}
 
@@ -43,26 +44,25 @@ export default class RewireState {
 		this.nodesToAppendToProgramBody = this.nodesToAppendToProgramBody.concat(nodes);
 	}
 
-	ensureAccessor(path, variableName) {
+	ensureAccessor(variableName) {
 		if(!this.accessors[variableName]) {
-			this.accessors[variableName] = noRewire(path.scope.generateUidIdentifier('get_' + variableName));
-			this.appendToProgramBody(getterTemplate({
-				GETTER_NAME: this.accessors[variableName],
-				VARIABLENAME: t.stringLiteral(variableName),
-				VARIABLE: t.identifier(variableName),
-				REWIRED_DATA_IDENTIFIER: this.rewiredDataIdentifier
-			}));
+			this.accessors[variableName] = true;
 		}
 
 		return this.accessors[variableName];
 	}
 
 	appendUniversalAccessors(scope) {
-		this.appendToProgramBody(universalAccesorsTemplate({
-			GETTERS_IDENTIFIER: noRewire(scope.generateUidIdentifier('__GETTERS__')),
-			ALL_GETTERS: t.objectExpression(Object.keys(this.accessors).map((variableName) => {
-				return t.objectProperty(t.stringLiteral(variableName), this.accessors[variableName], false);
+		let originalAccessor = t.functionDeclaration(this.originalVariableAccessorIdentifier, [ t.identifier('variableName') ], t.blockStatement([
+			t.switchStatement(t.identifier('variableName'), Object.keys(this.accessors).map(function(identifierName) {
+				return t.switchCase(t.stringLiteral(identifierName), [ t.returnStatement(noRewire(t.identifier(identifierName))) ] );
 			})),
+			t.returnStatement(noRewire(t.identifier('undefined')))
+		]));
+
+		this.appendToProgramBody(universalAccesorsTemplate({
+			ORIGINAL_VARIABLE_ACCESSOR_IDENTIFIER: this.originalVariableAccessorIdentifier,
+			ORIGINAL_ACCESSOR: originalAccessor,
 			UNIVERSAL_GETTER_ID :this.getUniversalGetterID(),
 			UNIVERSAL_SETTER_ID :this.getUniversalSetterID(),
 			UNIVERSAL_RESETTER_ID :this.getUniversalResetterID(),
@@ -113,15 +113,15 @@ export default class RewireState {
 	}
 
 	getUniversalGetterID() {
-		return this.universalAccessors['__GetDependency__'];
+		return this.universalAccessors['__get__'];
 	}
 
 	getUniversalSetterID() {
-		return this.universalAccessors['__Rewire__'];
+		return this.universalAccessors['__set__'];
 	}
 
 	getUniversalResetterID() {
-		return this.universalAccessors['__ResetDependency__'];
+		return this.universalAccessors['__reset__'];
 	}
 
 	getUniversalWithID() {

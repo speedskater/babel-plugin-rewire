@@ -24,7 +24,7 @@ module.exports = function({ types: t }) {
 
 			//Matches for body
 			if (!wasProcessed(path)
-				&& variableName !== 'undefined'
+				&& variableName !== 'undefined' && variableName !== 'arguments'
 				&& !(parent.type === 'AssignmentExpression' && parent.left == node)
 				&& !(parent.type !== 'VariableDeclarator' && parent.id == node)
 				&& !(parent.type === 'MemberExpression' && parent.property === node)
@@ -37,7 +37,8 @@ module.exports = function({ types: t }) {
 
 				if (variableBinding === undefined ||
 					(variableBinding.scope.block.type === 'Program' && variableBinding.referencePaths !== null && contains(variableBinding.referencePaths, path))) {
-					path.replaceWith(t.callExpression(rewireInformation.ensureAccessor(path, variableName), []));
+					rewireInformation.ensureAccessor(variableName);
+					path.replaceWith(t.callExpression(rewireInformation.getUniversalGetterID(), [ t.stringLiteral(variableName) ]));
 				}
 			}
 		},

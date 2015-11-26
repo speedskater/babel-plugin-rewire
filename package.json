@@ -67,8 +67,8 @@
     "node-hook": "^0.1.0"
   },
   "peerDependencies": {
-    "babel-core": ">=6.0.0 <7.0.0",
-    "babel-template": ">=6.2.0 <7.0.0" ,
-    "babel-types": ">=6.2.0 <7.0.0"
+    "babel-core": "^6.0.0",
+    "babel-template": "^6.2.0" ,
+    "babel-types": "^6.2.0"
   }
 }

@@ -6,27 +6,28 @@ import { foo } from './dependency';
 
 /** Executes the module. */
 export function run() {
-	_get_foo()('bar');
+	_get__('foo')('bar');
 }
-
-function _get_foo() {
-	return _RewiredData__ === undefined || _RewiredData__['foo'] === undefined ? foo : _RewiredData__['foo'];
-}
-
 let _RewiredData__ = {};
-let _GETTERS__ = {
-	'foo': _get_foo
-};
 
-function _GetDependency__(variableName) {
-	return _GETTERS__[variableName]();
+function _get__(variableName) {
+	return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
 }
 
-function _Rewire__(variableName, value) {
+function _get_original__(variableName) {
+	switch (variableName) {
+		case 'foo':
+			return foo;
+	}
+
+	return undefined;
+}
+
+function _set__(variableName, value) {
 	return _RewiredData__[variableName] = value;
 }
 
-function _ResetDependency__(variableName) {
+function _reset__(variableName) {
 	delete _RewiredData__[variableName];
 }
 
@@ -68,13 +69,13 @@ let _RewireAPI__ = {};
 		});
 	}
 
-	addPropertyToAPIObject('__get__', _GetDependency__);
-	addPropertyToAPIObject('__GetDependency__', _GetDependency__);
-	addPropertyToAPIObject('__Rewire__', _Rewire__);
-	addPropertyToAPIObject('__set__', _Rewire__);
-	addPropertyToAPIObject('__ResetDependency__', _ResetDependency__);
+	addPropertyToAPIObject('__get__', _get__);
+	addPropertyToAPIObject('__GetDependency__', _get__);
+	addPropertyToAPIObject('__Rewire__', _set__);
+	addPropertyToAPIObject('__set__', _set__);
+	addPropertyToAPIObject('__ResetDependency__', _reset__);
 	addPropertyToAPIObject('__with__', _with__);
 })();
 
-export { _GetDependency__ as __get__, _GetDependency__ as __GetDependency__, _Rewire__ as __Rewire__, _Rewire__ as __set__, _ResetDependency__ as __ResetDependency__, _RewireAPI__ as __RewireAPI__ };
+export { _get__ as __get__, _get__ as __GetDependency__, _set__ as __Rewire__, _set__ as __set__, _reset__ as __ResetDependency__, _RewireAPI__ as __RewireAPI__ };
 export default _RewireAPI__;
