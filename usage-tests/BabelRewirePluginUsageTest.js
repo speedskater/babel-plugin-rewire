@@ -36,7 +36,7 @@ function transformSampleCodeToTestWithBabelPluginRewire(source, filename) {
 }
 
 hook.hook('.js', transformSampleCodeToTestWithBabelPluginRewire);
-/*require('../samples/issue16/sample.js');
+require('../samples/issue16/sample.js');
 require('../samples/issue18/sample.js');
 require('../samples/issue19/sample.js');
 require('../samples/issue20/sample.js');
@@ -61,6 +61,6 @@ require('../samples/defaultExportImport/sample.js');
 require('../samples/rewireGlobalVariable/sample.js');
 require('../samples/redux-issue/sample.js');
 require('../samples/withSupport/sample.js');
-require('../samples/rewireClasses/sample.js');*/
+require('../samples/rewireClasses/sample.js');
 require('../samples/increment/sample.js');
 hook.unhook('.js'); // removes your own transform
