@@ -278,6 +278,13 @@ full plugin name:
 require("babel").transform("code", { plugins: ["babel-plugin-rewire"] });
 ```
 
+### Require Hook
+```javascript
+require('babel/register')({
+  plugins: ['babel-plugin-rewire']
+})
+```
+
 ### Webpack
 
 abbreviated:
