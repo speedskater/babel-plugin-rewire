@@ -12,167 +12,15 @@
  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.*/
 
-var template = require("babel-template");
+import RewireState from './RewireState.js';
+import { wasProcessed, noRewire } from './RewireHelpers.js';
 
-const getterTemplate = template(`
-	function GETTER_NAME() {
-		return (REWIRED_DATA_IDENTIFIER === undefined || REWIRED_DATA_IDENTIFIER[VARIABLENAME] === undefined) ? VARIABLE : REWIRED_DATA_IDENTIFIER[VARIABLENAME];
-	}
-`);
-
-const universalAccesorsTemplate = template(`
-let REWIRED_DATA_IDENTIFIER = {};
-let GETTERS_IDENTIFIER = ALL_GETTERS;
-
-function UNIVERSAL_GETTER_ID(variableName) {
-	return GETTERS_IDENTIFIER[variableName]();
-}
-
-function UNIVERSAL_SETTER_ID(variableName, value) {
-	return REWIRED_DATA_IDENTIFIER[variableName] = value;
-}
-
-function UNIVERSAL_RESETTER_ID(variableName) {
-	delete REWIRED_DATA_IDENTIFIER[variableName];
-}
-
-function UNIVERSAL_WITH_ID(object) {
-	var rewiredVariableNames = Object.keys(object);
-	var previousValues = {};
-
-	function reset() {
-		rewiredVariableNames.forEach(function(variableName) {
-			REWIRED_DATA[variableName] = previousValues[variableName];
-		});
-	}
-
-	return function(callback) {
-		rewiredVariableNames.forEach(function(variableName) {
-			previousValues[variableName] = REWIRED_DATA[variableName];
-			REWIRED_DATA[variableName] = object[variableName];
-		});
-		let result = callback();
-		if(typeof result.then == 'function') {
-			result.then(reset).catch(reset);
-		} else {
-			reset();
-		}
-	}
-}
-
-let API_OBJECT_ID = {};
-
-(function() {
-	function addPropertyToAPIObject(name, value) {
-		Object.defineProperty(API_OBJECT_ID, name, { value: value, enumerable: false, configurable: true });
-	}
-
-	addPropertyToAPIObject('__get__', UNIVERSAL_GETTER_ID);
-	addPropertyToAPIObject('__GetDependency__', UNIVERSAL_GETTER_ID);
-	addPropertyToAPIObject('__Rewire__', UNIVERSAL_SETTER_ID);
-	addPropertyToAPIObject('__set__', UNIVERSAL_SETTER_ID);
-	addPropertyToAPIObject('__ResetDependency__', UNIVERSAL_RESETTER_ID);
-	addPropertyToAPIObject('__with__', UNIVERSAL_WITH_ID);
-})();
-`);
-
-function appendUniversalAccessors(rewireInformation, scope, t) {
-	rewireInformation.appendToProgramBody(universalAccesorsTemplate({
-		GETTERS_IDENTIFIER: noRewire(scope.generateUidIdentifier('__GETTERS__')),
-		ALL_GETTERS: t.objectExpression(Object.keys(rewireInformation.accessors).map(function(variableName) {
-			return t.objectProperty(t.stringLiteral(variableName), rewireInformation.accessors[variableName], false);
-		})),
-		UNIVERSAL_GETTER_ID :rewireInformation.getUniversalGetterID(),
-		UNIVERSAL_SETTER_ID :rewireInformation.getUniversalSetterID(),
-		UNIVERSAL_RESETTER_ID :rewireInformation.getUniversalResetterID(),
-		UNIVERSAL_WITH_ID :rewireInformation.getUniversalWithID(),
-		API_OBJECT_ID: rewireInformation.getAPIObjectID(),
-		REWIRED_DATA_IDENTIFIER: rewireInformation.rewiredDataIdentifier
-	}));
-}
-
-const es6ExportsTemplate = template(`
-export let __get__ = UNIVERSAL_GETTER_ID;
-`);
-/*
- export {
- UNIVERSAL_GETTER_ID as __get__,
- UNIVERSAL_GETTER_ID as __GetDependency__,
- UNIVERSAL_SETTER_ID as __set__,
- UNIVERSAL_SETTER_ID as __Rewire__,
- UNIVERSAL_RESETTER_ID as __reset__,
- UNIVERSAL_RESETTER_ID as __ResetDependency__,
- UNIVERSAL_WITH_ID as __with__,
- API_OBJECT_ID as __RewireAPI__
- };
- */
-
-function getExportTemplateParameter(rewireInformation) {
-	return {
-		UNIVERSAL_GETTER_ID: rewireInformation.getUniversalGetterID(),
-		UNIVERSAL_SETTER_ID: rewireInformation.getUniversalSetterID(),
-		UNIVERSAL_RESETTER_ID: rewireInformation.getUniversalResetterID(),
-		UNIVERSAL_WITH_ID: rewireInformation.getUniversalWithID(),
-		API_OBJECT_ID: rewireInformation.getAPIObjectID()
-	};
-}
-
-const enrichExportTemplate = template(`
-let typeOfOriginalExport = typeof EXPORT_VALUE;
-function addNonEnumerableProperty(name, value) {
-	Object.defineProperty(EXPORT_VALUE, name, { value: value, enumerable: false, configurable: true });
-}
-
-if((typeOfOriginalExport === 'object' || typeOfOriginalExport === 'function') && Object.isExtensible(EXPORT_VALUE)) {
-	addNonEnumerableProperty('__get__', UNIVERSAL_GETTER_ID);
-	addNonEnumerableProperty('__GetDependency__', UNIVERSAL_GETTER_ID);
-	addNonEnumerableProperty('__Rewire__', UNIVERSAL_SETTER_ID);
-	addNonEnumerableProperty('__set__', UNIVERSAL_SETTER_ID);
-	addNonEnumerableProperty('__ResetDependency__', UNIVERSAL_RESETTER_ID);
-	addNonEnumerableProperty('__with__', UNIVERSAL_WITH_ID);
-	addNonEnumerableProperty('__RewireAPI__', API_OBJECT_ID);
-}
-`);
-
-/*
- export {
- UNIVERSAL_GETTER_ID as __get__,
- UNIVERSAL_GETTER_ID as __GetDependency__,
- UNIVERSAL_SETTER_ID as __set__,
- UNIVERSAL_SETTER_ID as __Rewire__,
- UNIVERSAL_RESETTER_ID as __reset__,
- UNIVERSAL_RESETTER_ID as __ResetDependency__,
- UNIVERSAL_WITH_ID as __with__,
- API_OBJECT_ID as __RewireAPI__
- };
- */
-
-function generateNamedExports(rewireInformation, t) {
-	return t.exportNamedDeclaration(null, [
-		t.exportSpecifier(rewireInformation.getUniversalGetterID(), t.identifier('__get__')),
-		t.exportSpecifier(rewireInformation.getUniversalGetterID(), t.identifier('__GetDependency__')),
-		t.exportSpecifier(rewireInformation.getUniversalSetterID(), t.identifier('__Rewire__')),
-		t.exportSpecifier(rewireInformation.getUniversalSetterID(), t.identifier('__set__')),
-		t.exportSpecifier(rewireInformation.getUniversalResetterID(), t.identifier('__ResetDependency__')),
-		t.exportSpecifier(rewireInformation.getAPIObjectID(), t.identifier('__RewireAPI__')),
-	]);
-}
-
-function enrichExport(rewireInformation, exportValue) {
-	var exportTemplateParameters = getExportTemplateParameter(rewireInformation);
-	exportTemplateParameters.EXPORT_VALUE = exportValue;
-	return enrichExportTemplate(exportTemplateParameters);
-}
-
-module.exports = function(pluginArguments) {
-	var t = pluginArguments.types;
-
-	var BodyVisitor = {
+module.exports = function({ types: t }) {
+	const BodyVisitor = {
 		Identifier: function (path, rewireInformation) {
-			var node = path.node;
-			var parent = path.parent;
-			var variableName = path.node.name;
-			var variableBinding = path.scope.getBinding(variableName);
+			let { node, parent, scope } = path;
+			let variableName = node.name;
+			let variableBinding = scope.getBinding(variableName);
 
 			//Matches for body
 			if (!wasProcessed(path)
@@ -190,41 +38,37 @@ module.exports = function(pluginArguments) {
 
 				if (variableBinding === undefined ||
 					(variableBinding.scope.block.type === 'Program' && variableBinding.referencePaths.find(referenceMatcher) !== undefined)) {
-					path.replaceWith(t.callExpression(rewireInformation.ensureAccessor(rewireInformation, path, variableName), []));
+					path.replaceWith(t.callExpression(rewireInformation.ensureAccessor(path, variableName), []));
 				}
 			}
 		},
 
-		'ExportNamedDeclaration|ExportAllDeclaration': function (path, rewireInformation) {
-			var hasDefaultExport = path.node.specifiers.some(function(specifier) {
+		'ExportNamedDeclaration|ExportAllDeclaration': function ({ node: { specifiers } }, rewireInformation) {
+			let hasDefaultExport = specifiers.some(function(specifier) {
 				return specifier.local.name === 'default';
 			});
-			if(hasDefaultExport) {
-				rewireInformation.hasES6DefaultExport = true;
-			}
+			rewireInformation.hasES6DefaultExport = rewireInformation.hasES6DefaultExport || hasDefaultExport;
 			rewireInformation.isES6Module = true;
 		},
 
-		AssignmentExpression: function(path, rewireInformation) {
-			var assignmentExpression = path.node;
-			rewireInformation.hasCommonJSExport = path.scope.block.type === 'Program' &&
-				!!assignmentExpression.left.object && assignmentExpression.left.object.name === 'module' &&
-				!!assignmentExpression.left.property && assignmentExpression.left.property.name === 'exports';
+		AssignmentExpression: function({ node: assignmentExpression, scope: { block: { type: blockType }} }, rewireInformation) {
+			rewireInformation.hasCommonJSExport = blockType === 'Program' &&
+			!!assignmentExpression.left.object && assignmentExpression.left.object.name === 'module' &&
+			!!assignmentExpression.left.property && assignmentExpression.left.property.name === 'exports';
 		},
 
 		ExportDefaultDeclaration: function (path, rewireInformation) {
 			if(!wasProcessed(path)) {
-				var exportIdentifier = null;
-
+				let exportIdentifier = null;
 				rewireInformation.hasES6DefaultExport = true;
 				rewireInformation.hasES6Export = true;
 				rewireInformation.isES6Module = true;
 
-				var declarationVisitors = {
+				let declarationVisitors = {
 					ClassDeclaration: function(path, rewireInformation) {
-						if(path.node.id === null && path.parent.type === 'ExportDefaultDeclaration') {
-							let existingClassDeclaration = path.node;
-							exportIdentifier = path.scope.generateUidIdentifier("DefaultExportValue");
+						let { node: existingClassDeclaration, parent, scope} = path;
+						if(existingClassDeclaration.id === null && parent.type === 'ExportDefaultDeclaration') {
+							exportIdentifier = scope.generateUidIdentifier("DefaultExportValue");
 							path.replaceWith(
 								t.classDeclaration(
 									exportIdentifier,
@@ -234,13 +78,13 @@ module.exports = function(pluginArguments) {
 								)
 							);
 						} else {
-							exportIdentifier = path.node.id;
+							exportIdentifier = existingClassDeclaration.id;
 						}
 					},
 					FunctionDeclaration: function(path, rewireInformation) {
-						if(path.node.id === null && path.parent.type === 'ExportDefaultDeclaration') {
-							let existingFunctionDeclaration = path.node;
-							exportIdentifier = path.scope.generateUidIdentifier("DefaultExportValue");
+						let { node: existingFunctionDeclaration, scope } = path;
+						if(existingFunctionDeclaration.id === null && path.parent.type === 'ExportDefaultDeclaration') {
+							exportIdentifier = scope.generateUidIdentifier("DefaultExportValue");
 							path.replaceWith(
 								t.functionDeclaration(
 									exportIdentifier,
@@ -251,12 +95,12 @@ module.exports = function(pluginArguments) {
 								)
 							);
 						} else {
-							exportIdentifier = path.node.id;
+							exportIdentifier = existingFunctionDeclaration.id;
 						}
 					},
-					Identifier: function(path, rewireInformation) {
-						if(path.parent.type === 'ExportDefaultDeclaration') {
-							exportIdentifier = path.node;
+					Identifier: function({ parent: { type: parentType}, node: identifier }, rewireInformation) {
+						if(parentType === 'ExportDefaultDeclaration') {
+							exportIdentifier = identifier;
 						}
 					}
 				};
@@ -269,114 +113,32 @@ module.exports = function(pluginArguments) {
 						noRewire(t.exportDefaultDeclaration(exportIdentifier))
 					]);
 				}
-				rewireInformation.appendToProgramBody(enrichExport(rewireInformation, exportIdentifier));
+				rewireInformation.enrichExport(exportIdentifier);
 			}
 		},
 
 		ImportDeclaration: function (path, rewireInformation) {
 			rewireInformation.isES6Module = true;
 		}
-	}
+	};
 
-	function appendExports(rewireInformation, t) {
-		if (rewireInformation.isES6Module && (!rewireInformation.hasCommonJSExport || rewireInformation.hasES6Export)) {
-			rewireInformation.appendToProgramBody(generateNamedExports(rewireInformation, t));
+	const ProgramVisitor = {
+		Program: function(path, file) {
+			if(!wasProcessed(path)) {
+				let { scope, node: program } = path;
+				let rewireState = new RewireState(scope);
 
-			if(!rewireInformation.hasES6DefaultExport) {
-				rewireInformation.appendToProgramBody(t.exportDefaultDeclaration(rewireInformation.getAPIObjectID()));
-			}
-		}
-		else if(!rewireInformation.isES6Module || (!rewireInformation.hasES6Export && rewireInformation.hasCommonJSExport)) {
-			rewireInformation.appendToProgramBody(enrichExport(rewireInformation,  t.memberExpression(t.identifier('module'), t.identifier('exports'), false)));
-		}
-	}
+				path.traverse(BodyVisitor, rewireState);
 
-	return {
-		visitor: {
-			Program: function(path, file) {
-				if(!wasProcessed(path)) {
-					var scope = path.scope;
-					var rewireInformation = {
-						isES6Module: false,
-						hasES6Export: false,
-						hasES6DefaultExport: false,
-						nodesToAppendToProgramBody: [],
-						hasCommonJSExport: false,
-						accessors: {},
-						rewiredDataIdentifier: scope.generateUidIdentifier("__RewiredData__"),
+				rewireState.appendUniversalAccessors(scope);
+				rewireState.appendExports();
 
-						universalAccessors: {
-							__GetDependency__: scope.generateUidIdentifier("__GetDependency__"),
-							__Rewire__: scope.generateUidIdentifier("__Rewire__"),
-							__ResetDependency__: scope.generateUidIdentifier("__ResetDependency__"),
-							__RewireAPI__: scope.generateUidIdentifier("__RewireAPI__"),
-							__With__: scope.generateUidIdentifier("__with__")
-						},
-
-						appendToProgramBody: function(nodes) {
-							if(!Array.isArray(nodes)) {
-								nodes = [ nodes ];
-							}
-							this.nodesToAppendToProgramBody = this.nodesToAppendToProgramBody.concat(nodes);
-						},
-
-						ensureAccessor: function(rewireInformation, path, variableName) {
-							var accessors = this.accessors;
-							if(!accessors[variableName]) {
-								accessors[variableName] = noRewire(path.scope.generateUidIdentifier('get_' + variableName));
-								this.appendToProgramBody(getterTemplate({
-									GETTER_NAME: accessors[variableName],
-									VARIABLENAME: t.stringLiteral(variableName),
-									VARIABLE: t.identifier(variableName),
-									REWIRED_DATA_IDENTIFIER: this.rewiredDataIdentifier
-								}));
-							}
-
-							return accessors[variableName];
-						},
-
-						getUniversalGetterID: function () {
-							return this.universalAccessors['__GetDependency__'];
-						},
-
-						getUniversalSetterID: function () {
-							return this.universalAccessors['__Rewire__'];
-						},
-
-						getUniversalResetterID: function () {
-							return this.universalAccessors['__ResetDependency__'];
-						},
-
-						getUniversalWithID: function () {
-							return this.universalAccessors['__with__'];
-						},
-
-						getAPIObjectID: function () {
-							return this.universalAccessors['__RewireAPI__'];
-						}
-					};
-
-					var node = path.node;
-					var parent = path.parent;
-					var scope = path.scope;
-
-					path.traverse(BodyVisitor, rewireInformation);
-
-					appendUniversalAccessors(rewireInformation, path.scope, t);
-					appendExports(rewireInformation, t);
-
-					path.replaceWith(noRewire(t.Program(node.body.concat(rewireInformation.nodesToAppendToProgramBody), node.directives)));
-				}
+				path.replaceWith(noRewire(t.Program(program.body.concat(rewireState.nodesToAppendToProgramBody), program.directives)));
 			}
 		}
 	};
+
+	return {
+		visitor: ProgramVisitor
+	};
 };
-
-function wasProcessed(path) {
-	return path.node.__noRewire === true;
-}
-
-function noRewire(identifier) {
-	identifier.__noRewire = true;
-	return identifier;
-}
