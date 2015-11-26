@@ -1,4 +1,4 @@
-var MyModule = _get__('require')('MyModule');
+var MyModule = require('MyModule');
 
 var Temp,
     Thing = _get__('MyModule').doDah;
@@ -17,9 +17,6 @@ function _get__(variableName) {
 
 function _get_original__(variableName) {
   switch (variableName) {
-    case 'require':
-      return require;
-
     case 'MyModule':
       return MyModule;
 

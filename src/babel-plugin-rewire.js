@@ -24,7 +24,7 @@ module.exports = function({ types: t }) {
 
 			//Matches for body
 			if (!wasProcessed(path)
-				&& variableName !== 'undefined' && variableName !== 'arguments'
+				&& variableName !== 'undefined' && variableName !== 'arguments' && variableName !== 'Object' && variableName !== 'require'
 				&& !(parent.type === 'AssignmentExpression' && parent.left == node)
 				&& !(parent.type !== 'VariableDeclarator' && parent.id == node)
 				&& !(parent.type === 'MemberExpression' && parent.property === node)

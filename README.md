@@ -355,7 +355,8 @@ loader: 'isparta?{ babel: { plugins: ["rewire"] } }'
 * 0.1.21 Improved default export handling, fixed commonjs default exporting, fixed ast nodes resource leaks, improved README. 
 * 0.1.22 Added support for asynchronous functions
 * 0.1.23-beta Improved flow compatibility, Added functionality to work with cyclic dependencies.
-* 1.0.0-beta-1 Added support for babel 6, added support for rewiring classes, added support for flow types, added support for rewire.js compatible \__with\__ 
+* 1.0.0-beta-1 Added support for babel 6, added support for rewiring classes, added support for flow types, added support for rewire.js compatible \__with\__
+* 1.0.0-beta-2 Removed rewire of Object, require
 
 ## Contributors
 

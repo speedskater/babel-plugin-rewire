@@ -29,15 +29,15 @@ const moduleName = _get__('user') && _get__('user').inState('activated') ? 'insi
 
 // Main app entryPoint
 if (_get__('moduleName') === 'inside') {
-	_get__('require').ensure([], function () {
-		_get__('require')('inside')();
+	require.ensure([], function () {
+		require('inside')();
 	});
 }
 
 // Login or register entryPoint
 else if (_get__('moduleName') === 'outside') {
-		_get__('require').ensure([], function () {
-			_get__('require')('outside')();
+		require.ensure([], function () {
+			require('outside')();
 		});
 	}
 
@@ -58,9 +58,6 @@ function _get_original__(variableName) {
 
 		case 'moduleName':
 			return moduleName;
-
-		case 'require':
-			return require;
 
 		case '$':
 			return $;

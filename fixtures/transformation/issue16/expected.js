@@ -1,16 +1,16 @@
-var React = _get__('require')('react/addons');
-var _ = _get__('require')('lodash');
-var StyleSheet = _get__('require')('react-style');
-var cx = _get__('require')('classnames');
+var React = require('react/addons');
+var _ = require('lodash');
+var StyleSheet = require('react-style');
+var cx = require('classnames');
 
-var $ = _get__('require')('vendor/jquery/semantic');
+var $ = require('vendor/jquery/semantic');
 
-var Style = _get__('require')('style/index.js');
+var Style = require('style/index.js');
 
 var {
   validateEmail,
   validateURL
-} = _get__('require')('util/validators');
+} = require('util/validators');
 
 var [one, two, three] = _get__('Style');
 
@@ -18,7 +18,7 @@ const PROTOCOLS = ['http://', 'https://', 'ftp://'];
 
 const DEFAULT_PROTOCOL = 'http://';
 
-var Mixins = _get__('require')('./mixins.jsx');
+var Mixins = require('./mixins.jsx');
 var FormFieldMixin = _get__('Mixins').FormFieldMixin,
     InputMixin = _get__('Mixins').InputMixin,
     TextInputMixin = _get__('Mixins').TextInputMixin;
@@ -118,9 +118,6 @@ function _get__(variableName) {
 
 function _get_original__(variableName) {
   switch (variableName) {
-    case 'require':
-      return require;
-
     case 'Style':
       return Style;
 
