@@ -95,22 +95,24 @@ function _with__(object) {
 
 	function reset() {
 		rewiredVariableNames.forEach(function (variableName) {
-			REWIRED_DATA[variableName] = previousValues[variableName];
+			_RewiredData__[variableName] = previousValues[variableName];
 		});
 	}
 
 	return function (callback) {
 		rewiredVariableNames.forEach(function (variableName) {
-			previousValues[variableName] = REWIRED_DATA[variableName];
-			REWIRED_DATA[variableName] = object[variableName];
+			previousValues[variableName] = _RewiredData__[variableName];
+			_RewiredData__[variableName] = object[variableName];
 		});
 		let result = callback();
 
-		if (typeof result.then == 'function') {
+		if (!!result && typeof result.then == 'function') {
 			result.then(reset).catch(reset);
 		} else {
 			reset();
 		}
+
+		return result;
 	};
 }
 

@@ -1,17 +1,12 @@
 import { createSingleFieldValidatorFactory } from 'data/commons/ValidatorFactories.js';
 
 export function requiredValidatorFunction(translatedFieldLabel, fieldValue) {
-	return fieldValue === _get_undefined() || fieldValue !== null && fieldValue !== '' || translatedFieldLabel + ' is required.';
+	return fieldValue === undefined || fieldValue !== null && fieldValue !== '' || translatedFieldLabel + ' is required.';
 }
 
 let _DefaultExportValue = _get_createSingleFieldValidatorFactory()(_get_requiredValidatorFunction());
 
 export default _DefaultExportValue;
-
-function _get_undefined() {
-	return _RewiredData__ === undefined || _RewiredData__['undefined'] === undefined ? undefined : _RewiredData__['undefined'];
-}
-
 let typeOfOriginalExport = typeof _DefaultExportValue;
 
 function addNonEnumerableProperty(name, value) {
@@ -42,7 +37,6 @@ function _get_requiredValidatorFunction() {
 
 let _RewiredData__ = {};
 let _GETTERS__ = {
-	'undefined': _get_undefined,
 	'createSingleFieldValidatorFactory': _get_createSingleFieldValidatorFactory,
 	'requiredValidatorFunction': _get_requiredValidatorFunction
 };
@@ -65,22 +59,24 @@ function _with__(object) {
 
 	function reset() {
 		rewiredVariableNames.forEach(function (variableName) {
-			REWIRED_DATA[variableName] = previousValues[variableName];
+			_RewiredData__[variableName] = previousValues[variableName];
 		});
 	}
 
 	return function (callback) {
 		rewiredVariableNames.forEach(function (variableName) {
-			previousValues[variableName] = REWIRED_DATA[variableName];
-			REWIRED_DATA[variableName] = object[variableName];
+			previousValues[variableName] = _RewiredData__[variableName];
+			_RewiredData__[variableName] = object[variableName];
 		});
 		let result = callback();
 
-		if (typeof result.then == 'function') {
+		if (!!result && typeof result.then == 'function') {
 			result.then(reset).catch(reset);
 		} else {
 			reset();
 		}
+
+		return result;
 	};
 }
 

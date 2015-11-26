@@ -87,7 +87,8 @@ describe('BabelRewirePluginTest', function() {
 		'requireExports',
 		'requireMultiExports',
 		'topLevelVar',
-		'functionRewireScope'
+		'functionRewireScope',
+		'issue69'
 	];
 
 	featuresToTest.forEach(function(feature) {

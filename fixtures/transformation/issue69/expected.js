@@ -1,4 +1,4 @@
-import MyModule from 'path/to/MyModule.js';
+export var status;
 let _RewiredData__ = {};
 let _GETTERS__ = {};
 
