@@ -48,7 +48,6 @@
   ],
   "license": "ISC",
   "devDependencies": {
-    "babel": "^6.1.18",
     "babel-cli": "^6.2.0",
     "babel-plugin-syntax-async-functions": "^6.1.18",
     "babel-plugin-syntax-flow": "^6.1.18",

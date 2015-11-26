@@ -3,7 +3,7 @@ var path = require('path');
 var fs = require('fs');
 var expect = require('expect.js');
 var hook = require('node-hook');
-var babelPluginRewire = require('../test-helpers/getBabelPluginRewire.js');
+var babelPluginRewire = require('../lib/babel-plugin-rewire.js');//require('../test-helpers/getBabelPluginRewire.js');
 require('core-js');
 
 function isSampleCode(filename) {
@@ -61,4 +61,5 @@ require('../samples/defaultExportImport/sample.js');
 require('../samples/rewireGlobalVariable/sample.js');
 require('../samples/redux-issue/sample.js');
 require('../samples/withSupport/sample.js');
+require('../samples/rewireClasses/sample.js');
 hook.unhook('.js'); // removes your own transform
