@@ -23,6 +23,23 @@ function UNIVERSAL_GETTER_ID(variableName) {
 
 ORIGINAL_ACCESSOR
 
+function ASSIGNMENT_OPERATION_IDENTIFIER(variableName, value) {
+	if(REWIRED_DATA_IDENTIFIER === undefined || REWIRED_DATA_IDENTIFIER[variableName] === undefined) {
+		return ORIGINAL_VARIABLE_SETTER_IDENTIFIER(variableName, value);
+	} else {
+		return REWIRED_DATA_IDENTIFIER[variableName] = value;
+	}
+}
+
+ORIGINAL_SETTER;
+
+function UPDATE_OPERATION_IDENTIFIER(operation, variableName, prefix) {
+	var oldValue = UNIVERSAL_GETTER_ID(variableName);
+	var newValue = (operation === '++') ? oldValue + 1 : oldValue - 1;
+	ASSIGNMENT_OPERATION_IDENTIFIER(variableName, newValue);
+	return (prefix) ? newValue : oldValue;
+}
+
 function UNIVERSAL_SETTER_ID(variableName, value) {
 	return REWIRED_DATA_IDENTIFIER[variableName] = value;
 }
@@ -67,6 +84,7 @@ let API_OBJECT_ID = {};
 	addPropertyToAPIObject('__GetDependency__', UNIVERSAL_GETTER_ID);
 	addPropertyToAPIObject('__Rewire__', UNIVERSAL_SETTER_ID);
 	addPropertyToAPIObject('__set__', UNIVERSAL_SETTER_ID);
+	addPropertyToAPIObject('__reset__', UNIVERSAL_RESETTER_ID);
 	addPropertyToAPIObject('__ResetDependency__', UNIVERSAL_RESETTER_ID);
 	addPropertyToAPIObject('__with__', UNIVERSAL_WITH_ID);
 })();
@@ -83,6 +101,7 @@ if((typeOfOriginalExport === 'object' || typeOfOriginalExport === 'function') &&
 	addNonEnumerableProperty('__GetDependency__', UNIVERSAL_GETTER_ID);
 	addNonEnumerableProperty('__Rewire__', UNIVERSAL_SETTER_ID);
 	addNonEnumerableProperty('__set__', UNIVERSAL_SETTER_ID);
+	addNonEnumerableProperty('__reset__', UNIVERSAL_RESETTER_ID);
 	addNonEnumerableProperty('__ResetDependency__', UNIVERSAL_RESETTER_ID);
 	addNonEnumerableProperty('__with__', UNIVERSAL_WITH_ID);
 	addNonEnumerableProperty('__RewireAPI__', API_OBJECT_ID);

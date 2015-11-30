@@ -1,4 +1,6 @@
+let test = 'foo';
+
 module.exports = {
-  foo: 'foo',
+  foo: test,
   bar: 'bar'
 };

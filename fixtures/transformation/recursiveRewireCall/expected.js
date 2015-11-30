@@ -6,7 +6,7 @@ import { default as defaultExportedObject, __RewireAPI__ as DefaultExportObjectR
 import { default as defaultExportedFunction, __RewireAPI__ as DefaultExportFunctionRewireAPI } from './src/DefaultExportFunction.js';
 import { default as CommonJSModule, __RewireAPI__ as CommonJSRewireAPI } from './src/CommonJSModule.js';
 
-_get__('describe')('NamedExportRewireSupportTest', function () {
+describe('NamedExportRewireSupportTest', function () {
 	function checkRewireAPI(APIObject) {
 		_get__('expect')(APIObject.__Rewire__).to.be.a('function');
 		_get__('expect')(APIObject.__ResetDependency__).to.be.a('function');
@@ -15,7 +15,7 @@ _get__('describe')('NamedExportRewireSupportTest', function () {
 		_get__('expect')(APIObject.__get__).to.be.a('function');
 	}
 
-	_get__('it')('should add a named export rewire support API for PrimitiveDefaultExport', function () {
+	it('should add a named export rewire support API for PrimitiveDefaultExport', function () {
 		checkRewireAPI(_get__('PrimitiveDefaultExportRewireAPI'));
 
 		_get__('expect')(_get__('primitiveDefaultExportedValue') === false).to.be(true);
@@ -30,7 +30,7 @@ _get__('describe')('NamedExportRewireSupportTest', function () {
 		_get__('expect')(_get__('addOne')(1)).to.be(2);
 	});
 
-	_get__('it')('should add a named export rewire support API for NoDefaultExport', function () {
+	it('should add a named export rewire support API for NoDefaultExport', function () {
 		_get__('expect')(_get__('NoDefaultExportRewireAPI').__Rewire__).to.be.a('function');
 		checkRewireAPI(_get__('NoDefaultExportRewireAPI'));
 
@@ -43,26 +43,26 @@ _get__('describe')('NamedExportRewireSupportTest', function () {
 		_get__('expect')(_get__('greet')()).to.equal('Hello John');
 	});
 
-	_get__('it')('should add a named export rewire support API for DefaultExportObject', function () {
-		_get__('console').log("TEST 1");
+	it('should add a named export rewire support API for DefaultExportObject', function () {
+		console.log("TEST 1");
 		checkRewireAPI(_get__('DefaultExportObjectRewireAPI'));
-		_get__('console').log("TEST 2: " + _get__('defaultExportedObject'));
-		_get__('console').log("TEST 2.5: " + _get__('defaultExportedObject').addOne);
+		console.log("TEST 2: " + _get__('defaultExportedObject'));
+		console.log("TEST 2.5: " + _get__('defaultExportedObject').addOne);
 		_get__('expect')(_get__('defaultExportedObject').addOne(1)).to.be(2);
-		_get__('console').log("TEST 3");
+		console.log("TEST 3");
 		_get__('DefaultExportObjectRewireAPI').__Rewire__('ModuleToRewire', function (val) {
 			return val + 2;
 		});
-		_get__('console').log("TEST 4");
+		console.log("TEST 4");
 
 		_get__('expect')(_get__('defaultExportedObject').addOne(1)).to.be(3);
-		_get__('console').log("TEST 5");
+		console.log("TEST 5");
 		_get__('DefaultExportObjectRewireAPI').__ResetDependency__('ModuleToRewire');
-		_get__('console').log("TEST 6");
+		console.log("TEST 6");
 		_get__('expect')(_get__('defaultExportedObject').addOne(1)).to.be(2);
 	});
 
-	_get__('it')('should add a named export rewire support API for DefaultExportFunction', function () {
+	it('should add a named export rewire support API for DefaultExportFunction', function () {
 		checkRewireAPI(_get__('DefaultExportFunctionRewireAPI'));
 
 		_get__('expect')(_get__('defaultExportedFunction')(1)).to.be(3);
@@ -76,7 +76,7 @@ _get__('describe')('NamedExportRewireSupportTest', function () {
 		_get__('expect')(_get__('defaultExportedFunction')(1)).to.be(3);
 	});
 
-	_get__('it')('should add a named export rewire support API for CommonJSModule', function () {
+	it('should add a named export rewire support API for CommonJSModule', function () {
 		checkRewireAPI(_get__('CommonJSModule'));
 		checkRewireAPI(_get__('CommonJSRewireAPI'));
 
@@ -99,14 +99,8 @@ function _get__(variableName) {
 
 function _get_original__(variableName) {
 	switch (variableName) {
-		case 'describe':
-			return describe;
-
 		case 'expect':
 			return expect;
-
-		case 'it':
-			return it;
 
 		case 'PrimitiveDefaultExportRewireAPI':
 			return PrimitiveDefaultExportRewireAPI;
@@ -122,9 +116,6 @@ function _get_original__(variableName) {
 
 		case 'greet':
 			return greet;
-
-		case 'console':
-			return console;
 
 		case 'DefaultExportObjectRewireAPI':
 			return DefaultExportObjectRewireAPI;
@@ -146,6 +137,30 @@ function _get_original__(variableName) {
 	}
 
 	return undefined;
+}
+
+function _assign__(variableName, value) {
+	if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
+		return _set_original__(variableName, value);
+	} else {
+		return _RewiredData__[variableName] = value;
+	}
+}
+
+function _set_original__(variableName, _value) {
+	switch (variableName) {}
+
+	return undefined;
+}
+
+function _update_operation__(operation, variableName, prefix) {
+	var oldValue = _get__(variableName);
+
+	var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
+
+	_assign__(variableName, newValue);
+
+	return prefix ? newValue : oldValue;
 }
 
 function _set__(variableName, value) {
@@ -198,6 +213,7 @@ let _RewireAPI__ = {};
 	addPropertyToAPIObject('__GetDependency__', _get__);
 	addPropertyToAPIObject('__Rewire__', _set__);
 	addPropertyToAPIObject('__set__', _set__);
+	addPropertyToAPIObject('__reset__', _reset__);
 	addPropertyToAPIObject('__ResetDependency__', _reset__);
 	addPropertyToAPIObject('__with__', _with__);
 })();

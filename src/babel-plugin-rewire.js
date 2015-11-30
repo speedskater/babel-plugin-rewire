@@ -22,24 +22,36 @@ module.exports = function({ types: t }) {
 			let variableName = node.name;
 			let variableBinding = scope.getBinding(variableName);
 
+
+
 			//Matches for body
-			if (!wasProcessed(path)
-				&& variableName !== 'undefined' && variableName !== 'arguments' && variableName !== 'Object' && variableName !== 'require'
-				&& !(parent.type === 'AssignmentExpression' && parent.left == node)
-				&& !(parent.type !== 'VariableDeclarator' && parent.id == node)
-				&& !(parent.type === 'MemberExpression' && parent.property === node)
-				&& !(parent.type === 'ObjectProperty' && parent.key === node)
-				&& !(parent.type === 'ObjectProperty' && path.parentPath && path.parentPath.parent && path.parentPath.parent.type === 'ObjectPattern')
-				&& !(parent.type === 'ExportSpecifier')
-				&& !(parent.type === 'ImportSpecifier')
-				&& !(parent.type === 'ObjectTypeProperty')
-				&& !(parent.type === 'ClassMethod')
-				&& !(parent.type === 'UpdateExpression')
-			) {
-				if (variableBinding === undefined ||
-					(variableBinding.scope.block.type === 'Program' && variableBinding.referencePaths !== null && contains(variableBinding.referencePaths, path))) {
-					rewireInformation.ensureAccessor(variableName);
-					path.replaceWith(t.callExpression(rewireInformation.getUniversalGetterID(), [ t.stringLiteral(variableName) ]));
+			if (variableBinding !== undefined && !wasProcessed(path)
+				&& (variableBinding.scope.block.type === 'Program')) {
+				if(variableBinding.referencePaths !== null && contains(variableBinding.referencePaths, path)
+					&& !(parent.type !== 'VariableDeclarator' && parent.id == node)
+					&& !(parent.type === 'MemberExpression' && parent.property === node)
+					&& !(parent.type === 'ObjectProperty' && parent.key === node)
+					&& !(parent.type === 'ObjectProperty' && path.parentPath && path.parentPath.parent && path.parentPath.parent.type === 'ObjectPattern')
+					&& !(parent.type === 'ExportSpecifier')
+					&& !(parent.type === 'ImportSpecifier')
+					&& !(parent.type === 'ObjectTypeProperty')
+					&& !(parent.type === 'ClassMethod')
+				) {
+					if(parent.type === 'UpdateExpression') {
+						rewireInformation.addUpdateableVariable(variableName);
+						path.parentPath.replaceWith(t.callExpression(rewireInformation.getUpdateOperationID(), [ t.stringLiteral(parent.operator), t.stringLiteral(variableName), t.booleanLiteral(parent.prefix) ]));
+					} else {
+						rewireInformation.ensureAccessor(variableName);
+						path.replaceWith(t.callExpression(rewireInformation.getUniversalGetterID(), [ t.stringLiteral(variableName) ]));
+					}
+				} else if(parent.type === 'AssignmentExpression' && parent.left == node) {
+					rewireInformation.addUpdateableVariable(variableName);
+					if(parent.operator === '=') {
+						path.parentPath.replaceWith(noRewire(t.callExpression(rewireInformation.getAssignmentOperationID(), [ t.stringLiteral(variableName), parent.right ])));
+					} else {
+						let baseOperator = parent.operator.substring(0, parent.operator.length - 1);
+						path.parentPath.replaceWith(t.assignmentExpression('=', parent.left, t.binaryExpression(baseOperator, t.callExpression(rewireInformation.getUniversalGetterID(), [ t.stringLiteral(variableName) ]), parent.right)));
+					}
 				}
 			}
 		},

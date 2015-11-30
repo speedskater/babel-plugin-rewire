@@ -3,7 +3,7 @@ var path = require('path');
 var fs = require('fs');
 var expect = require('expect.js');
 var hook = require('node-hook');
-var babelPluginRewire = require('../lib/babel-plugin-rewire.js'); /*require('../test-helpers/getBabelPluginRewire.js');*/
+var babelPluginRewire = require('../lib/babel-plugin-rewire.js'); //require('../test-helpers/getBabelPluginRewire.js');
 require('core-js');
 
 function isSampleCode(filename) {
@@ -32,6 +32,7 @@ function transformSampleCodeToTestWithBabelPluginRewire(source, filename) {
 		console.log(code);
 		return code;
 	}*/
+
 	return isSampleCode(filename) ? babel.transform(source, babelTransformationOptions).code : source;
 }
 
@@ -58,10 +59,10 @@ require('../samples/typedExport/sample.js');
 require('../samples/nonEnumerableProperties/sample.js');
 require('../samples/redefinedRewireProperties/sample.js');
 require('../samples/defaultExportImport/sample.js');
-require('../samples/rewireGlobalVariable/sample.js');
 require('../samples/redux-issue/sample.js');
 require('../samples/withSupport/sample.js');
 require('../samples/rewireClasses/sample.js');
-require('../samples/increment/sample.js');
 require('../samples/objectAssign/sample.js');
+require('../samples/updateOperations/sample.js');
+ require('../samples/assignmentOperations/sample.js');
 hook.unhook('.js'); // removes your own transform

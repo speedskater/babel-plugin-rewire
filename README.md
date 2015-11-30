@@ -357,6 +357,7 @@ loader: 'isparta?{ babel: { plugins: ["rewire"] } }'
 * 0.1.23-beta Improved flow compatibility, Added functionality to work with cyclic dependencies.
 * 1.0.0-beta-1 Added support for babel 6, added support for rewiring classes, added support for flow types, added support for rewire.js compatible \__with\__
 * 1.0.0-beta-2 Removed rewire of Object, require
+* 1.0.0-beta-3 Removed support for rewiring of globals. Added support for rewiring in combination with assignment and update expressions.
 
 ## Contributors
 

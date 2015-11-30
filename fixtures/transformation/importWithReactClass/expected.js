@@ -36,6 +36,7 @@ if ((typeOfOriginalExport === 'object' || typeOfOriginalExport === 'function') &
 	addNonEnumerableProperty('__GetDependency__', _get__);
 	addNonEnumerableProperty('__Rewire__', _set__);
 	addNonEnumerableProperty('__set__', _set__);
+	addNonEnumerableProperty('__reset__', _reset__);
 	addNonEnumerableProperty('__ResetDependency__', _reset__);
 	addNonEnumerableProperty('__with__', _with__);
 	addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
@@ -60,6 +61,30 @@ function _get_original__(variableName) {
 	}
 
 	return undefined;
+}
+
+function _assign__(variableName, value) {
+	if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
+		return _set_original__(variableName, value);
+	} else {
+		return _RewiredData__[variableName] = value;
+	}
+}
+
+function _set_original__(variableName, _value) {
+	switch (variableName) {}
+
+	return undefined;
+}
+
+function _update_operation__(operation, variableName, prefix) {
+	var oldValue = _get__(variableName);
+
+	var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
+
+	_assign__(variableName, newValue);
+
+	return prefix ? newValue : oldValue;
 }
 
 function _set__(variableName, value) {
@@ -112,6 +137,7 @@ let _RewireAPI__ = {};
 	addPropertyToAPIObject('__GetDependency__', _get__);
 	addPropertyToAPIObject('__Rewire__', _set__);
 	addPropertyToAPIObject('__set__', _set__);
+	addPropertyToAPIObject('__reset__', _reset__);
 	addPropertyToAPIObject('__ResetDependency__', _reset__);
 	addPropertyToAPIObject('__with__', _with__);
 })();

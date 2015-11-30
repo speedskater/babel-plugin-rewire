@@ -1,31 +1,60 @@
-let test = _get__('greet')('world');
+let value = 'initial';
 
-export default _get__('test');
-
-function greet(whoToGreet) {
-	return 'Hello ' + whoToGreet;
-}
-let typeOfOriginalExport = typeof test;
-
-function addNonEnumerableProperty(name, value) {
-	Object.defineProperty(test, name, {
-		value: value,
-		enumerable: false,
-		configurable: true
-	});
+export function getValue() {
+	return _get__('value');
 }
 
-if ((typeOfOriginalExport === 'object' || typeOfOriginalExport === 'function') && Object.isExtensible(test)) {
-	addNonEnumerableProperty('__get__', _get__);
-	addNonEnumerableProperty('__GetDependency__', _get__);
-	addNonEnumerableProperty('__Rewire__', _set__);
-	addNonEnumerableProperty('__set__', _set__);
-	addNonEnumerableProperty('__reset__', _reset__);
-	addNonEnumerableProperty('__ResetDependency__', _reset__);
-	addNonEnumerableProperty('__with__', _with__);
-	addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
+export function setValue(newValue) {
+	_assign__('value', newValue);
 }
 
+export function assign(newValue) {
+	return _assign__('value', newValue);
+}
+
+export function additionAssignement(addition) {
+	return _assign__('value', _get__('value') + addition);
+}
+
+export function subtractionAssignment(valueToSubtract) {
+	return _assign__('value', _get__('value') - valueToSubtract);
+}
+
+export function multiplicationAssignment(valueToMultiply) {
+	return _assign__('value', _get__('value') * valueToMultiply);
+}
+
+export function divisionAssignment(valueToDivideWith) {
+	return _assign__('value', _get__('value') / valueToDivideWith);
+}
+
+export function remainderAssignement(valueToCalculcateModulWith) {
+	return _assign__('value', _get__('value') % valueToCalculcateModulWith);
+}
+
+export function leftShiftAssignment(amountToShift) {
+	return _assign__('value', _get__('value') << amountToShift);
+}
+
+export function rightShiftAssignment(amountToShift) {
+	return _assign__('value', _get__('value') >> amountToShift);
+}
+
+export function unsignedRightShiftAssignment(amountToShift) {
+	return _assign__('value', _get__('value') >>> amountToShift);
+}
+
+export function bitwiseAndAssignement(operand) {
+	return _assign__('value', _get__('value') & operand);
+}
+
+export function bitwiseOrAssignement(operand) {
+	return _assign__('value', _get__('value') | operand);
+}
+
+export function bitwiseXorAssignment(operand) {
+	return _assign__('value', _get__('value') ^ operand);
+}
 let _RewiredData__ = {};
 
 function _get__(variableName) {
@@ -34,11 +63,8 @@ function _get__(variableName) {
 
 function _get_original__(variableName) {
 	switch (variableName) {
-		case 'greet':
-			return greet;
-
-		case 'test':
-			return test;
+		case 'value':
+			return value;
 	}
 
 	return undefined;
@@ -53,7 +79,10 @@ function _assign__(variableName, value) {
 }
 
 function _set_original__(variableName, _value) {
-	switch (variableName) {}
+	switch (variableName) {
+		case 'value':
+			return value = _value;
+	}
 
 	return undefined;
 }
@@ -124,3 +153,4 @@ let _RewireAPI__ = {};
 })();
 
 export { _get__ as __get__, _get__ as __GetDependency__, _set__ as __Rewire__, _set__ as __set__, _reset__ as __ResetDependency__, _RewireAPI__ as __RewireAPI__ };
+export default _RewireAPI__;

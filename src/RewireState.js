@@ -25,15 +25,20 @@ export default class RewireState {
 		this.nodesToAppendToProgramBody = [];
 		this.hasCommonJSExport = false;
 		this.accessors = {};
+		this.updateableVariables = {};
 		this.rewiredDataIdentifier = scope.generateUidIdentifier('__RewiredData__');
 		this.originalVariableAccessorIdentifier = scope.generateUidIdentifier('__get_original__');
+		this.originalVariableSetterIdentifier = scope.generateUidIdentifier('__set_original__');
+		this.updateOperationIdentifier = scope.generateUidIdentifier('__update_operation__');
+		this.assignmentOperationIdentifier = scope.generateUidIdentifier('__assign__');
 
 		this.universalAccessors = {
 			__get__: noRewire(scope.generateUidIdentifier('__get__')),
 			__set__: noRewire(scope.generateUidIdentifier('__set__')),
 			__reset__: noRewire(scope.generateUidIdentifier('__reset__')),
 			__with__: noRewire(scope.generateUidIdentifier('__with__')),
-			__RewireAPI__: noRewire(scope.generateUidIdentifier('__RewireAPI__'))
+			__RewireAPI__: noRewire(scope.generateUidIdentifier('__RewireAPI__')),
+			__assignOperation: noRewire(scope.generateUidIdentifier('__assign__')),
 		};
 	}
 
@@ -52,6 +57,11 @@ export default class RewireState {
 		return this.accessors[variableName];
 	}
 
+	addUpdateableVariable(variableName) {
+		this.updateableVariables[variableName] = true;
+		this.ensureAccessor(variableName);
+	}
+
 	appendUniversalAccessors(scope) {
 		let originalAccessor = t.functionDeclaration(this.originalVariableAccessorIdentifier, [ t.identifier('variableName') ], t.blockStatement([
 			t.switchStatement(t.identifier('variableName'), Object.keys(this.accessors).map(function(identifierName) {
@@ -60,9 +70,21 @@ export default class RewireState {
 			t.returnStatement(noRewire(t.identifier('undefined')))
 		]));
 
+		let valueVariable = scope.generateUidIdentifier('value');
+		let originalSetter = t.functionDeclaration(this.originalVariableSetterIdentifier,  [ t.identifier('variableName'), valueVariable ], t.blockStatement([
+			t.switchStatement(t.identifier('variableName'), Object.keys(this.updateableVariables).map(function(identifierName) {
+				return t.switchCase(t.stringLiteral(identifierName), [ t.returnStatement(t.assignmentExpression('=', noRewire(t.identifier(identifierName)), valueVariable)) ] );
+			})),
+			t.returnStatement(noRewire(t.identifier('undefined')))
+		]));
+
 		this.appendToProgramBody(universalAccesorsTemplate({
 			ORIGINAL_VARIABLE_ACCESSOR_IDENTIFIER: this.originalVariableAccessorIdentifier,
+			ORIGINAL_VARIABLE_SETTER_IDENTIFIER: this.originalVariableSetterIdentifier,
+			ASSIGNMENT_OPERATION_IDENTIFIER: this.assignmentOperationIdentifier,
+			UPDATE_OPERATION_IDENTIFIER: this.updateOperationIdentifier,
 			ORIGINAL_ACCESSOR: originalAccessor,
+			ORIGINAL_SETTER: originalSetter,
 			UNIVERSAL_GETTER_ID :this.getUniversalGetterID(),
 			UNIVERSAL_SETTER_ID :this.getUniversalSetterID(),
 			UNIVERSAL_RESETTER_ID :this.getUniversalResetterID(),
@@ -109,11 +131,19 @@ export default class RewireState {
 	}
 
 	containsDependenciesToRewire() {
-		return Object.keys(this.accessors).length > 0;
+		return Object.keys(this.accessors).length > 0 || Object.keys(this.updateableVariables).length > 0;
 	}
 
 	getUniversalGetterID() {
 		return this.universalAccessors['__get__'];
+	}
+
+	getUpdateOperationID() {
+		return this.updateOperationIdentifier;
+	}
+
+	getAssignmentOperationID() {
+		return this.assignmentOperationIdentifier;
 	}
 
 	getUniversalSetterID() {
