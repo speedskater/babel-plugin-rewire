@@ -105,7 +105,7 @@ module.exports = function({ types: t }) {
 			}
 		},
 
-		'ExportNamedDeclaration|ExportAllDeclaration': function ({ node: { specifiers } }, rewireInformation) {
+		'ExportNamedDeclaration|ExportAllDeclaration': function ({ node: { specifiers = [] } }, rewireInformation) {
 			let hasDefaultExport = specifiers.some(function(specifier) {
 				return specifier.local.name === 'default';
 			});
