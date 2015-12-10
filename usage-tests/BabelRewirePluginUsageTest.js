@@ -65,5 +65,6 @@ require('../samples/withSupport/sample.js');
 require('../samples/rewireClasses/sample.js');
 require('../samples/objectAssign/sample.js');
 require('../samples/updateOperations/sample.js');
+require('../samples/wildcardExport/sample.js');
 require('../samples/assignmentOperations/sample.js');
 hook.unhook('.js'); // removes your own transform
