@@ -18,7 +18,6 @@ function transformSampleCodeToTestWithBabelPluginRewire(source, filename) {
 		"plugins": [
 			babelPluginRewire,
 			"syntax-async-functions",
-			"transform-runtime",
 			"transform-es2015-block-scoping",
 			"transform-es2015-template-literals",
 			"transform-es2015-typeof-symbol",
