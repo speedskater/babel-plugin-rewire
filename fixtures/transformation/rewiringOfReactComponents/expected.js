@@ -1,42 +1,26 @@
-import { node } from './DomUtils.js';
-import Card from './Card.js';
+import React from 'react';
+import ChildComponent from './ChildComponent';
 
-class WelcomePanel extends _get__('Card') {
-	constructor(props) {
-		super(props);
-	}
-
+export default class Foo extends _get__('React').Component {
 	render() {
-		let _Card_Component = _get__('Card');
+		let _ChildComponent_Component = _get__('ChildComponent');
 
-		let _Card_Component2 = _get__('Card');
-
-		return <div className='welcome-panel'>
-				<_Card_Component content={_get__('node').toString()} />
-				<_Card_Component2><ChildNode /></_Card_Component2>
+		return <div className='content'>
+				<_ChildComponent_Component />
 			</div>;
 	}
-
-	initPanel(el, content) {
-		this.initEl = el;
-		this.initContent = content;
-	}
-};
-
-//export default WelcomePanel;
-let _DefaultExportValue = { WelcomePanel: _get__('WelcomePanel') };
-export default _DefaultExportValue;
-let typeOfOriginalExport = typeof _DefaultExportValue;
+}
+let typeOfOriginalExport = typeof Foo;
 
 function addNonEnumerableProperty(name, value) {
-	Object.defineProperty(_DefaultExportValue, name, {
+	Object.defineProperty(Foo, name, {
 		value: value,
 		enumerable: false,
 		configurable: true
 	});
 }
 
-if ((typeOfOriginalExport === 'object' || typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
+if ((typeOfOriginalExport === 'object' || typeOfOriginalExport === 'function') && Object.isExtensible(Foo)) {
 	addNonEnumerableProperty('__get__', _get__);
 	addNonEnumerableProperty('__GetDependency__', _get__);
 	addNonEnumerableProperty('__Rewire__', _set__);
@@ -55,14 +39,8 @@ function _get__(variableName) {
 
 function _get_original__(variableName) {
 	switch (variableName) {
-		case 'node':
-			return node;
-
-		case 'Card':
-			return Card;
-
-		case 'WelcomePanel':
-			return WelcomePanel;
+		case 'React':
+			return React;
 	}
 
 	return undefined;

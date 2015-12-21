@@ -17,12 +17,61 @@ import { wasProcessed, noRewire, contains } from './RewireHelpers.js';
 
 module.exports = function({ types: t }) {
 	const BodyVisitor = {
+		JSXElement: function(path, rewireInformation) {
+			let { node, parent, scope } = path;
+			let { openingElement, closingElement, children } = node;
+			let tagName = openingElement.name.name;
+			let variableBinding = scope.getBinding(tagName);
+
+			if (!wasProcessed(path) && !t.react.isCompatTag(tagName) && variableBinding !== undefined && (variableBinding.scope.block.type === 'Program')) {
+				let insertingBefore = path;
+				while(insertingBefore.parentPath.node != scope.block && insertingBefore.parentPath.type !== 'BlockStatement') {
+					insertingBefore = insertingBefore.parentPath;
+				}
+
+				let componentIdentifier = scope.generateUidIdentifier(tagName + '_Component');
+				insertingBefore.insertBefore(t.variableDeclaration('let', [t.variableDeclarator(componentIdentifier, t.callExpression(rewireInformation.getUniversalGetterID(), [ t.stringLiteral(tagName) ]))]));
+
+				if(openingElement.selfClosing) {
+					path.replaceWith(noRewire(t.JSXElement(
+							t.JSXOpeningElement(
+								t.JSXIdentifier(componentIdentifier.name),
+								openingElement.attributes,
+								openingElement.selfClosing
+							),
+							undefined,
+							[],
+							true
+						)
+					));
+				} else {
+					path.replaceWith(noRewire(
+						t.JSXElement(
+							t.JSXOpeningElement(
+								t.JSXIdentifier(componentIdentifier.name),
+								openingElement.attributes,
+								false
+							),
+							t.JSXClosingElement(
+								t.JSXIdentifier(componentIdentifier.name)
+							),
+							children,
+							false
+						)
+					));
+				}
+				/*path.replaceWithMultiple([
+					t.variableDeclaration('let', [t.variableDeclarator(componentIdentifier, t.identifier(tagName))]),
+					noRewire(t.JSXElement(openingElement, closingElement, children))
+				]);*/
+			}
+		},
+
+
 		Identifier: function (path, rewireInformation) {
 			let { node, parent, scope } = path;
 			let variableName = node.name;
 			let variableBinding = scope.getBinding(variableName);
-
-
 
 			//Matches for body
 			if (variableBinding !== undefined && !wasProcessed(path)

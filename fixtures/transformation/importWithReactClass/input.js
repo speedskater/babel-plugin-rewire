@@ -10,6 +10,7 @@ class WelcomePanel extends Card {
 		return (
 			<div className="welcome-panel">
 				<Card content={node.toString()} />
+				<Card><ChildNode /></Card>
 			</div>
 		);
 	}
