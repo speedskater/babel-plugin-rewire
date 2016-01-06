@@ -99,7 +99,7 @@ var HiddenTextInput = _get__('React').createClass({
     can be placed at the top of a Form to prevent that behaviour.
   */
   render: function () {
-    return <input type='text' style={{ opacity: 0, height: 0, position: 'absolute' }} />;
+    return <input type="text" style={{ opacity: 0, height: 0, position: 'absolute' }} />;
   }
 });
 

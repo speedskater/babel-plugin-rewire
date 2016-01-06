@@ -8,7 +8,7 @@ class WelcomePanel extends Card {
 
 	render() {
 		return (
-			<div className="welcome-panel">
+			<div className='welcome-panel'>
 				<Card content={node.toString()} />
 				<Card><ChildNode /></Card>
 			</div>

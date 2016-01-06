@@ -5,7 +5,7 @@ export default class Foo extends _get__('React').Component {
 	render() {
 		let _ChildComponent_Component = _get__('ChildComponent');
 
-		return <div className='content'>
+		return <div className="content">
 				<_ChildComponent_Component />
 			</div>;
 	}

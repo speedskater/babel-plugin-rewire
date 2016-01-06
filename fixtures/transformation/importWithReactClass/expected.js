@@ -11,7 +11,7 @@ class WelcomePanel extends _get__('Card') {
 
 		let _Card_Component2 = _get__('Card');
 
-		return <div className='welcome-panel'>
+		return <div className="welcome-panel">
 				<_Card_Component content={_get__('node').toString()} />
 				<_Card_Component2><ChildNode /></_Card_Component2>
 			</div>;
