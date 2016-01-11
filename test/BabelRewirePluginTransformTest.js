@@ -90,6 +90,7 @@ describe('BabelRewirePluginTest', function() {
 		'recursiveRewireCall',
 		'requireExports',
 		'requireMultiExports',
+		'switch',
 		'topLevelVar',
 		'functionRewireScope',
 		'issue69',
