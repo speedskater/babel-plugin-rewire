@@ -24,22 +24,24 @@ module.exports = function({ types: t }) {
 			let variableBinding = scope.getBinding(tagName);
 
 			if (!wasProcessed(path) && !t.react.isCompatTag(tagName) && variableBinding !== undefined && (variableBinding.scope.block.type === 'Program')) {
+				rewireInformation.ensureAccessor(tagName);
+
 				let insertingBefore = path;
 				while(insertingBefore.parentPath.node != scope.block && insertingBefore.parentPath.type !== 'BlockStatement') {
 					insertingBefore = insertingBefore.parentPath;
 				}
 
 				let componentIdentifier = scope.generateUidIdentifier(tagName + '_Component');
-				insertingBefore.insertBefore(t.variableDeclaration('let', [t.variableDeclarator(componentIdentifier, t.callExpression(rewireInformation.getUniversalGetterID(), [ t.stringLiteral(tagName) ]))]));
+				let temporaryComponentDeclaration = t.variableDeclaration('let', [t.variableDeclarator(componentIdentifier, t.callExpression(rewireInformation.getUniversalGetterID(), [ t.stringLiteral(tagName) ]))]);
 
 				if(openingElement.selfClosing) {
 					path.replaceWith(noRewire(t.JSXElement(
 							t.JSXOpeningElement(
 								t.JSXIdentifier(componentIdentifier.name),
 								openingElement.attributes,
-								openingElement.selfClosing
+								true
 							),
-							undefined,
+							null,
 							[],
 							true
 						)
@@ -60,10 +62,19 @@ module.exports = function({ types: t }) {
 						)
 					));
 				}
-				/*path.replaceWithMultiple([
-					t.variableDeclaration('let', [t.variableDeclarator(componentIdentifier, t.identifier(tagName))]),
-					noRewire(t.JSXElement(openingElement, closingElement, children))
-				]);*/
+
+				if(insertingBefore.parentPath.type === 'ArrowFunctionExpression') {
+					let arrowFunctionExpression = insertingBefore.parentPath.node;
+					insertingBefore.parentPath.replaceWith(
+						t.arrowFunctionExpression(
+							arrowFunctionExpression.params,
+							t.blockStatement([ temporaryComponentDeclaration, t.returnStatement(insertingBefore.node) ]),
+							arrowFunctionExpression.async
+						)
+					);
+				} else {
+					insertingBefore.insertBefore(temporaryComponentDeclaration);
+				}
 			}
 		},
 

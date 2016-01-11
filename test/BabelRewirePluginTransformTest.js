@@ -3,7 +3,7 @@ var path = require('path');
 var fs = require('fs');
 var os = require('os');
 var expect = require('expect.js');
-var babelPluginRewire = require('../lib/babel-plugin-rewire.js'); // require('../test-helpers/getBabelPluginRewire.js');
+var babelPluginRewire = /*require('../lib/babel-plugin-rewire.js'); // */require('../test-helpers/getBabelPluginRewire.js');
 
 
 describe('BabelRewirePluginTest', function() {
@@ -95,7 +95,8 @@ describe('BabelRewirePluginTest', function() {
 		'flowTypeImport',
 		'updateOperations',
 		'assignmentOperations',
-		'rewiringOfReactComponents'
+		'rewiringOfReactComponents',
+		'rewiringOfSimpleFunctionalComponents'
 	];
 
 	featuresToTest.forEach(function(feature) {

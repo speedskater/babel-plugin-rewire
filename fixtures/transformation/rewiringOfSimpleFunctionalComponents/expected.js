@@ -1,26 +1,62 @@
 import React from 'react';
-import ChildComponent from './ChildComponent';
+import MessageList from './ChildComponent.js';
 
-export default class Foo extends _get__('React').Component {
-	render() {
-		let _ChildComponent_Component = _get__('ChildComponent');
-
-		return <div className="content">
-				<_ChildComponent_Component />
-			</div>;
-	}
+function MySpecialComponentIWantToRewire() {
+	return <div>Output</div>;
 }
-let typeOfOriginalExport = typeof Foo;
+
+function ComponentToRewirePerElement({ element, children }) {
+	return <div key={element.get('id')}>{children}</div>;
+}
+
+export let rewireInlineComponent = () => {
+	let _MySpecialComponentIWantToRewire_Component = _get__('MySpecialComponentIWantToRewire');
+
+	return <_MySpecialComponentIWantToRewire_Component />;
+};
+
+export let rewireWitMap = () => {
+	return <div>
+		{array.map(element => {
+			let _ComponentToRewirePerElement_Component = _get__('ComponentToRewirePerElement');
+
+			return <_ComponentToRewirePerElement_Component element={element}>
+				{element.get('text')}
+			</_ComponentToRewirePerElement_Component>;
+		})}
+	</div>;
+};
+
+export function another() {
+	let _MessageList_Component = _get__('MessageList');
+
+	return <_MessageList_Component />;
+};
+
+export let arrowWithReturn = () => {
+	let _MessageList_Component2 = _get__('MessageList');
+
+	return <_MessageList_Component2 />;
+};
+
+let _DefaultExportValue = () => {
+	let _MessageList_Component3 = _get__('MessageList');
+
+	return <_MessageList_Component3 />;
+};
+
+export default _DefaultExportValue;
+let typeOfOriginalExport = typeof _DefaultExportValue;
 
 function addNonEnumerableProperty(name, value) {
-	Object.defineProperty(Foo, name, {
+	Object.defineProperty(_DefaultExportValue, name, {
 		value: value,
 		enumerable: false,
 		configurable: true
 	});
 }
 
-if ((typeOfOriginalExport === 'object' || typeOfOriginalExport === 'function') && Object.isExtensible(Foo)) {
+if ((typeOfOriginalExport === 'object' || typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
 	addNonEnumerableProperty('__get__', _get__);
 	addNonEnumerableProperty('__GetDependency__', _get__);
 	addNonEnumerableProperty('__Rewire__', _set__);
@@ -39,11 +75,14 @@ function _get__(variableName) {
 
 function _get_original__(variableName) {
 	switch (variableName) {
-		case 'ChildComponent':
-			return ChildComponent;
+		case 'MySpecialComponentIWantToRewire':
+			return MySpecialComponentIWantToRewire;
 
-		case 'React':
-			return React;
+		case 'ComponentToRewirePerElement':
+			return ComponentToRewirePerElement;
+
+		case 'MessageList':
+			return MessageList;
 	}
 
 	return undefined;

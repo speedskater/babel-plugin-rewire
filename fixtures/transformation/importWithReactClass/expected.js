@@ -55,11 +55,11 @@ function _get__(variableName) {
 
 function _get_original__(variableName) {
 	switch (variableName) {
-		case 'node':
-			return node;
-
 		case 'Card':
 			return Card;
+
+		case 'node':
+			return node;
 
 		case 'WelcomePanel':
 			return WelcomePanel;
