@@ -267,6 +267,19 @@ full plugin name:
 $ babel --plugins babel-plugin-rewire ..
 ```
 
+### With babelrc
+
+You can also specify plugins via the [babelrc](http://babeljs.io/docs/usage/babelrc/) file:
+
+
+```json
+{
+  "plugins": ["rewire"]
+}
+```
+
+Whether you're using the command line, JS API, or require hook, this file is honored by babel.
+
 ### JavaScript API
 
 abbreviated:
@@ -328,6 +341,21 @@ If you are using isparta together with Webpack you could also do something like 
 ```javascript
 loader: 'isparta?{ babel: { plugins: ["rewire"] } }'
 ```
+
+### istanbul
+Initially isparta was created to solve the problem of using istanbul with Babel. However work has been done recently on istanbul to support Babel generated code with sourcemaps.
+
+At the moment of this writing this is still part of an alpha version (1.0.0-alpha.2, see [#212](https://github.com/gotwarlost/istanbul/issues/212#issuecomment-160526692) for details). You need to use the [sourcemaps option](http://babeljs.io/docs/usage/options/) with the `inline` value (see [this](https://github.com/istanbuljs/sample-babel-node/blob/master/.babelrc) for an example).
+
+Because istanbul doesn't run babel by itself, you need to make sure that your code goes through babel. If you're running it through webpack it should be no different than what's shown on the [webpack](#webpack) section, but if you're running it through the node cli, you need to use [babel-node](http://babeljs.io/docs/usage/cli/#babel-node) and specify the plugin via the [cli argument](#commandline) or [babelrc](#with_babelrc).
+
+A small quirk is that you need to run the actual istanbul cli file, rather than the istanbul command, such as:
+
+```
+babel-node ./node_modules/istanbul/lib/cli.js cover test/run-tests.js
+```
+
+See the istanbul [sample-babel-node](https://github.com/istanbuljs/sample-babel-node) project for a full working example.
 
 ## Release History
 
