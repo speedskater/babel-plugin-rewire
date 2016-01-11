@@ -54,6 +54,7 @@ require('../samples/namedExportRewireSupport/sample.js');
 require('../samples/namedExportsWithNameClash/sample.js');
 require('../samples/nestedScopes/sample.js');
 require('../samples/objectLiteralNameClash/sample.js');
+require('../samples/passThrough/sample.js');
 require('../samples/defaultExportNonExtensible/sample.js');
 require('../samples/typedExport/sample.js');
 require('../samples/nonEnumerableProperties/sample.js');
