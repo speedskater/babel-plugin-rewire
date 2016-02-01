@@ -1,5 +1,5 @@
-import { default as Index, localFunction as localFunctionInIndex, __RewireAPI__ as IndexModule } from './src/index.js';
-import { default as MyClass, localFunction as localFunctionInMyClass, __RewireAPI__ as MyClassModule } from './src/MyClass.js';
+import { default as Index, localFunction as localFunctionInIndex, __ModuleAPI__ as IndexModule } from './src/index.js';
+import { default as MyClass, localFunction as localFunctionInMyClass, __ModuleAPI__ as MyClassModule } from './src/MyClass.js';
 
 import expect from 'expect.js';
 

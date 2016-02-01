@@ -3,20 +3,21 @@
  */
 import { ADD_MESSAGE, DELETE_MESSAGE } from './actions.js';
 
-export default {
-    auth: function (state = {messages: []}, action) {
+let addMessage = 'test';
+addMessage = 'newTest';
 
-        switch (action.type) {
-            // CHANGE STATE FOR AUTH
-            case ADD_MESSAGE:
-                return Object.assign({}, state, {messages: [...state.messages, action.text]});
-            case DELETE_MESSAGE:
-                return Object.assign({}, state, {
-                    messages: [...state.messages.slice(0, action.id),
-                        ...state.messages.slice(action.id + 1)]
-                });
-            default:
-                return state;
-        }
+export function auth(state = {messages: []}, action=null) {
+
+    switch (action.type) {
+        // CHANGE STATE FOR AUTH
+        case ADD_MESSAGE:
+            return Object.assign({}, state, {messages: [...state.messages, action.text]});
+        case DELETE_MESSAGE:
+            return Object.assign({}, state, {
+                messages: [...state.messages.slice(0, action.id),
+                    ...state.messages.slice(action.id + 1)]
+            });
+        default:
+            return state;
     }
 };

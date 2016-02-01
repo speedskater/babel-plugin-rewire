@@ -64,6 +64,7 @@
     "babel-runtime": "^5.8.23",
     "core-js": "^1.0.0",
     "expect.js": "^0.3.1",
+    "jscodeshift": "^0.3.13",
     "mocha": "^2.2.4",
     "node-hook": "^0.1.0",
     "react": "^0.14.3",

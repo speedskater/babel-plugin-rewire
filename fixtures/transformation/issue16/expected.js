@@ -235,11 +235,11 @@ function _with__(object) {
   };
 }
 
-let _RewireAPI__ = {};
+let _ModuleAPI__ = {};
 
 (function () {
   function addPropertyToAPIObject(name, value) {
-    Object.defineProperty(_RewireAPI__, name, {
+    Object.defineProperty(_ModuleAPI__, name, {
       value: value,
       enumerable: false,
       configurable: true
@@ -273,5 +273,5 @@ if ((typeOfOriginalExport === 'object' || typeOfOriginalExport === 'function') &
   addNonEnumerableProperty('__reset__', _reset__);
   addNonEnumerableProperty('__ResetDependency__', _reset__);
   addNonEnumerableProperty('__with__', _with__);
-  addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
+  addNonEnumerableProperty('__ModuleAPI__', _ModuleAPI__);
 }

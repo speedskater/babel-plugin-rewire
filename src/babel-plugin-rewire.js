@@ -101,7 +101,8 @@ module.exports = function({ types: t }) {
 						rewireInformation.addUpdateableVariable(variableName);
 						path.parentPath.replaceWith(t.callExpression(rewireInformation.getUpdateOperationID(), [ t.stringLiteral(parent.operator), t.stringLiteral(variableName), t.booleanLiteral(parent.prefix) ]));
 					} else {
-						rewireInformation.ensureAccessor(variableName);
+						let isWildCardImport = (variableBinding.path.type === 'ImportNamespaceSpecifier');
+						rewireInformation.ensureAccessor(variableName, isWildCardImport);
 						path.replaceWith(t.callExpression(rewireInformation.getUniversalGetterID(), [ t.stringLiteral(variableName) ]));
 					}
 				} else if(parent.type === 'AssignmentExpression' && parent.left == node) {

@@ -81,11 +81,8 @@ let API_OBJECT_ID = {};
 	}
 
 	addPropertyToAPIObject('__get__', UNIVERSAL_GETTER_ID);
-	addPropertyToAPIObject('__GetDependency__', UNIVERSAL_GETTER_ID);
-	addPropertyToAPIObject('__Rewire__', UNIVERSAL_SETTER_ID);
 	addPropertyToAPIObject('__set__', UNIVERSAL_SETTER_ID);
 	addPropertyToAPIObject('__reset__', UNIVERSAL_RESETTER_ID);
-	addPropertyToAPIObject('__ResetDependency__', UNIVERSAL_RESETTER_ID);
 	addPropertyToAPIObject('__with__', UNIVERSAL_WITH_ID);
 })();
 `);
@@ -97,13 +94,25 @@ function addNonEnumerableProperty(name, value) {
 }
 
 if((typeOfOriginalExport === 'object' || typeOfOriginalExport === 'function') && Object.isExtensible(EXPORT_VALUE)) {
-	addNonEnumerableProperty('__get__', UNIVERSAL_GETTER_ID);
-	addNonEnumerableProperty('__GetDependency__', UNIVERSAL_GETTER_ID);
-	addNonEnumerableProperty('__Rewire__', UNIVERSAL_SETTER_ID);
-	addNonEnumerableProperty('__set__', UNIVERSAL_SETTER_ID);
-	addNonEnumerableProperty('__reset__', UNIVERSAL_RESETTER_ID);
-	addNonEnumerableProperty('__ResetDependency__', UNIVERSAL_RESETTER_ID);
-	addNonEnumerableProperty('__with__', UNIVERSAL_WITH_ID);
-	addNonEnumerableProperty('__RewireAPI__', API_OBJECT_ID);
+	addNonEnumerableProperty('__ModuleAPI__', API_OBJECT_ID);
+}
+`);
+
+export const filterWildcardImportTemplate = template(`
+function FILTER_WILDCARD_IMPORT_IDENTIFIER(wildcardImport={}) {
+	let validPropertyNames = Object.keys(wildcardImport).filter(function(propertyName) {
+		return  propertyName !== '__get__' &&
+				propertyName !== '__set__' &&
+				propertyName !== '__reset__' &&
+				propertyName !== '__with__' &&
+				propertyName !== '__ModuleAPI__';
+	});
+
+	return validPropertyNames.reduce(
+		function(filteredWildcardImport, propertyName) {
+			filteredWildcardImport[propertyName] = wildcardImport[propertyName];
+			return filteredWildcardImport;
+		}, {}
+	);
 }
 `);

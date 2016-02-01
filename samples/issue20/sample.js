@@ -1,21 +1,21 @@
+import { __ModuleAPI__ as ComponentToTestModule } from './src/WelcomePanel';
+
 import ComponentToTest from './src/WelcomePanel';
 
-'use strict'
+'use strict';
 
-describe('Tests General Configuration', function(){
+describe('Tests General Configuration', function () {
 
-	beforeEach(function() {
-		ComponentToTest.__Rewire__('node',"hey I'm mock");
+	beforeEach(function () {
+		ComponentToTestModule.__set__('node', "hey I'm mock");
 	});
 
-	it('should not be null', function(){
+	it('should not be null', function () {
 		let panel = new ComponentToTest.WelcomePanel();
-		panel.initPanel('body','This is message no ');
-	})
+		panel.initPanel('body', 'This is message no ');
+	});
 
-	afterEach(function() {
-		ComponentToTest.__ResetDependency__('node');
+	afterEach(function () {
+		ComponentToTestModule.__reset__('node');
 	});
 });
-
-

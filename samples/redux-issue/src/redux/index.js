@@ -4,16 +4,17 @@
 
 import { combineReducers, compose, createStore, applyMiddleware } from './lib';
 
-import helloWorldReducers from './reducers.js';
+import * as reducers from './reducers.js';
 
-const reducers = Object.assign({}, helloWorldReducers);
+console.log('REDUCERS ::: ' + Object.keys(reducers))
+
+//const reducers = Object.assign({}, helloWorldReducers);
 const rootReducer = combineReducers(reducers);
 
 const finalCreateStore = compose(
-  //applyMiddleware(thunk, logger)
-  // devTools(),
-  // persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
+  applyMiddleware()
 )(createStore);
 
 const store = finalCreateStore(rootReducer);
+store.dispatch({ type: 'TEST' });
 export default store;

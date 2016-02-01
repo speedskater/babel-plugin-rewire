@@ -4,6 +4,7 @@ import expect from 'expect.js';
 
 describe('wildcard export of imported object', () => {
   it('has objects exported from namedExports', () => {
+    expect(wildcardImport.__ModuleAPI__).to.be(undefined);
     expect(wildcardImport.test1).to.equal(test1);
     expect(wildcardImport.test2).to.equal(test2);
   });

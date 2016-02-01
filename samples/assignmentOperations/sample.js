@@ -13,7 +13,7 @@ import {
 	bitwiseXorAssignment,
 	getValue,
 	setValue,
-	__RewireAPI__ as RewireAPI
+	__ModuleAPI__ as ModuleAPI
 } from './src/assignmentOperations.js';
 import expect from 'expect.js';
 
@@ -22,23 +22,23 @@ describe('assignment', function() {
 
 	function expectValue(expectedValue) {
 		expect(getValue()).to.be(expectedValue);
-		expect(RewireAPI.__get__('value')).to.be(expectedValue);
+		expect(ModuleAPI.__get__('value')).to.be(expectedValue);
 	}
 
 	function reset() {
-		RewireAPI.__reset__('value');
+		ModuleAPI.__reset__('value');
 	}
 
 	function setOriginalValue(newValue) {
 		setValue(newValue);
 		expect(getValue()).to.be(newValue);
-		expect(RewireAPI.__get__('value')).to.be(newValue);
+		expect(ModuleAPI.__get__('value')).to.be(newValue);
 	}
 
 	function rewireValue(newValue) {
-		RewireAPI.__set__('value', newValue);
+		ModuleAPI.__set__('value', newValue);
 		expect(getValue()).to.be(newValue);
-		expect(RewireAPI.__get__('value')).to.be(newValue);
+		expect(ModuleAPI.__get__('value')).to.be(newValue);
 	}
 
 	it('should be supported as plain assignment', function() {

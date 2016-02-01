@@ -1,4 +1,4 @@
-import RewireExample from './src/RewireExample';
+import { default as RewireExample, __ModuleAPI__ as RewireExampleModule } from './src/RewireExample';
 import expect from 'expect.js';
 
 let fakeDatabaseInfo = 'fake database info';
@@ -13,13 +13,13 @@ describe('sample rewire issue 16', () => {
 	var rewireExample;
 
 	beforeEach(() => {
-		RewireExample.__Rewire__('Database', FakeDatabase);
-		expect(RewireExample.__GetDependency__('Database')).to.equal(FakeDatabase);
+		RewireExampleModule.__set__('Database', FakeDatabase);
+		expect(RewireExampleModule.__get__('Database')).to.equal(FakeDatabase);
 		rewireExample = new RewireExample();
 	});
 
 	afterEach(()=> {
-		RewireExample.__ResetDependency__('Database');
+		RewireExampleModule.__reset__('Database');
 	});
 
 	describe('outputDatabaseInfo function', () => {
