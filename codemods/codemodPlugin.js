@@ -58,7 +58,6 @@ module.exports = function({ types: t }) {
 				} else if(variableBinding !== undefined && variableBinding.path.node.type === 'VariableDeclarator' &&
 					variableBinding.path.node.init.type === 'CallExpression' &&
 					variableBinding.path.node.init.callee.name === 'require') {
-					console.log('require dings ');
 					let argument = variableBinding.path.node.init.arguments[0];
 
 					let importName = argument.value || argument.name || argument.toString();
