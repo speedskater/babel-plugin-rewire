@@ -1,13 +1,15 @@
-import { __ModuleAPI__ as ComponentToTestModule } from './src/WelcomePanel';
-
+import { __Rewire__, default as WelcomePanel2 } from './src/WelcomePanel2.js';
 import ComponentToTest from './src/WelcomePanel';
+let DefaultCommonJSExport = require('./src/DefaultExport');
 
 'use strict';
 
 describe('Tests General Configuration', function () {
 
 	beforeEach(function () {
-		ComponentToTestModule.__set__('node', "hey I'm mock");
+		DefaultCommonJSExport.__GetDependency__('myFunnyDependency')();
+		ComponentToTest.__set__('node', "hey I'm mock");
+		__Rewire__('anotherthing', 'dong');
 	});
 
 	it('should not be null', function () {
@@ -16,6 +18,6 @@ describe('Tests General Configuration', function () {
 	});
 
 	afterEach(function () {
-		ComponentToTestModule.__reset__('node');
+		ComponentToTest.__ResetDependency__('node');
 	});
 });
