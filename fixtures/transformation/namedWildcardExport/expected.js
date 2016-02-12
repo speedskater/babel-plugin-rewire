@@ -1,1 +1,1 @@
-export * from 'path/to/thing';
+export * as namedThing from 'path/to/thing';

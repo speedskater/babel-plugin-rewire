@@ -13,7 +13,8 @@ describe('BabelRewirePluginTest', function() {
 			babelPluginRewire,
 			"syntax-async-functions",
 			"syntax-flow",
-			"syntax-jsx"
+			"syntax-jsx",
+			"transform-export-extensions"
 		]
 	};
 
@@ -26,6 +27,7 @@ describe('BabelRewirePluginTest', function() {
 			"transform-es2015-block-scoping",
 			"transform-es2015-template-literals",
 			"transform-es2015-typeof-symbol",
+			"transform-export-extensions",
 			"transform-regenerator"
 		]
 	};
