@@ -87,6 +87,7 @@ describe('BabelRewirePluginTest', function() {
 		'primitiveExportWithNamedFunctionExport',
 		'wildcardImport',
 		'wildcardExport',
+		'namedWildcardExport',
 		'recursiveRewireCall',
 		'requireExports',
 		'requireMultiExports',
