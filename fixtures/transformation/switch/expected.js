@@ -1,37 +1,36 @@
 import React from 'react';
-import ComponentA from './ComponentA'
-import ComponentB from './ComponentB'
-import ComponentC from './ComponentC'
-import DefaultComponent from './DefaultComponent'
+import ComponentA from './ComponentA';
+import ComponentB from './ComponentB';
+import ComponentC from './ComponentC';
+import DefaultComponent from './DefaultComponent';
 
 export default class Foo extends _get__('React').Component {
 	render() {
-		let _ChildComponent_Component = _get__('ChildComponent');
-
 		return <div>
 				{['a', 'b', 'c'].map(this.renderChild)}
 			</div>;
 	}
 
-		renderChild(type) {
-			switch (type) {
-				case 'a':
-					let _ComponentA_Component = _get__('ComponentA');
-					return <_ComponentA_Component />;
+	renderChild(type) {
+		switch (type) {
+			case 'a':
+				let _ComponentA_Component = _get__('ComponentA');
 
-				case 'b':
-					let _ComponentB_Component = _get__('ComponentB');
-					return <_ComponentB_Component />;
+				return <_ComponentA_Component />;
+			case 'b':
+				let _ComponentB_Component = _get__('ComponentB');
 
-				case 'c':
-					let _ComponentC_Component = _get__('ComponentC');
-					return <_ComponentC_Component />;
+				return <_ComponentB_Component />;
+			case 'c':
+				let _ComponentC_Component = _get__('ComponentC');
 
-				default:
-					let _DefaultComponent_Component = _get__('DefaultComponent');
-					return <_DefaultComponent_Component />;
-			}
+				return <_ComponentC_Component />;
+			default:
+				let _DefaultComponent_Component = _get__('DefaultComponent');
+
+				return <_DefaultComponent_Component />;
 		}
+	}
 }
 let typeOfOriginalExport = typeof Foo;
 
