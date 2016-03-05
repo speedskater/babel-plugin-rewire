@@ -107,3 +107,27 @@ if((typeOfOriginalExport === 'object' || typeOfOriginalExport === 'function') &&
 	addNonEnumerableProperty('__RewireAPI__', API_OBJECT_ID);
 }
 `);
+
+export const filterWildcardImportTemplate = template(`
+function FILTER_WILDCARD_IMPORT_IDENTIFIER(wildcardImport={}) {
+	let validPropertyNames = Object.keys(wildcardImport).filter(function(propertyName) {
+		return  propertyName !== '__get__' &&
+				propertyName !== '__set__' &&
+				propertyName !== '__reset__' &&
+				propertyName !== '__with__' &&
+
+				propertyName !== '__GetDependency__' &&
+				propertyName !== '__Rewire__' &&
+				propertyName !== '__ResetDependency__' &&
+
+				propertyName !== '__RewireAPI__';
+	});
+
+	return validPropertyNames.reduce(
+		function(filteredWildcardImport, propertyName) {
+			filteredWildcardImport[propertyName] = wildcardImport[propertyName];
+			return filteredWildcardImport;
+		}, {}
+	);
+}
+`);
