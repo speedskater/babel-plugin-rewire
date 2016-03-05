@@ -72,6 +72,8 @@ module.exports = function({ types: t }) {
 							arrowFunctionExpression.async
 						)
 					);
+				} else if (insertingBefore.parentPath.type === 'SwitchStatement') {
+					path.parentPath.insertBefore(temporaryComponentDeclaration);
 				} else {
 					insertingBefore.insertBefore(temporaryComponentDeclaration);
 				}
