@@ -391,6 +391,7 @@ See the istanbul [sample-babel-node](https://github.com/istanbuljs/sample-babel-
 * 1.0.0-beta-3 Removed support for rewiring of globals. Added support for rewiring in combination with assignment and update expressions.
 * 1.0.0-beta-4 Updates jsx support in combination with babel 6 but has a regression
 * 1.0.0-beta-5 Fixes rewiring of jsx elements. Readme improvements. Test for pass-through like modules.
+* 1.0.0-rc-1 Fixes rewiring of switch statements. Readme improvements. Wildcard imports and tdz issues.
 
 ## Contributors
 
