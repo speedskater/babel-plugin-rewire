@@ -400,6 +400,8 @@ See the istanbul [sample-babel-node](https://github.com/istanbuljs/sample-babel-
 [TheSavior](https://github.com/TheSavior) - support for non-enumerable rewire properties
 [PSpSynedra](https://github.com/PSpSynedra) - support for named export and function rewiring and improvements of default imports 
 [Gustaf Dalemar](https://github.com/DLMR) - support for asynchronous functions
+[Spencre Leichty](https://github.com/spncrlkt) - support for named wildcard exports
+[Zhanzhan He](https://github.com/zh3) - support for wildcard imports
 
 ## License
 
