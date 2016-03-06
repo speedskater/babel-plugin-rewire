@@ -357,6 +357,9 @@ babel-node ./node_modules/istanbul/lib/cli.js cover test/run-tests.js
 
 See the istanbul [sample-babel-node](https://github.com/istanbuljs/sample-babel-node) project for a full working example.
 
+## Examples projects
+* [es6-library-boilerplate](https://github.com/CurtisHumphrey/es6-library-boilerplate)
+
 ## Release History
 
 * 0.1.0 Initial release
