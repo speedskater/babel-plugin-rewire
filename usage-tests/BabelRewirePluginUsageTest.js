@@ -21,6 +21,7 @@ function transformSampleCodeToTestWithBabelPluginRewire(source, filename) {
 			"transform-es2015-block-scoping",
 			"transform-es2015-template-literals",
 			"transform-es2015-typeof-symbol",
+			"transform-export-extensions",
 			"transform-regenerator"
 		]
 	};
@@ -66,6 +67,7 @@ require('../samples/rewireClasses/sample.js');
 require('../samples/objectAssign/sample.js');
 require('../samples/updateOperations/sample.js');
 require('../samples/wildcardExport/sample.js');
+require('../samples/namedWildcardExport/sample.js');
 require('../samples/assignmentOperations/sample.js');
 require('../samples/jsx-switch/sample.js');
 hook.unhook('.js'); // removes your own transform
