@@ -1,13 +1,12 @@
-export let namedVariable = function (val) {
-	return val + 1;
-},
-    namedVariable2 = function (val) {
-	return val + 2;
-};
+import getLog from './log';
 
-export default function _DefaultExportValue(val) {
-	return _get__("namedVariable")(val) + _get__("namedVariable2")(val);
+const log = _get__('getLog')('main');
+
+export function getLogConstant() {
+	return _get__('log');
 }
+let _DefaultExportValue = 'test';
+export default _DefaultExportValue;
 var _RewiredData__ = {};
 let _RewireAPI__ = {};
 
@@ -35,11 +34,11 @@ function _get__(variableName) {
 
 function _get_original__(variableName) {
 	switch (variableName) {
-		case "namedVariable":
-			return namedVariable;
+		case 'getLog':
+			return getLog;
 
-		case "namedVariable2":
-			return namedVariable2;
+		case 'log':
+			return log;
 	}
 
 	return undefined;

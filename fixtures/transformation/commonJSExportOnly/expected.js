@@ -5,7 +5,26 @@ module.exports = {
 		return _get__('foo');
 	}
 };
-let _RewiredData__ = {};
+var _RewiredData__ = {};
+let _RewireAPI__ = {};
+
+(function () {
+	function addPropertyToAPIObject(name, value) {
+		Object.defineProperty(_RewireAPI__, name, {
+			value: value,
+			enumerable: false,
+			configurable: true
+		});
+	}
+
+	addPropertyToAPIObject('__get__', _get__);
+	addPropertyToAPIObject('__GetDependency__', _get__);
+	addPropertyToAPIObject('__Rewire__', _set__);
+	addPropertyToAPIObject('__set__', _set__);
+	addPropertyToAPIObject('__reset__', _reset__);
+	addPropertyToAPIObject('__ResetDependency__', _reset__);
+	addPropertyToAPIObject('__with__', _with__);
+})();
 
 function _get__(variableName) {
 	return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
@@ -78,26 +97,6 @@ function _with__(object) {
 		return result;
 	};
 }
-
-let _RewireAPI__ = {};
-
-(function () {
-	function addPropertyToAPIObject(name, value) {
-		Object.defineProperty(_RewireAPI__, name, {
-			value: value,
-			enumerable: false,
-			configurable: true
-		});
-	}
-
-	addPropertyToAPIObject('__get__', _get__);
-	addPropertyToAPIObject('__GetDependency__', _get__);
-	addPropertyToAPIObject('__Rewire__', _set__);
-	addPropertyToAPIObject('__set__', _set__);
-	addPropertyToAPIObject('__reset__', _reset__);
-	addPropertyToAPIObject('__ResetDependency__', _reset__);
-	addPropertyToAPIObject('__with__', _with__);
-})();
 
 let typeOfOriginalExport = typeof module.exports;
 

@@ -18,8 +18,8 @@ function transformSampleCodeToTestWithBabelPluginRewire(source, filename) {
 		"plugins": [
 			babelPluginRewire,
 			"syntax-async-functions",
-			"transform-es2015-block-scoping",
 			"transform-es2015-template-literals",
+			"transform-es2015-block-scoping",
 			"transform-es2015-typeof-symbol",
 			"transform-export-extensions",
 			"transform-regenerator"
@@ -48,6 +48,7 @@ require('../samples/issue30/sample.js');
 require('../samples/issue33/sample.js');
 require('../samples/issue48/sample.js');
 require('../samples/issue59/sample.js');
+require('../samples/issue71-tdz/sample.js');
 require('../samples/issue82/sample.js');
 require('../samples/functionRewireScope/sample.js');
 require('../samples/namedExportsRewire/sample.js');

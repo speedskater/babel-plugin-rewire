@@ -1,13 +1,9 @@
-export let namedVariable = function (val) {
-	return val + 1;
-},
-    namedVariable2 = function (val) {
-	return val + 2;
+// Simple module that exports a function as default
+const getLog = function (category) {
+	return category;
 };
 
-export default function _DefaultExportValue(val) {
-	return _get__("namedVariable")(val) + _get__("namedVariable2")(val);
-}
+export default _get__("getLog");
 var _RewiredData__ = {};
 let _RewireAPI__ = {};
 
@@ -35,11 +31,8 @@ function _get__(variableName) {
 
 function _get_original__(variableName) {
 	switch (variableName) {
-		case "namedVariable":
-			return namedVariable;
-
-		case "namedVariable2":
-			return namedVariable2;
+		case "getLog":
+			return getLog;
 	}
 
 	return undefined;
@@ -104,17 +97,17 @@ function _with__(object) {
 	};
 }
 
-let typeOfOriginalExport = typeof _DefaultExportValue;
+let typeOfOriginalExport = typeof getLog;
 
 function addNonEnumerableProperty(name, value) {
-	Object.defineProperty(_DefaultExportValue, name, {
+	Object.defineProperty(getLog, name, {
 		value: value,
 		enumerable: false,
 		configurable: true
 	});
 }
 
-if ((typeOfOriginalExport === 'object' || typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
+if ((typeOfOriginalExport === 'object' || typeOfOriginalExport === 'function') && Object.isExtensible(getLog)) {
 	addNonEnumerableProperty('__get__', _get__);
 	addNonEnumerableProperty('__GetDependency__', _get__);
 	addNonEnumerableProperty('__Rewire__', _set__);

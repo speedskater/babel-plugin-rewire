@@ -50,6 +50,13 @@ export default class RewireState {
 		this.nodesToAppendToProgramBody = this.nodesToAppendToProgramBody.concat(nodes);
 	}
 
+	prependToProgramBody(nodes) {
+		if(!Array.isArray(nodes)) {
+			nodes = [ nodes ];
+		}
+		this.nodesToAppendToProgramBody = nodes.concat(this.nodesToAppendToProgramBody);
+	}
+
 	ensureAccessor(variableName, isWildcardImport = false) {
 		if(!this.accessors[variableName]) {
 			this.accessors[variableName] = true;
@@ -64,7 +71,7 @@ export default class RewireState {
 		this.ensureAccessor(variableName);
 	}
 
-	appendUniversalAccessors(scope) {
+	prependUniversalAccessors(scope) {
 		let hasWildcardImport = Object.keys(this.isWildcardImport).some(function(propertyName) {
 			return this.isWildcardImport[propertyName];
 		}.bind(this));
@@ -91,7 +98,7 @@ export default class RewireState {
 			t.returnStatement(noRewire(t.identifier('undefined')))
 		]));
 
-		this.appendToProgramBody(universalAccesorsTemplate({
+		this.prependToProgramBody(universalAccesorsTemplate({
 			ORIGINAL_VARIABLE_ACCESSOR_IDENTIFIER: this.originalVariableAccessorIdentifier,
 			ORIGINAL_VARIABLE_SETTER_IDENTIFIER: this.originalVariableSetterIdentifier,
 			ASSIGNMENT_OPERATION_IDENTIFIER: this.assignmentOperationIdentifier,

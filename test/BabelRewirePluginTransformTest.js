@@ -97,6 +97,8 @@ describe('BabelRewirePluginTest', function() {
 		'topLevelVar',
 		'functionRewireScope',
 		'issue69',
+		'issue71-tdz',
+		'issue71-tdz-index',
 		'flowTypeExport',
 		'flowTypeImport',
 		'updateOperations',

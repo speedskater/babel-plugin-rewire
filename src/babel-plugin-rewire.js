@@ -210,7 +210,7 @@ module.exports = function({ types: t }) {
 				path.traverse(BodyVisitor, rewireState);
 
 				if(rewireState.containsDependenciesToRewire()) {
-					rewireState.appendUniversalAccessors(scope);
+					rewireState.prependUniversalAccessors(scope);
 					rewireState.appendExports();
 
 					path.replaceWith(noRewire(t.Program(program.body.concat(rewireState.nodesToAppendToProgramBody), program.directives)));
