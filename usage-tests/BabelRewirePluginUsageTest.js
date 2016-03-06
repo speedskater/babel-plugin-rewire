@@ -67,4 +67,5 @@ require('../samples/objectAssign/sample.js');
 require('../samples/updateOperations/sample.js');
 require('../samples/wildcardExport/sample.js');
 require('../samples/assignmentOperations/sample.js');
+require('../samples/jsx-switch/sample.js');
 hook.unhook('.js'); // removes your own transform

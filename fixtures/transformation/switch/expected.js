@@ -12,22 +12,22 @@ export default class Foo extends _get__('React').Component {
 	}
 
 	renderChild(type) {
+		let _ComponentA_Component = _get__('ComponentA');
+
+		let _ComponentB_Component = _get__('ComponentB');
+
+		let _ComponentC_Component = _get__('ComponentC');
+
+		let _DefaultComponent_Component = _get__('DefaultComponent');
+
 		switch (type) {
 			case 'a':
-				let _ComponentA_Component = _get__('ComponentA');
-
 				return <_ComponentA_Component />;
 			case 'b':
-				let _ComponentB_Component = _get__('ComponentB');
-
 				return <_ComponentB_Component />;
 			case 'c':
-				let _ComponentC_Component = _get__('ComponentC');
-
 				return <_ComponentC_Component />;
 			default:
-				let _DefaultComponent_Component = _get__('DefaultComponent');
-
 				return <_DefaultComponent_Component />;
 		}
 	}

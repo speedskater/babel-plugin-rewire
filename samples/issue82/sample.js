@@ -3,7 +3,6 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server'
 import ComponentToTest from './src/ComponentToTest.js';
 import DefaultExportSimpleFunctionalComponent from './src/DefaultExportSimpleFunctionalComponent.js';
-import TestUtils from 'react/lib/ReactTestUtils'
 import expect from 'expect.js';
 
 describe('issue82', function() {

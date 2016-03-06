@@ -27,8 +27,12 @@ module.exports = function({ types: t }) {
 				rewireInformation.ensureAccessor(tagName);
 
 				let insertingBefore = path;
-				while(insertingBefore.parentPath.node != scope.block && insertingBefore.parentPath.type !== 'BlockStatement') {
+
+				//TODO recursively respect switch statements
+				let scopeReached = insertingBefore.parentPath.node === scope.block;
+				while((insertingBefore.parentPath.type === 'SwitchStatement') || (!scopeReached && insertingBefore.parentPath.type !== 'BlockStatement')) {
 					insertingBefore = insertingBefore.parentPath;
+					scopeReached = insertingBefore.parentPath.node === scope.block;
 				}
 
 				let componentIdentifier = scope.generateUidIdentifier(tagName + '_Component');
@@ -72,9 +76,7 @@ module.exports = function({ types: t }) {
 							arrowFunctionExpression.async
 						)
 					);
-				} else if (insertingBefore.parentPath.type === 'SwitchStatement') {
-					path.parentPath.insertBefore(temporaryComponentDeclaration);
-				} else {
+				}  else {
 					insertingBefore.insertBefore(temporaryComponentDeclaration);
 				}
 			}
