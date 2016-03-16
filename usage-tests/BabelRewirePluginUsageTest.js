@@ -72,4 +72,5 @@ require('../samples/wildcardExport/sample.js');
 require('../samples/namedWildcardExport/sample.js');
 require('../samples/assignmentOperations/sample.js');
 require('../samples/jsx-switch/sample.js');
+require('../samples/jsx-stateless-multilevel/sample.js');
 hook.unhook('.js'); // removes your own transform
