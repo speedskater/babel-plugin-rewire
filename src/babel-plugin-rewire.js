@@ -86,7 +86,7 @@ module.exports = function({ types: t }) {
 		Identifier: function (path, rewireInformation) {
 			let { node, parent, scope } = path;
 			let variableName = node.name;
-			let variableBinding = scope.getBinding(variableName);
+			let variableBinding = (!t.isFlow || (!t.isFlow(node) && !t.isFlow(parent))) ? scope.getBinding(variableName) : undefined;
 
 			//Matches for body
 			if (variableBinding !== undefined && !wasProcessed(path)
