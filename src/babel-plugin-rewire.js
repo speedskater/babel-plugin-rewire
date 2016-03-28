@@ -30,7 +30,7 @@ module.exports = function({ types: t }) {
 
 				//TODO recursively respect switch statements
 				let scopeReached = insertingBefore.parentPath.node === scope.block;
-				while((insertingBefore.parentPath.type === 'SwitchStatement') || (!scopeReached && insertingBefore.parentPath.type !== 'BlockStatement')) {
+				while(insertingBefore.parentPath && insertingBefore.parentPath.parentPath && ((insertingBefore.parentPath.type === 'SwitchStatement') || (!scopeReached && insertingBefore.parentPath.type !== 'BlockStatement'))) {
 					insertingBefore = insertingBefore.parentPath;
 					scopeReached = insertingBefore.parentPath.node === scope.block;
 				}
@@ -67,7 +67,7 @@ module.exports = function({ types: t }) {
 					));
 				}
 
-				if(insertingBefore.parentPath.type === 'ArrowFunctionExpression') {
+				if(insertingBefore.parentPath && insertingBefore.parentPath.type === 'ArrowFunctionExpression') {
 					let arrowFunctionExpression = insertingBefore.parentPath.node;
 					insertingBefore.parentPath.replaceWith(
 						t.arrowFunctionExpression(

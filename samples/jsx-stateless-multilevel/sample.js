@@ -1,3 +1,5 @@
+import React from 'react';
+
 import DivInsideDiv from './src/default-export';
 import ReactDOMServer from 'react-dom/server';
 import expect from 'expect.js';
