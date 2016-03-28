@@ -101,7 +101,7 @@ function _with__(object) {
 	};
 }
 
-let typeOfOriginalExport = typeof test;
+let _typeOfOriginalExport = typeof test;
 
 function addNonEnumerableProperty(name, value) {
 	Object.defineProperty(test, name, {
@@ -111,7 +111,7 @@ function addNonEnumerableProperty(name, value) {
 	});
 }
 
-if ((typeOfOriginalExport === 'object' || typeOfOriginalExport === 'function') && Object.isExtensible(test)) {
+if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(test)) {
 	addNonEnumerableProperty('__get__', _get__);
 	addNonEnumerableProperty('__GetDependency__', _get__);
 	addNonEnumerableProperty('__Rewire__', _set__);

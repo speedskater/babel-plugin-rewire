@@ -93,12 +93,12 @@ function UNIVERSAL_WITH_ID(object) {
 `);
 
 export const enrichExportTemplate = template(`
-let typeOfOriginalExport = typeof EXPORT_VALUE;
+let TYPEOFORIGINALEXPORTVARIABLE = typeof EXPORT_VALUE;
 function addNonEnumerableProperty(name, value) {
 	Object.defineProperty(EXPORT_VALUE, name, { value: value, enumerable: false, configurable: true });
 }
 
-if((typeOfOriginalExport === 'object' || typeOfOriginalExport === 'function') && Object.isExtensible(EXPORT_VALUE)) {
+if((TYPEOFORIGINALEXPORTVARIABLE === 'object' || TYPEOFORIGINALEXPORTVARIABLE === 'function') && Object.isExtensible(EXPORT_VALUE)) {
 	addNonEnumerableProperty('__get__', UNIVERSAL_GETTER_ID);
 	addNonEnumerableProperty('__GetDependency__', UNIVERSAL_GETTER_ID);
 	addNonEnumerableProperty('__Rewire__', UNIVERSAL_SETTER_ID);

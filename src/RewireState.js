@@ -32,6 +32,7 @@ export default class RewireState {
 		this.originalVariableSetterIdentifier = scope.generateUidIdentifier('__set_original__');
 		this.updateOperationIdentifier = scope.generateUidIdentifier('__update_operation__');
 		this.assignmentOperationIdentifier = scope.generateUidIdentifier('__assign__');
+		this.typeofOriginalExportVariable = scope.generateUidIdentifier('typeOfOriginalExport');
 
 		this.universalAccessors = {
 			__get__: noRewire(scope.generateUidIdentifier('__get__')),
@@ -136,6 +137,7 @@ export default class RewireState {
 
 	enrichExport(exportValue) {
 		this.appendToProgramBody(enrichExportTemplate({
+			TYPEOFORIGINALEXPORTVARIABLE: this.getTypeOfOriginalExportVariable(),
 			UNIVERSAL_GETTER_ID: this.getUniversalGetterID(),
 			UNIVERSAL_SETTER_ID: this.getUniversalSetterID(),
 			UNIVERSAL_RESETTER_ID: this.getUniversalResetterID(),
@@ -186,5 +188,9 @@ export default class RewireState {
 
 	getAPIObjectID() {
 		return this.universalAccessors['__RewireAPI__'];
+	}
+
+	getTypeOfOriginalExportVariable() {
+		return this.typeofOriginalExportVariable;
 	}
 };
