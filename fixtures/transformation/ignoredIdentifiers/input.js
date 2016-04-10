@@ -1,6 +1,6 @@
 const ignoredIdentifier1 = 'foo';
 const ignoredIdentifier2 = 'bar';
-const baz = 'bazs';
+const baz = 'baz';
 
 const obj = {
   foo: ignoredIdentifier1,
