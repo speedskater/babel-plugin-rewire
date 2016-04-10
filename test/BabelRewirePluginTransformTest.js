@@ -18,6 +18,18 @@ describe('BabelRewirePluginTest', function() {
 		]
 	};
 
+	var babelTranslationOptionsIgnoredIdentifiers = {
+		"plugins": [
+			[babelPluginRewire, {
+				ignoredIdentifiers: ['ignoredIdentifier1', 'ignoredIdentifier2']
+			}],
+			"syntax-async-functions",
+			"syntax-flow",
+			"syntax-jsx",
+			"transform-export-extensions"
+		]
+	};
+
 	var babelTranslationOptionsAllEnabled = {
 		"presets": ["es2015", "react"], //,
 		"plugins": [
@@ -32,14 +44,14 @@ describe('BabelRewirePluginTest', function() {
 		]
 	};
 
-	function testTranslation(testName) {
+	function testTranslation(testName, options) {
 		var directory = path.resolve(__dirname, '..', 'fixtures', 'transformation', testName);
 
 		var input = fs.readFileSync(path.resolve(directory, 'input.js'), 'utf-8');
 		var expected = fs.readFileSync(path.resolve(directory, 'expected.js'), 'utf-8');
 
 		try {
-			var transformationOutput = babel.transform(input, babelTranslationOptions).code;
+			var transformationOutput = babel.transform(input, options).code;
 		} catch(error) {
 			expect().fail("Transformation failed: \n" + error.stack)
 		}
@@ -65,50 +77,70 @@ describe('BabelRewirePluginTest', function() {
 		var transformationResult = babel.transform(input, babelTranslationOptionsAllEnabled);
 	}
 
+	function testIgnoredIdentifiersTranslation(testName) {
+		var directory = path.resolve(__dirname, '..', 'fixtures', 'transformation', testName);
+		var input = fs.readFileSync(path.resolve(directory, 'input.js'), 'utf-8');
+
+		var transformationResult = babel.transform(input, babelTranslationOptionsAllEnabledIgnoredIdentifiers);
+	}
+
+
 	var featuresToTest = [
-		'babelissue1315',
-		'issue16',
-		'forOf',
-		'commonJSExportOnly',
-		'defaultImport',
-		'defaultExport',
-		'defaultExportImport',
-		'defaultExportWithClass',
-		'defaultExportWithNamedFunction',
-		'defaultExportWithObject',
-		'issuePathReplaceWith',
-		'importWithReactClass',
-		'moduleExports',
-		'multipleImports',
-		'multipleImportsWithAliases',
-		'namedFunctionExport',
-		'namedFunctionImport',
-		'namedVariableExport',
-		'noDefaultExport',
-		'passThrough',
-		'primitiveExportWithNamedFunctionExport',
-		'wildcardImport',
-		'wildcardExport',
-		'namedWildcardExport',
-		'recursiveRewireCall',
-		'requireExports',
-		'requireMultiExports',
-		'switch',
-		'topLevelVar',
-		'functionRewireScope',
-		'issue69',
-		'issue71-tdz',
-		'issue71-tdz-index',
-		'flowTypeExport',
-		'flowTypeImport',
-		'updateOperations',
-		'assignmentOperations',
-		'rewiringOfReactComponents',
-		'rewiringOfSimpleFunctionalComponents'
+		// 'babelissue1315',
+		// 'issue16',
+		// 'forOf',
+		// 'commonJSExportOnly',
+		// 'defaultImport',
+		// 'defaultExport',
+		// 'defaultExportImport',
+		// 'defaultExportWithClass',
+		// 'defaultExportWithNamedFunction',
+		// 'defaultExportWithObject',
+		// 'issuePathReplaceWith',
+		// 'importWithReactClass',
+		// 'moduleExports',
+		// 'multipleImports',
+		// 'multipleImportsWithAliases',
+		// 'namedFunctionExport',
+		// 'namedFunctionImport',
+		// 'namedVariableExport',
+		// 'noDefaultExport',
+		// 'passThrough',
+		// 'primitiveExportWithNamedFunctionExport',
+		// 'wildcardImport',
+		// 'wildcardExport',
+		// 'namedWildcardExport',
+		// 'recursiveRewireCall',
+		// 'requireExports',
+		// 'requireMultiExports',
+		// 'switch',
+		// 'topLevelVar',
+		// 'functionRewireScope',
+		// 'issue69',
+		// 'issue71-tdz',
+		// 'issue71-tdz-index',
+		// 'flowTypeExport',
+		// 'flowTypeImport',
+		// 'updateOperations',
+		// 'assignmentOperations',
+		// 'rewiringOfReactComponents',
+		// 'rewiringOfSimpleFunctionalComponents'
+	];
+
+	var ignoredIdentifiers = [
+		'ignoredIdentifiers'
 	];
 
 	featuresToTest.forEach(function(feature) {
-		it('test babel-plugin-rewire for ' + feature, testTranslation.bind(null, feature));
+		it('test babel-plugin-rewire for ' + feature, testTranslation.bind(null, feature, babelTranslationOptions));
+	});
+
+	featuresToTest.forEach(function(feature) {
+		it('test translation babel-plugin-rewire with ignored identifiers for ' + feature, testTranslation.bind(null, feature, babelTranslationOptions));
+	});
+
+	ignoredIdentifiers.forEach(function(feature) {
+		it('test translation babel-plugin-rewire with ignored identifiers for ' + feature, testTranslation.bind(null, feature, babelTranslationOptionsIgnoredIdentifiers));
 	});
 
 	featuresToTest.forEach(function(feature) {
