@@ -17,7 +17,7 @@ import { wasProcessed, noRewire } from './RewireHelpers.js';
 import * as t from 'babel-types';
 
 export default class RewireState {
-	
+
 	constructor(scope) {
 		this.isES6Module = false;
 		this.hasES6Export = false;
@@ -26,6 +26,7 @@ export default class RewireState {
 		this.hasCommonJSExport = false;
 		this.accessors = {};
 		this.isWildcardImport = {};
+		this.ignoredIdentifiers = [];
 		this.updateableVariables = {};
 		this.rewiredDataIdentifier = scope.generateUidIdentifier('__RewiredData__');
 		this.originalVariableAccessorIdentifier = scope.generateUidIdentifier('__get_original__');
@@ -70,6 +71,10 @@ export default class RewireState {
 	addUpdateableVariable(variableName) {
 		this.updateableVariables[variableName] = true;
 		this.ensureAccessor(variableName);
+	}
+
+	setIgnoredIdentifiers(ignoredIdentifiers) {
+		this.ignoredIdentifiers = ignoredIdentifiers || [];
 	}
 
 	prependUniversalAccessors(scope) {

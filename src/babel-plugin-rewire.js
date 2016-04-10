@@ -88,6 +88,10 @@ module.exports = function({ types: t }) {
 			let variableName = node.name;
 			let variableBinding = (!t.isFlow || (!t.isFlow(node) && !t.isFlow(parent))) ? scope.getBinding(variableName) : undefined;
 
+			if (rewireInformation.ignoredIdentifiers.indexOf(node.name) !== -1) {
+				return;
+			}
+
 			//Matches for body
 			if (variableBinding !== undefined && !wasProcessed(path)
 				&& (variableBinding.scope.block.type === 'Program')) {
@@ -206,6 +210,7 @@ module.exports = function({ types: t }) {
 			if(!wasProcessed(path)) {
 				let { scope, node: program } = path;
 				let rewireState = new RewireState(scope);
+				rewireState.setIgnoredIdentifiers(file.opts.ignoredIdentifiers);
 
 				path.traverse(BodyVisitor, rewireState);
 
