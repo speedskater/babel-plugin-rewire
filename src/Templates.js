@@ -57,7 +57,13 @@ function UPDATE_OPERATION_IDENTIFIER(operation, variableName, prefix) {
 }
 
 function UNIVERSAL_SETTER_ID(variableName, value) {
-	return REWIRED_DATA_IDENTIFIER[variableName] = value;
+	if(typeof variableName === 'object') {
+		Object.keys(variableName).forEach(function(name) {
+			REWIRED_DATA_IDENTIFIER[name] = variableName[name];
+		});
+	} else {
+		return REWIRED_DATA_IDENTIFIER[variableName] = value;
+	}
 }
 
 function UNIVERSAL_RESETTER_ID(variableName) {
