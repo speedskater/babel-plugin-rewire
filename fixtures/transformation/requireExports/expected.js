@@ -67,7 +67,13 @@ function _update_operation__(operation, variableName, prefix) {
 }
 
 function _set__(variableName, value) {
-  return _RewiredData__[variableName] = value;
+  if (typeof variableName === 'object') {
+    Object.keys(variableName).forEach(function (name) {
+      _RewiredData__[name] = variableName[name];
+    });
+  } else {
+    return _RewiredData__[variableName] = value;
+  }
 }
 
 function _reset__(variableName) {
