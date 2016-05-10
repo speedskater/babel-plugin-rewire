@@ -393,12 +393,14 @@ See the istanbul [sample-babel-node](https://github.com/istanbuljs/sample-babel-
 * 1.0.0-beta-5 Fixes rewiring of jsx elements. Readme improvements. Test for pass-through like modules.
 * 1.0.0-rc-1 Fixes rewiring of switch statements. Readme improvements. Wildcard imports and tdz issues.
 * 1.0.0-rc-2 Fixes issues with babelify, React stateless functions as well as flow declarations.
+* 1.0.0-rc-3 Added support for ignoring identifiers and support for objects as parameter to __set__
 
 ## Contributors
 
 [speedskater](https://github.com/speedskater) - author and creator of initial release
 [Peet](https://github.com/peet) - module.exports and top-level var support
-[TheSavior](https://github.com/TheSavior) - support for non-enumerable rewire properties
+[TheSavior](https://github.com/TheSavior) - support for non-enumerable rewire properties, support for ignored identifiers
+[Rene Saarsoo](https://github.com/nene) - support for using objects as parameter to __set__
 [PSpSynedra](https://github.com/PSpSynedra) - support for named export and function rewiring and improvements of default imports 
 [Gustaf Dalemar](https://github.com/DLMR) - support for asynchronous functions
 [Spencre Leichty](https://github.com/spncrlkt) - support for named wildcard exports
