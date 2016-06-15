@@ -16,6 +16,7 @@ import template from 'babel-template';
 
 export const universalAccesorsTemplate = template(`
 var REWIRED_DATA_IDENTIFIER = {};
+var INTENTIONAL_UNDEFINED = '__INTENTIONAL_UNDEFINED__';
 
 let API_OBJECT_ID = {};
 
@@ -34,7 +35,16 @@ let API_OBJECT_ID = {};
 })();
 
 function UNIVERSAL_GETTER_ID(variableName) {
-	return (REWIRED_DATA_IDENTIFIER === undefined || REWIRED_DATA_IDENTIFIER[variableName] === undefined) ? ORIGINAL_VARIABLE_ACCESSOR_IDENTIFIER(variableName) : REWIRED_DATA_IDENTIFIER[variableName];
+  if (REWIRED_DATA_IDENTIFIER === undefined || REWIRED_DATA_IDENTIFIER[variableName] === undefined) {
+    return ORIGINAL_VARIABLE_ACCESSOR_IDENTIFIER(variableName);
+  } else {
+    var value = REWIRED_DATA_IDENTIFIER[variableName];
+    if (value === INTENTIONAL_UNDEFINED) {
+      return undefined;
+    } else {
+      return value;
+    }
+  }
 }
 
 ORIGINAL_ACCESSOR
@@ -62,7 +72,13 @@ function UNIVERSAL_SETTER_ID(variableName, value) {
 			REWIRED_DATA_IDENTIFIER[name] = variableName[name];
 		});
 	} else {
-		return REWIRED_DATA_IDENTIFIER[variableName] = value;
+    if (value === undefined) {
+      REWIRED_DATA_IDENTIFIER[variableName] = INTENTIONAL_UNDEFINED
+    } else {
+      REWIRED_DATA_IDENTIFIER[variableName] = value
+    }
+
+    return value
 	}
 }
 
