@@ -339,7 +339,24 @@ If you use _.babelrc_ it's advised that you run your tests with a specific ENV, 
 
 If you are using isparta together with Webpack you could also do something like this.
 ```javascript
-loader: 'isparta?{ babel: { plugins: ["rewire"] } }'
+webpack: {
+  isparta: {
+    embedSource: true,
+    noAutoWrap: true,
+    babel: {
+      plugins: 'rewire'
+    }
+  },
+  preLoaders: [
+  ...
+    {
+      test: /\.js$/,
+      include: path.resolve('src/'), //only source under test
+      loader: 'isparta'
+    },
+  ]
+    ...
+}
 ```
 
 ### istanbul
