@@ -42,7 +42,9 @@ else if (_get__('moduleName') === 'outside') {
 	}
 
 _get__('$')(() => _get__('ie8Icons').fix());
-var _RewiredData__ = {};
+
+var _RewiredData__ = Object.create(null);
+
 var INTENTIONAL_UNDEFINED = '__INTENTIONAL_UNDEFINED__';
 let _RewireAPI__ = {};
 

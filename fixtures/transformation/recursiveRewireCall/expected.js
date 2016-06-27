@@ -91,7 +91,9 @@ describe('NamedExportRewireSupportTest', function () {
 		_get__('expect')(_get__('CommonJSModule')(1)).to.be(3);
 	});
 });
-var _RewiredData__ = {};
+
+var _RewiredData__ = Object.create(null);
+
 var INTENTIONAL_UNDEFINED = '__INTENTIONAL_UNDEFINED__';
 let _RewireAPI__ = {};
 

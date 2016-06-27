@@ -5,7 +5,9 @@ module.exports = {
 		return _get__('foo');
 	}
 };
-var _RewiredData__ = {};
+
+var _RewiredData__ = Object.create(null);
+
 var INTENTIONAL_UNDEFINED = '__INTENTIONAL_UNDEFINED__';
 let _RewireAPI__ = {};
 

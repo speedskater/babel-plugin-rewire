@@ -18,7 +18,9 @@ export function preDecrement() {
 export function postDecrement() {
 	return _update_operation__("--", "postDecrementValue", false);
 }
-var _RewiredData__ = {};
+
+var _RewiredData__ = Object.create(null);
+
 var INTENTIONAL_UNDEFINED = '__INTENTIONAL_UNDEFINED__';
 let _RewireAPI__ = {};
 

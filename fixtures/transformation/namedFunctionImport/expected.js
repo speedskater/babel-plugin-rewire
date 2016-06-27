@@ -8,7 +8,9 @@ import { foo } from './dependency';
 export function run() {
 	_get__('foo')('bar');
 }
-var _RewiredData__ = {};
+
+var _RewiredData__ = Object.create(null);
+
 var INTENTIONAL_UNDEFINED = '__INTENTIONAL_UNDEFINED__';
 let _RewireAPI__ = {};
 

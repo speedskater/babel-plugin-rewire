@@ -7,7 +7,9 @@ export function requiredValidatorFunction(translatedFieldLabel, fieldValue) {
 let _DefaultExportValue = _get__('createSingleFieldValidatorFactory')(_get__('requiredValidatorFunction'));
 
 export default _DefaultExportValue;
-var _RewiredData__ = {};
+
+var _RewiredData__ = Object.create(null);
+
 var INTENTIONAL_UNDEFINED = '__INTENTIONAL_UNDEFINED__';
 let _RewireAPI__ = {};
 

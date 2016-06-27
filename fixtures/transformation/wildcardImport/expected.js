@@ -9,7 +9,9 @@ describe('wildcard export of imported object', () => {
 				_get__('expect')(_get__('wildcardImport').test2).to.equal(_get__('test2'));
 		});
 });
-var _RewiredData__ = {};
+
+var _RewiredData__ = Object.create(null);
+
 var INTENTIONAL_UNDEFINED = '__INTENTIONAL_UNDEFINED__';
 let _RewireAPI__ = {};
 

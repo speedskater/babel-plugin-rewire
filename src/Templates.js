@@ -15,7 +15,8 @@
 import template from 'babel-template';
 
 export const universalAccesorsTemplate = template(`
-var REWIRED_DATA_IDENTIFIER = {};
+var REWIRED_DATA_IDENTIFIER = Object.create(null);
+
 var INTENTIONAL_UNDEFINED = '__INTENTIONAL_UNDEFINED__';
 
 let API_OBJECT_ID = {};

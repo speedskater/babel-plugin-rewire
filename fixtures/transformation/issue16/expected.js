@@ -110,7 +110,9 @@ module.exports = {
   EmailInput: _get__('EmailInput'),
   URLInput: _get__('URLInput')
 };
-var _RewiredData__ = {};
+
+var _RewiredData__ = Object.create(null);
+
 var INTENTIONAL_UNDEFINED = '__INTENTIONAL_UNDEFINED__';
 let _RewireAPI__ = {};
 

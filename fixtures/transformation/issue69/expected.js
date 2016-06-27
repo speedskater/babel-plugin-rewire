@@ -5,7 +5,9 @@ export var Status;
 	Status[Status["FAILURE"] = 2] = "FAILURE";
 })(_get__("Status") || _assign__("Status", {}));
 ;
-var _RewiredData__ = {};
+
+var _RewiredData__ = Object.create(null);
+
 var INTENTIONAL_UNDEFINED = '__INTENTIONAL_UNDEFINED__';
 let _RewireAPI__ = {};
 

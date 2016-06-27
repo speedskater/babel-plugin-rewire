@@ -10,7 +10,9 @@ export default class Foo extends _get__('React').Component {
 			</div>;
 	}
 }
-var _RewiredData__ = {};
+
+var _RewiredData__ = Object.create(null);
+
 var INTENTIONAL_UNDEFINED = '__INTENTIONAL_UNDEFINED__';
 let _RewireAPI__ = {};
 

@@ -4,7 +4,9 @@ import expect from 'expect.js';
 for (let b of a) {
 	_get__('expect')(_get__('ComponentToTest').__Get__('node')).to.be('hey I\'m mock');
 }
-var _RewiredData__ = {};
+
+var _RewiredData__ = Object.create(null);
+
 var INTENTIONAL_UNDEFINED = '__INTENTIONAL_UNDEFINED__';
 let _RewireAPI__ = {};
 

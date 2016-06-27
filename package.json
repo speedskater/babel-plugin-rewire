@@ -68,7 +68,8 @@
     "mocha": "^2.2.4",
     "node-hook": "^0.1.0",
     "react": "^15.1.0",
-    "react-dom": "^15.1.0"
+    "react-dom": "^15.1.0",
+    "should": "^9.0.2"
   },
   "peerDependencies": {
     "babel-core": "^6.0.0",

@@ -6,7 +6,9 @@ function out(todo) {
 
 module.exports.out = _get__('out');
 module.exports.other = 'Foo';
-var _RewiredData__ = {};
+
+var _RewiredData__ = Object.create(null);
+
 var INTENTIONAL_UNDEFINED = '__INTENTIONAL_UNDEFINED__';
 let _RewireAPI__ = {};
 
