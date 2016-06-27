@@ -408,6 +408,7 @@ See the istanbul [sample-babel-node](https://github.com/istanbuljs/sample-babel-
 [Zhanzhan He](https://github.com/zh3) - support for wildcard imports
 [Kelly Selden](https://github.com/kellyselden) - fixed dependencies in package.json
 [Sasha Koss](https://github.com/kossnocorp) - support for rewiring to undefined
+[Kevin Canévet](https://github.com/StyMaar) - fixed incompatibility with should
 
 ## License
 
