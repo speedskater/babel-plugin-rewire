@@ -394,6 +394,7 @@ See the istanbul [sample-babel-node](https://github.com/istanbuljs/sample-babel-
 * 1.0.0-rc-1 Fixes rewiring of switch statements. Readme improvements. Wildcard imports and tdz issues.
 * 1.0.0-rc-2 Fixes issues with babelify, React stateless functions as well as flow declarations.
 * 1.0.0-rc-3 Added support for ignoring identifiers and support for objects as parameter to __set__
+* 1.0.0-rc-4 Support for rewiring to undefined. Fixed dependencies.
 
 ## Contributors
 
@@ -405,6 +406,8 @@ See the istanbul [sample-babel-node](https://github.com/istanbuljs/sample-babel-
 [Gustaf Dalemar](https://github.com/DLMR) - support for asynchronous functions
 [Spencre Leichty](https://github.com/spncrlkt) - support for named wildcard exports
 [Zhanzhan He](https://github.com/zh3) - support for wildcard imports
+[Kelly Selden](https://github.com/kellyselden) - fixed dependencies in package.json
+[Sasha Koss](https://github.com/kossnocorp) - support for rewiring to undefined
 
 ## License
 
