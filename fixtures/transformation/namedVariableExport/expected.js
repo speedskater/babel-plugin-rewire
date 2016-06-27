@@ -9,6 +9,7 @@ export default function _DefaultExportValue(val) {
 	return _get__("namedVariable")(val) + _get__("namedVariable2")(val);
 }
 var _RewiredData__ = {};
+var INTENTIONAL_UNDEFINED = '__INTENTIONAL_UNDEFINED__';
 let _RewireAPI__ = {};
 
 (function () {
@@ -30,7 +31,17 @@ let _RewireAPI__ = {};
 })();
 
 function _get__(variableName) {
-	return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
+	if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
+		return _get_original__(variableName);
+	} else {
+		var value = _RewiredData__[variableName];
+
+		if (value === INTENTIONAL_UNDEFINED) {
+			return undefined;
+		} else {
+			return value;
+		}
+	}
 }
 
 function _get_original__(variableName) {
@@ -75,7 +86,13 @@ function _set__(variableName, value) {
 			_RewiredData__[name] = variableName[name];
 		});
 	} else {
-		return _RewiredData__[variableName] = value;
+		if (value === undefined) {
+			_RewiredData__[variableName] = INTENTIONAL_UNDEFINED;
+		} else {
+			_RewiredData__[variableName] = value;
+		}
+
+		return value;
 	}
 }
 
