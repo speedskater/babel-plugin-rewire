@@ -250,7 +250,7 @@ describe('async function export test', function() {
 ## Installation
 
 ```
-$ npm install babel babel-plugin-rewire
+$ npm install babel-core babel-plugin-rewire
 ```
 
 ## Usage
@@ -284,16 +284,16 @@ Whether you're using the command line, JS API, or require hook, this file is hon
 
 abbreviated:
 ```javascript
-require("babel").transform("code", { plugins: ["rewire"] });
+require("babel-core").transform("code", { plugins: ["rewire"] });
 ```
 full plugin name:
 ```javascript
-require("babel").transform("code", { plugins: ["babel-plugin-rewire"] });
+require("babel-core").transform("code", { plugins: ["babel-plugin-rewire"] });
 ```
 
 ### Require Hook
 ```javascript
-require('babel/register')({
+require('babel-register')({
   plugins: ['babel-plugin-rewire']
 })
 ```
