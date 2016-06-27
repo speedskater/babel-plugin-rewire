@@ -77,4 +77,5 @@ require('../samples/jsx-stateless-multilevel/sample.js');
 require('../samples/rewireToUndefined/sample.js');
 require('../samples/issue115-should-js/sample.js');
 require('../samples/issue140-chai-should/sample.js');
+require('../samples/issue130-jsx-es6-type-imports/sample.js');
 hook.unhook('.js'); // removes your own transform
