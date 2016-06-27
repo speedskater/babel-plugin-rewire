@@ -394,21 +394,21 @@ See the istanbul [sample-babel-node](https://github.com/istanbuljs/sample-babel-
 * 1.0.0-rc-1 Fixes rewiring of switch statements. Readme improvements. Wildcard imports and tdz issues.
 * 1.0.0-rc-2 Fixes issues with babelify, React stateless functions as well as flow declarations.
 * 1.0.0-rc-3 Added support for ignoring identifiers and support for objects as parameter to __set__
-* 1.0.0-rc-4 Support for rewiring to undefined. Fixed dependencies.
+* 1.0.0-rc-4 Support for rewiring to undefined, suppport for should.js and cleaned up package.json.
 
 ## Contributors
 
-[speedskater](https://github.com/speedskater) - author and creator of initial release
-[Peet](https://github.com/peet) - module.exports and top-level var support
-[TheSavior](https://github.com/TheSavior) - support for non-enumerable rewire properties, support for ignored identifiers
-[Rene Saarsoo](https://github.com/nene) - support for using objects as parameter to __set__
-[PSpSynedra](https://github.com/PSpSynedra) - support for named export and function rewiring and improvements of default imports 
-[Gustaf Dalemar](https://github.com/DLMR) - support for asynchronous functions
-[Spencre Leichty](https://github.com/spncrlkt) - support for named wildcard exports
-[Zhanzhan He](https://github.com/zh3) - support for wildcard imports
-[Kelly Selden](https://github.com/kellyselden) - fixed dependencies in package.json
-[Sasha Koss](https://github.com/kossnocorp) - support for rewiring to undefined
-[Kevin Canévet](https://github.com/StyMaar) - fixed incompatibility with should
+* [speedskater](https://github.com/speedskater) - author and creator of initial release
+* [Peet](https://github.com/peet) - module.exports and top-level var support
+* [TheSavior](https://github.com/TheSavior) - support for non-enumerable rewire properties, support for ignored identifiers
+* [Rene Saarsoo](https://github.com/nene) - support for using objects as parameter to __set__
+* [PSpSynedra](https://github.com/PSpSynedra) - support for named export and function rewiring and improvements of default imports 
+* [Gustaf Dalemar](https://github.com/DLMR) - support for asynchronous functions
+* [Spencre Leichty](https://github.com/spncrlkt) - support for named wildcard exports
+* [Zhanzhan He](https://github.com/zh3) - support for wildcard imports
+* [Kelly Selden](https://github.com/kellyselden) - fixed dependencies in package.json
+* [Sasha Koss](https://github.com/kossnocorp) - support for rewiring to undefined
+* [Kevin Canévet](https://github.com/StyMaar) - fixed incompatibility with should
 
 ## License
 
