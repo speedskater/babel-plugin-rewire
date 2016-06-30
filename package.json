@@ -70,7 +70,8 @@
     "node-hook": "^0.1.0",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
-    "should": "^9.0.2"
+    "should": "^9.0.2",
+    "sinon": "^1.17.4"
   },
   "peerDependencies": {
     "babel-core": "^6.0.0",
