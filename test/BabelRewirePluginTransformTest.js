@@ -3,29 +3,31 @@ var path = require('path');
 var fs = require('fs');
 var os = require('os');
 var expect = require('expect.js');
-var babelPluginRewire = require('../lib/babel-plugin-rewire.js'); // require('../test-helpers/getBabelPluginRewire.js');
+var babelPluginRewire = /*require('../lib/babel-plugin-rewire.js'); // */ require('../test-helpers/getBabelPluginRewire.js');
 
 
 describe('BabelRewirePluginTest', function() {
 
 	var babelTranslationOptions = {
 		"plugins": [
+			"syntax-jsx",
+			'babel-plugin-transform-react-jsx',
 			babelPluginRewire,
 			"syntax-async-functions",
 			"syntax-flow",
-			"syntax-jsx",
 			"transform-export-extensions"
 		]
 	};
 
 	var babelTranslationOptionsIgnoredIdentifiers = {
 		"plugins": [
+			"syntax-jsx",
+			"babel-plugin-transform-react-jsx",
 			[babelPluginRewire, {
 				ignoredIdentifiers: ['ignoredIdentifier1', 'ignoredIdentifier2']
 			}],
 			"syntax-async-functions",
 			"syntax-flow",
-			"syntax-jsx",
 			"transform-export-extensions"
 		]
 	};
@@ -33,6 +35,8 @@ describe('BabelRewirePluginTest', function() {
 	var babelTranslationOptionsAllEnabled = {
 		"presets": ["es2015", "react"], //,
 		"plugins": [
+			"syntax-jsx",
+			"babel-plugin-transform-react-jsx",
 			babelPluginRewire,
 			"syntax-async-functions",
 			"transform-runtime",
@@ -86,7 +90,7 @@ describe('BabelRewirePluginTest', function() {
 
 
 	var featuresToTest = [
-		'babelissue1315',
+		/*'babelissue1315',
 		'issue16',
 		'forOf',
 		'commonJSExportOnly',
@@ -97,8 +101,9 @@ describe('BabelRewirePluginTest', function() {
 		'defaultExportWithNamedFunction',
 		'defaultExportWithObject',
 		'issuePathReplaceWith',
-		'importWithReactClass',
-		'moduleExports',
+		'importWithReactClass',*/
+		'jsxSupport',
+		/*'moduleExports',
 		'multipleImports',
 		'multipleImportsWithAliases',
 		'namedFunctionExport',
@@ -124,7 +129,7 @@ describe('BabelRewirePluginTest', function() {
 		'updateOperations',
 		'assignmentOperations',
 		'rewiringOfReactComponents',
-		'rewiringOfSimpleFunctionalComponents'
+		'rewiringOfSimpleFunctionalComponents'*/
 	];
 
 	var ignoredIdentifiers = [
