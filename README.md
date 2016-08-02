@@ -412,6 +412,7 @@ See the istanbul [sample-babel-node](https://github.com/istanbuljs/sample-babel-
 * 1.0.0-rc-2 Fixes issues with babelify, React stateless functions as well as flow declarations.
 * 1.0.0-rc-3 Added support for ignoring identifiers and support for objects as parameter to __set__
 * 1.0.0-rc-4 Support for rewiring to undefined, suppport for should.js and cleaned up package.json.
+* 1.0.0-rc-5 Improved support for rewiring JSX-Components. Further improved for working in combination with other plugins.
 
 ## Contributors
 
