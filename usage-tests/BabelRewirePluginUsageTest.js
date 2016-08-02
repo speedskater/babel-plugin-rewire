@@ -67,6 +67,7 @@ require('../samples/defaultExportImport/sample.js');
 require('../samples/redux-issue/sample.js');
 require('../samples/withSupport/sample.js');
 require('../samples/rewireClasses/sample.js');
+require('../samples/rewireParentChild/sample.js');
 require('../samples/objectAssign/sample.js');
 require('../samples/updateOperations/sample.js');
 require('../samples/wildcardExport/sample.js');
