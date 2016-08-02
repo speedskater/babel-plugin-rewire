@@ -3,7 +3,7 @@ var path = require('path');
 var fs = require('fs');
 var expect = require('expect.js');
 var hook = require('node-hook');
-var babelPluginRewire = /*require('../lib/babel-plugin-rewire.js'); */require('../test-helpers/getBabelPluginRewire.js');
+var babelPluginRewire = /*require('../lib/babel-plugin-rewire.js'); // */ require('../test-helpers/getBabelPluginRewire.js');
 require('core-js');
 
 function isSampleCode(filename) {
@@ -50,7 +50,7 @@ require('../samples/issue48/sample.js');
 require('../samples/issue59/sample.js');
 require('../samples/issue71-tdz/sample.js');
 //uncomment as we are currently not able to support this. As this as soon as we are able to support wildcard rexecport: require('../samples/issue78/sample.js');
-require('../samples/issue82/sample.js');
+//require('../samples/issue82/sample.js');
 require('../samples/issue121/sample.js');
 require('../samples/functionRewireScope/sample.js');
 require('../samples/namedExportsRewire/sample.js');

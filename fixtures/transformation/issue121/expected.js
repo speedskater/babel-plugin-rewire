@@ -1,47 +1,15 @@
-import React from 'react';
-import MessageList from './ChildComponent.js';
+import { getCount } from "./count.js";
+import { getDuration } from "./duration.js";
 
-function MySpecialComponentIWantToRewire() {
-	return _get__('React').createElement(
-		'div',
-		null,
-		'Output'
-	);
+export default class _DefaultExportValue {
+	getCount() {
+		return _get__("getCount")();
+	}
+
+	getDuration() {
+		return _get__("getDuration")();
+	}
 }
-
-function ComponentToRewirePerElement({ element, children }) {
-	return _get__('React').createElement(
-		'div',
-		{ key: element.get('id') },
-		children
-	);
-}
-
-export let rewireInlineComponent = () => _get__('React').createElement(_get__('MySpecialComponentIWantToRewire'), null);
-
-export let rewireWitMap = () => {
-	return _get__('React').createElement(
-		'div',
-		null,
-		array.map(element => _get__('React').createElement(
-			_get__('ComponentToRewirePerElement'),
-			{ element: element },
-			element.get('text')
-		))
-	);
-};
-
-export function another() {
-	return _get__('React').createElement(_get__('MessageList'), null);
-};
-
-export let arrowWithReturn = () => {
-	return _get__('React').createElement(_get__('MessageList'), null);
-};
-
-let _DefaultExportValue = () => _get__('React').createElement(_get__('MessageList'), null);
-
-export default _DefaultExportValue;
 
 var _RewiredData__ = Object.create(null);
 
@@ -82,17 +50,11 @@ function _get__(variableName) {
 
 function _get_original__(variableName) {
 	switch (variableName) {
-		case 'React':
-			return React;
+		case "getCount":
+			return getCount;
 
-		case 'MySpecialComponentIWantToRewire':
-			return MySpecialComponentIWantToRewire;
-
-		case 'ComponentToRewirePerElement':
-			return ComponentToRewirePerElement;
-
-		case 'MessageList':
-			return MessageList;
+		case "getDuration":
+			return getDuration;
 	}
 
 	return undefined;

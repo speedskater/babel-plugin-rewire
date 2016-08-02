@@ -1,5 +1,5 @@
-import type { UserID, User } from "MyTypes";
 
-function getUserID(user: User): UserID {
+
+function getUserID(user) {
 	return user.id;
 }

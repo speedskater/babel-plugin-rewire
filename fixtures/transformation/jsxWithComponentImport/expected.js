@@ -1,47 +1,19 @@
 import React from 'react';
-import MessageList from './ChildComponent.js';
+import ChildComponent from './ChildComponent';
+import { x as AnotherChildComponent } from './ChildComponent';
+import * as AnotherChildComponents from './ChildComponent';
 
-function MySpecialComponentIWantToRewire() {
-	return _get__('React').createElement(
-		'div',
-		null,
-		'Output'
-	);
+export default class Foo extends _get__('React').Component {
+	render() {
+		return _get__('React').createElement(
+			'div',
+			{ className: 'content' },
+			_get__('React').createElement(_get__('ChildComponent'), null),
+			_get__('React').createElement(_get__('AnotherChildComponent'), null),
+			_get__('React').createElement(_get__('AnotherChildComponents'), null)
+		);
+	}
 }
-
-function ComponentToRewirePerElement({ element, children }) {
-	return _get__('React').createElement(
-		'div',
-		{ key: element.get('id') },
-		children
-	);
-}
-
-export let rewireInlineComponent = () => _get__('React').createElement(_get__('MySpecialComponentIWantToRewire'), null);
-
-export let rewireWitMap = () => {
-	return _get__('React').createElement(
-		'div',
-		null,
-		array.map(element => _get__('React').createElement(
-			_get__('ComponentToRewirePerElement'),
-			{ element: element },
-			element.get('text')
-		))
-	);
-};
-
-export function another() {
-	return _get__('React').createElement(_get__('MessageList'), null);
-};
-
-export let arrowWithReturn = () => {
-	return _get__('React').createElement(_get__('MessageList'), null);
-};
-
-let _DefaultExportValue = () => _get__('React').createElement(_get__('MessageList'), null);
-
-export default _DefaultExportValue;
 
 var _RewiredData__ = Object.create(null);
 
@@ -85,14 +57,14 @@ function _get_original__(variableName) {
 		case 'React':
 			return React;
 
-		case 'MySpecialComponentIWantToRewire':
-			return MySpecialComponentIWantToRewire;
+		case 'ChildComponent':
+			return ChildComponent;
 
-		case 'ComponentToRewirePerElement':
-			return ComponentToRewirePerElement;
+		case 'AnotherChildComponent':
+			return AnotherChildComponent;
 
-		case 'MessageList':
-			return MessageList;
+		case 'AnotherChildComponents':
+			return _filterWildcardImport__(AnotherChildComponents);
 	}
 
 	return undefined;
@@ -169,17 +141,17 @@ function _with__(object) {
 	};
 }
 
-let _typeOfOriginalExport = typeof _DefaultExportValue;
+let _typeOfOriginalExport = typeof Foo;
 
 function addNonEnumerableProperty(name, value) {
-	Object.defineProperty(_DefaultExportValue, name, {
+	Object.defineProperty(Foo, name, {
 		value: value,
 		enumerable: false,
 		configurable: true
 	});
 }
 
-if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
+if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(Foo)) {
 	addNonEnumerableProperty('__get__', _get__);
 	addNonEnumerableProperty('__GetDependency__', _get__);
 	addNonEnumerableProperty('__Rewire__', _set__);
@@ -188,6 +160,16 @@ if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function')
 	addNonEnumerableProperty('__ResetDependency__', _reset__);
 	addNonEnumerableProperty('__with__', _with__);
 	addNonEnumerableProperty('__RewireAPI__', _RewireAPI__);
+}
+
+function _filterWildcardImport__(wildcardImport = {}) {
+	let validPropertyNames = Object.keys(wildcardImport).filter(function (propertyName) {
+		return propertyName !== '__get__' && propertyName !== '__set__' && propertyName !== '__reset__' && propertyName !== '__with__' && propertyName !== '__GetDependency__' && propertyName !== '__Rewire__' && propertyName !== '__ResetDependency__' && propertyName !== '__RewireAPI__';
+	});
+	return validPropertyNames.reduce(function (filteredWildcardImport, propertyName) {
+		filteredWildcardImport[propertyName] = wildcardImport[propertyName];
+		return filteredWildcardImport;
+	}, {});
 }
 
 export { _get__ as __get__, _get__ as __GetDependency__, _set__ as __Rewire__, _set__ as __set__, _reset__ as __ResetDependency__, _RewireAPI__ as __RewireAPI__ };

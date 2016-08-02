@@ -3,11 +3,11 @@ import ChildComponent from './ChildComponent';
 
 export default class Foo extends _get__('React').Component {
 	render() {
-		let _ChildComponent_Component = _get__('ChildComponent');
-
-		return <div className="content">
-				<_ChildComponent_Component />
-			</div>;
+		return _get__('React').createElement(
+			'div',
+			{ className: 'content' },
+			_get__('React').createElement(_get__('ChildComponent'), null)
+		);
 	}
 }
 
@@ -50,11 +50,11 @@ function _get__(variableName) {
 
 function _get_original__(variableName) {
 	switch (variableName) {
-		case 'ChildComponent':
-			return ChildComponent;
-
 		case 'React':
 			return React;
+
+		case 'ChildComponent':
+			return ChildComponent;
 	}
 
 	return undefined;

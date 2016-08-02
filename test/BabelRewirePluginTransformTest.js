@@ -9,9 +9,8 @@ var babelPluginRewire = /*require('../lib/babel-plugin-rewire.js'); // */ requir
 describe('BabelRewirePluginTest', function() {
 
 	var babelTranslationOptions = {
+		"presets": ["react"],
 		"plugins": [
-			"syntax-jsx",
-			'babel-plugin-transform-react-jsx',
 			babelPluginRewire,
 			"syntax-async-functions",
 			"syntax-flow",
@@ -20,9 +19,8 @@ describe('BabelRewirePluginTest', function() {
 	};
 
 	var babelTranslationOptionsIgnoredIdentifiers = {
+		"presets": ["react"],
 		"plugins": [
-			"syntax-jsx",
-			"babel-plugin-transform-react-jsx",
 			[babelPluginRewire, {
 				ignoredIdentifiers: ['ignoredIdentifier1', 'ignoredIdentifier2']
 			}],
@@ -35,8 +33,6 @@ describe('BabelRewirePluginTest', function() {
 	var babelTranslationOptionsAllEnabled = {
 		"presets": ["es2015", "react"], //,
 		"plugins": [
-			"syntax-jsx",
-			"babel-plugin-transform-react-jsx",
 			babelPluginRewire,
 			"syntax-async-functions",
 			"transform-runtime",
@@ -67,6 +63,7 @@ describe('BabelRewirePluginTest', function() {
 		} catch(error) {}
 		
 		fs.writeFileSync(tempDir + '/testexpected' + testName + '.js', transformationOutput, 'utf-8');
+		//fs.writeFileSync(path.resolve(directory, 'expected.js'), transformationOutput, 'utf-8');
 
 		if(expected.trim() != transformationOutput.trim()) {
 			console.log(transformationOutput);
@@ -90,7 +87,7 @@ describe('BabelRewirePluginTest', function() {
 
 
 	var featuresToTest = [
-		/*'babelissue1315',
+		'babelissue1315',
 		'issue16',
 		'forOf',
 		'commonJSExportOnly',
@@ -101,9 +98,10 @@ describe('BabelRewirePluginTest', function() {
 		'defaultExportWithNamedFunction',
 		'defaultExportWithObject',
 		'issuePathReplaceWith',
-		'importWithReactClass',*/
+		'importWithReactClass',
 		'jsxSupport',
-		/*'moduleExports',
+		'jsxWithComponentImport',
+		'moduleExports',
 		'multipleImports',
 		'multipleImportsWithAliases',
 		'namedFunctionExport',
@@ -129,7 +127,8 @@ describe('BabelRewirePluginTest', function() {
 		'updateOperations',
 		'assignmentOperations',
 		'rewiringOfReactComponents',
-		'rewiringOfSimpleFunctionalComponents'*/
+		'rewiringOfSimpleFunctionalComponents',
+		'issue121'
 	];
 
 	var ignoredIdentifiers = [

@@ -25,6 +25,7 @@ export default class RewireState {
 		this.nodesToAppendToProgramBody = [];
 		this.hasCommonJSExport = false;
 		this.accessors = {};
+		this.trackedIdentfiers = {};
 		this.isWildcardImport = {};
 		this.ignoredIdentifiers = [];
 		this.updateableVariables = {};
@@ -62,10 +63,19 @@ export default class RewireState {
 	ensureAccessor(variableName, isWildcardImport = false) {
 		if(!this.accessors[variableName]) {
 			this.accessors[variableName] = true;
-			this.isWildcardImport[variableName] = isWildcardImport
+			this.addTrackedIdentifier(variableName, isWildcardImport);
 		}
 
 		return this.accessors[variableName];
+	}
+	
+	addTrackedIdentifier(variableName, isWildcardImport = false) {
+		this.isWildcardImport[variableName] = isWildcardImport
+		return this.trackedIdentfiers[variableName] = true;
+	}
+
+	hasTrackedIdentifier(variableName) {
+		return !!this.trackedIdentfiers[variableName];
 	}
 
 	addUpdateableVariable(variableName) {

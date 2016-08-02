@@ -16,6 +16,7 @@ describe('JSX support', () => {
     const createElement = sinon.spy();
     test.__Rewire__('React', {createElement});
     test.__Rewire__('Component', 'component class');
+		test();
     expect(createElement.calledWith('component class')).to.be(true);
   });
 });

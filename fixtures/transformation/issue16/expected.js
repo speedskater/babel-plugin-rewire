@@ -85,10 +85,17 @@ var TextArea = _get__('React').createClass({
     if (this.props.height) taStyle.height = this.props.height;
     var error = !this.isValid() && this.userHasChangedValue();
     var classNames = _get__('cx')("field", { error: error });
-    return <div className={classNames}>
-        {this.getLabelEl(labelStyle)}
-        <textarea onBlur={this.onBlur} onFocus={this.onFocus} onChange={this.onChange} style={taStyle} value={this.state.value} />
-      </div>;
+    return _get__('React').createElement(
+      'div',
+      { className: classNames },
+      this.getLabelEl(labelStyle),
+      _get__('React').createElement('textarea', {
+        onBlur: this.onBlur,
+        onFocus: this.onFocus,
+        onChange: this.onChange,
+        style: taStyle,
+        value: this.state.value })
+    );
   }
 });
 
@@ -99,7 +106,7 @@ var HiddenTextInput = _get__('React').createClass({
     can be placed at the top of a Form to prevent that behaviour.
   */
   render: function () {
-    return <input type="text" style={{ opacity: 0, height: 0, position: 'absolute' }} />;
+    return _get__('React').createElement('input', { type: 'text', style: { opacity: 0, height: 0, position: 'absolute' } });
   }
 });
 

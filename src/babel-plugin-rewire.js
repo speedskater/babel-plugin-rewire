@@ -12,124 +12,72 @@
  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.*/
 
+import traverse from "babel-traverse";
+
 import RewireState from './RewireState.js';
 import { wasProcessed, noRewire, contains } from './RewireHelpers.js';
 
 module.exports = function({ types: t }) {
+	function isRewireable(path, variableBinding) {
+		let { node, parent } = path;
+
+		return (variableBinding.referencePaths !== null) &&
+		!(parent.type !== 'VariableDeclarator' && parent.id == node) &&
+		!(parent.type === 'MemberExpression' && parent.property === node) &&
+		!(parent.type === 'ObjectProperty' && parent.key === node) &&
+		!(parent.type === 'ObjectProperty' && path.parentPath && path.parentPath.parent && path.parentPath.parent.type === 'ObjectPattern') &&
+		!(parent.type === 'ExportSpecifier') &&
+		!(parent.type === 'ImportSpecifier') &&
+		!(parent.type === 'ObjectTypeProperty') &&
+		!(parent.type === 'ClassMethod')
+	}
+
+	function doesIdentifierRepresentAValidReference(path, variableBinding, rewireInformation) {
+		let isIgnoredVariable = rewireInformation.ignoredIdentifiers.indexOf(path.node.name) !== -1;
+		return (!isIgnoredVariable) && (variableBinding !== undefined) && !wasProcessed(path) && (variableBinding.scope.block.type === 'Program');
+	}
+
+	function getVariableNameAndBinding(path) {
+		let { node, parent, scope } = path;
+		let variableName = node.name;
+		let variableBinding = (!t.isFlow || (!t.isFlow(node) && !t.isFlow(parent))) ? scope.getBinding(variableName) : undefined;
+
+		return {
+			variableName,
+			variableBinding
+		};
+	}
+
 	const BodyVisitor = {
-		JSXElement: function (path, rewireInformation) {
-			let {node, parent, scope} = path;
-			let {openingElement, closingElement, children} = node;
-			let tagName = openingElement.name.name;
-			let variableBinding = scope.getBinding(tagName);
-
-			if (!wasProcessed(path) && !t.react.isCompatTag(tagName) && variableBinding !== undefined && (variableBinding.scope.block.type === 'Program')) {
-				rewireInformation.ensureAccessor(tagName);
-
-				let insertingBefore = path;
-
-				//TODO recursively respect switch statements
-				let scopeReached = insertingBefore.parentPath.node === scope.block;
-				while (insertingBefore.parentPath && insertingBefore.parentPath.parentPath && ((insertingBefore.parentPath.type === 'SwitchStatement') || (!scopeReached && insertingBefore.parentPath.type !== 'BlockStatement'))) {
-					insertingBefore = insertingBefore.parentPath;
-					scopeReached = insertingBefore.parentPath.node === scope.block;
-				}
-
-				let componentIdentifier = scope.generateUidIdentifier(tagName + '_Component');
-				let temporaryComponentDeclaration = t.variableDeclaration('let', [t.variableDeclarator(componentIdentifier, t.callExpression(rewireInformation.getUniversalGetterID(), [t.stringLiteral(tagName)]))]);
-
-				if (openingElement.selfClosing) {
-					path.replaceWith(noRewire(t.JSXElement(
-						t.JSXOpeningElement(
-							t.JSXIdentifier(componentIdentifier.name),
-							openingElement.attributes,
-							true
-						),
-						null,
-						[],
-						true
-						)
-					));
-				} else {
-					path.replaceWith(noRewire(
-						t.JSXElement(
-							t.JSXOpeningElement(
-								t.JSXIdentifier(componentIdentifier.name),
-								openingElement.attributes,
-								false
-							),
-							t.JSXClosingElement(
-								t.JSXIdentifier(componentIdentifier.name)
-							),
-							children,
-							false
-						)
-					));
-				}
-
-				if (insertingBefore.parentPath && insertingBefore.parentPath.type === 'ArrowFunctionExpression') {
-					let arrowFunctionExpression = insertingBefore.parentPath.node;
-					insertingBefore.parentPath.replaceWith(
-						t.arrowFunctionExpression(
-							arrowFunctionExpression.params,
-							t.blockStatement([temporaryComponentDeclaration, t.returnStatement(insertingBefore.node)]),
-							arrowFunctionExpression.async
-						)
-					);
-				} else {
-					insertingBefore.insertBefore(temporaryComponentDeclaration);
-				}
-			}
-		},
-
 		Identifier: function (path, rewireInformation) {
 			let { node, parent, scope } = path;
-			let variableName = node.name;
-			let variableBinding = (!t.isFlow || (!t.isFlow(node) && !t.isFlow(parent))) ? scope.getBinding(variableName) : undefined;
-
-			if (rewireInformation.ignoredIdentifiers.indexOf(node.name) !== -1) {
-				return;
-			}
+			let { variableName, variableBinding } = getVariableNameAndBinding(path);
 
 			//Matches for body
-			if (variableBinding !== undefined && !wasProcessed(path)
-				&& (variableBinding.scope.block.type === 'Program')) {
-				console.log("variableName :: " + variableName);
-				console.log("parent.type :: " + parent.type);
-				if (variableBinding.referencePaths !== null && (contains(variableBinding.referencePaths, path)/* ||
-						(variableBinding.identifier !== node)*/)
-
-					&& !(parent.type !== 'VariableDeclarator' && parent.id == node)
-					&& !(parent.type === 'MemberExpression' && parent.property === node)
-					&& !(parent.type === 'ObjectProperty' && parent.key === node)
-					&& !(parent.type === 'ObjectProperty' && path.parentPath && path.parentPath.parent && path.parentPath.parent.type === 'ObjectPattern')
-					&& !(parent.type === 'ExportSpecifier')
-					&& !(parent.type === 'ImportSpecifier')
-					&& !(parent.type === 'ObjectTypeProperty')
-					&& !(parent.type === 'ClassMethod')
-				) {
+			if (doesIdentifierRepresentAValidReference(path, variableBinding, rewireInformation)) {
+				let isWildCardImport = (variableBinding.path.type === 'ImportNamespaceSpecifier');
+				if(isRewireable(path, variableBinding) && contains(variableBinding.referencePaths, path)) {
 					if (parent.type === 'UpdateExpression') {
 						rewireInformation.addUpdateableVariable(variableName);
 						path.parentPath.replaceWith(t.callExpression(rewireInformation.getUpdateOperationID(), [t.stringLiteral(parent.operator), t.stringLiteral(variableName), t.booleanLiteral(parent.prefix)]));
 					} else {
-						let isWildCardImport = (variableBinding.path.type === 'ImportNamespaceSpecifier');
 						rewireInformation.ensureAccessor(variableName, isWildCardImport);
 						path.replaceWith(t.callExpression(rewireInformation.getUniversalGetterID(), [t.stringLiteral(variableName)]));
 					}
-				} else if (parent.type === 'AssignmentExpression' && parent.left == node) {
+				} else if(parent.type === 'AssignmentExpression' && parent.left == node) {
 					rewireInformation.addUpdateableVariable(variableName);
 
-					if (parent.operator === '=') {
+					if(parent.operator === '=') {
 						path.parentPath.replaceWith(noRewire(t.callExpression(rewireInformation.getAssignmentOperationID(), [t.stringLiteral(variableName), parent.right])));
 					} else {
 						let baseOperator = parent.operator.substring(0, parent.operator.length - 1);
 						path.parentPath.replaceWith(t.assignmentExpression('=', parent.left, t.binaryExpression(baseOperator, t.callExpression(rewireInformation.getUniversalGetterID(), [t.stringLiteral(variableName)]), parent.right)));
 					}
+					//TODO variable bindings add accessor for each variable declaration even if its unused. The reason is that any other plugin could potentially change the code otherwise
+				}
 
-				//TODO variable bindings add accessor for each variable declaration even if its unused. The reason is that any other plugin could potentially change the code otherwise
-				} else if(parent.type === 'VariableDeclarator' && parent.id == node) {
-					let isWildCardImport = (variableBinding.path.type === 'ImportNamespaceSpecifier');
-					rewireInformation.ensureAccessor(variableName, isWildCardImport);
+				if(variableBinding.identifier === node) {
+					rewireInformation.addTrackedIdentifier(variableName, isWildCardImport);
 				}
 			}
 		},
@@ -212,16 +160,42 @@ module.exports = function({ types: t }) {
 		}
 	};
 
+	const BodySecondPassVisitor = {
+		Identifier: function (path, rewireInformation) {
+			let { node, parent } = path;
+			let { variableName, variableBinding } = getVariableNameAndBinding(path);
+
+			//Matches for body
+			if (doesIdentifierRepresentAValidReference(path, variableBinding, rewireInformation) &&
+				isRewireable(path, variableBinding) &&
+				rewireInformation.hasTrackedIdentifier(variableName) &&
+				(variableBinding.identifier !== node) &&
+				(parent.type !== 'UpdateExpression')
+			) {
+				let isWildCardImport = (variableBinding.path.type === 'ImportNamespaceSpecifier');
+				rewireInformation.ensureAccessor(variableName, isWildCardImport);
+				path.replaceWith(t.callExpression(rewireInformation.getUniversalGetterID(), [t.stringLiteral(variableName)]));
+			}
+		}
+	};
+
 	const ProgramVisitor = {
 		Program: {
-			exit: function (path, state) {
+			enter: function (path, state) {
 				if (!wasProcessed(path)) {
-					let {scope, node: program} = path;
-					let rewireState = new RewireState(scope);
+					let rewireState = new RewireState(path.scope);
 					rewireState.setIgnoredIdentifiers(state.opts.ignoredIdentifiers);
 
 					path.traverse(BodyVisitor, rewireState);
 
+					state.rewireState = rewireState;
+				}
+			},
+			exit: function(path, state) {
+				if (!wasProcessed(path)) {
+					let {scope, node: program} = path;
+					let rewireState = state.rewireState;
+					path.traverse(BodySecondPassVisitor, rewireState);
 					if (rewireState.containsDependenciesToRewire()) {
 						rewireState.prependUniversalAccessors(scope);
 						rewireState.appendExports();

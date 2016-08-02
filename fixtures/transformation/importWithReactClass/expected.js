@@ -7,14 +7,16 @@ class WelcomePanel extends _get__('Card') {
 	}
 
 	render() {
-		let _Card_Component = _get__('Card');
-
-		let _Card_Component2 = _get__('Card');
-
-		return <div className="welcome-panel">
-				<_Card_Component content={_get__('node').toString()} />
-				<_Card_Component2><ChildNode /></_Card_Component2>
-			</div>;
+		return React.createElement(
+			'div',
+			{ className: 'welcome-panel' },
+			React.createElement(_get__('Card'), { content: _get__('node').toString() }),
+			React.createElement(
+				_get__('Card'),
+				null,
+				React.createElement(ChildNode, null)
+			)
+		);
 	}
 
 	initPanel(el, content) {
@@ -66,11 +68,11 @@ function _get__(variableName) {
 
 function _get_original__(variableName) {
 	switch (variableName) {
-		case 'Card':
-			return Card;
-
 		case 'node':
 			return node;
+
+		case 'Card':
+			return Card;
 
 		case 'WelcomePanel':
 			return WelcomePanel;

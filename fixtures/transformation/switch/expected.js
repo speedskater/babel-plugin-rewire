@@ -6,29 +6,23 @@ import DefaultComponent from './DefaultComponent';
 
 export default class Foo extends _get__('React').Component {
 	render() {
-		return <div>
-				{['a', 'b', 'c'].map(this.renderChild)}
-			</div>;
+		return _get__('React').createElement(
+			'div',
+			null,
+			['a', 'b', 'c'].map(this.renderChild)
+		);
 	}
 
 	renderChild(type) {
-		let _ComponentA_Component = _get__('ComponentA');
-
-		let _ComponentB_Component = _get__('ComponentB');
-
-		let _ComponentC_Component = _get__('ComponentC');
-
-		let _DefaultComponent_Component = _get__('DefaultComponent');
-
 		switch (type) {
 			case 'a':
-				return <_ComponentA_Component />;
+				return _get__('React').createElement(_get__('ComponentA'), null);
 			case 'b':
-				return <_ComponentB_Component />;
+				return _get__('React').createElement(_get__('ComponentB'), null);
 			case 'c':
-				return <_ComponentC_Component />;
+				return _get__('React').createElement(_get__('ComponentC'), null);
 			default:
-				return <_DefaultComponent_Component />;
+				return _get__('React').createElement(_get__('DefaultComponent'), null);
 		}
 	}
 }
@@ -72,6 +66,9 @@ function _get__(variableName) {
 
 function _get_original__(variableName) {
 	switch (variableName) {
+		case 'React':
+			return React;
+
 		case 'ComponentA':
 			return ComponentA;
 
@@ -83,9 +80,6 @@ function _get_original__(variableName) {
 
 		case 'DefaultComponent':
 			return DefaultComponent;
-
-		case 'React':
-			return React;
 	}
 
 	return undefined;
