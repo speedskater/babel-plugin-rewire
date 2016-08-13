@@ -52,6 +52,7 @@ require('../samples/issue71-tdz/sample.js');
 //uncomment as we are currently not able to support this. As this as soon as we are able to support wildcard rexecport: require('../samples/issue78/sample.js');
 //require('../samples/issue82/sample.js');
 require('../samples/issue121/sample.js');
+require('../samples/issue155/sample.js');
 require('../samples/functionRewireScope/sample.js');
 require('../samples/namedExportsRewire/sample.js');
 require('../samples/namedExportRewireSupport/sample.js');
