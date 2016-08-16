@@ -128,7 +128,8 @@ describe('BabelRewirePluginTest', function() {
 		'assignmentOperations',
 		'rewiringOfReactComponents',
 		'rewiringOfSimpleFunctionalComponents',
-		'issue121'
+		'issue121',
+		'issue152'
 	];
 
 	var ignoredIdentifiers = [
