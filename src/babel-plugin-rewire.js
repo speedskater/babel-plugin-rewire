@@ -133,7 +133,7 @@ module.exports = function({ types: t }) {
 									existingFunctionDeclaration.async
 								)
 							);
-						} else {
+						} else if(path.parent.type === 'ExportDefaultDeclaration') {
 							exportIdentifier = existingFunctionDeclaration.id;
 						}
 					},
