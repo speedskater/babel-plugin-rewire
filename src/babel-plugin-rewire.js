@@ -22,7 +22,8 @@ module.exports = function({ types: t }) {
 		let { node, parent } = path;
 
 		return (variableBinding.referencePaths !== null) &&
-		!(parent.type !== 'VariableDeclarator' && parent.id == node) &&
+		!(parent.type === 'VariableDeclarator' && parent.id == node) &&
+		!(parent.type === 'FunctionExpression' && parent.id === node) &&
 		!(parent.type === 'MemberExpression' && parent.property === node) &&
 		!(parent.type === 'ObjectProperty' && parent.key === node) &&
 		!(parent.type === 'ObjectProperty' && path.parentPath && path.parentPath.parent && path.parentPath.parent.type === 'ObjectPattern') &&

@@ -11,74 +11,107 @@ function isSampleCode(filename) {
 	return (filename.substr(0, samplesPath.length) === samplesPath);
 }
 
-
-function transformSampleCodeToTestWithBabelPluginRewire(source, filename) {
-	var babelTransformationOptions = {
-		"presets": ["es2015", "react"], //,
-		"plugins": [
-			babelPluginRewire,
-			"syntax-async-functions",
-			"transform-es2015-template-literals",
-			"transform-es2015-block-scoping",
-			"transform-es2015-typeof-symbol",
-			"transform-export-extensions",
-			"transform-regenerator"
+var configurations = {
+	transformSampleCodeToTestWithBabelPluginRewireAndTransformRegenerator: {
+		transformOptions: {
+			"presets": ["es2015", "react"], //,
+			"plugins": [
+				babelPluginRewire,
+				"syntax-async-functions",
+				"transform-es2015-template-literals",
+				"transform-es2015-block-scoping",
+				"transform-es2015-typeof-symbol",
+				"transform-export-extensions",
+				"transform-regenerator"
+			]
+		},
+		samples: [
+			'issue16',
+			'issue18',
+			'issue19',
+			'issue20',
+			'issue22',
+			'issue28',
+			'issue29',
+			'issue30',
+			'issue33',
+			'issue48',
+			'issue59',
+			'issue71-tdz',
+			//uncomment as we are currently not able to support this. As this as soon as we are able to support wildcard rexecport: require('../samples/issue78/sample.js');
+			//require('../samples/issue82/sample.js');
+			'issue121',
+			'functionRewireScope',
+			'namedExportsRewire',
+			'namedExportRewireSupport',
+			'namedExportsWithNameClash',
+			'nestedScopes',
+			'objectLiteralNameClash',
+			'passThrough',
+			'defaultExportNonExtensible',
+			'typedExport',
+			'nonEnumerableProperties',
+			'redefinedRewireProperties',
+			'defaultExportImport',
+			'redux-issue',
+			'withSupport',
+			'rewireClasses',
+			'rewireParentChild',
+			'objectAssign',
+			'updateOperations',
+			'wildcardExport',
+			'namedWildcardExport',
+			'assignmentOperations',
+			'jsx-switch',
+			'jsx-stateless-multilevel',
+			'rewireToUndefined',
+			'issue115-should-js',
+			'issue140-chai-should',
+			'issue130-jsx-es6-type-imports',
+			'jsxSupport',
+			'issue152-1'
 		]
-	};
+	},
+	transformSampleCodeToTestWithBabelPluginRewireAndTransformAsyncToGenerator: {
+		transformOptions: {
+			"presets": ["es2015", "react"], //,
+			"plugins": [
+				babelPluginRewire,
+				"syntax-async-functions",
+				"transform-es2015-template-literals",
+				"transform-es2015-block-scoping",
+				"transform-es2015-typeof-symbol",
+				"transform-export-extensions",
+				"babel-plugin-transform-async-to-generator"
+			]
+		},
+		samples: [
+			'issue152-2'
+		]
+	}
+};
 
-	/*if(isSampleCode(filename)) {
-		console.log("=========== " + filename + "============");
-		var code = babel.transform(source, babelTransformationOptions).code;
-		console.log(code);
-		return code;
-	}*/
 
-	return isSampleCode(filename) ? babel.transform(source, babelTransformationOptions).code : source;
-}
+Object.keys(configurations).forEach(function(configurationName) {
+	describe(configurationName, function() {
+		var configuration = configurations[configurationName];
+		var transformOptions = configuration.transformOptions;
 
-hook.hook('.js', transformSampleCodeToTestWithBabelPluginRewire);
-require('../samples/issue16/sample.js');
-require('../samples/issue18/sample.js');
-require('../samples/issue19/sample.js');
-require('../samples/issue20/sample.js');
-require('../samples/issue22/sample.js');
-require('../samples/issue28/sample.js');
-require('../samples/issue29/sample.js');
-require('../samples/issue30/sample.js');
-require('../samples/issue33/sample.js');
-require('../samples/issue48/sample.js');
-require('../samples/issue59/sample.js');
-require('../samples/issue71-tdz/sample.js');
-//uncomment as we are currently not able to support this. As this as soon as we are able to support wildcard rexecport: require('../samples/issue78/sample.js');
-//require('../samples/issue82/sample.js');
-require('../samples/issue121/sample.js');
-require('../samples/functionRewireScope/sample.js');
-require('../samples/namedExportsRewire/sample.js');
-require('../samples/namedExportRewireSupport/sample.js');
-require('../samples/namedExportsWithNameClash/sample.js');
-require('../samples/nestedScopes/sample.js');
-require('../samples/objectLiteralNameClash/sample.js');
-require('../samples/passThrough/sample.js');
-require('../samples/defaultExportNonExtensible/sample.js');
-require('../samples/typedExport/sample.js');
-require('../samples/nonEnumerableProperties/sample.js');
-require('../samples/redefinedRewireProperties/sample.js');
-require('../samples/defaultExportImport/sample.js');
-require('../samples/redux-issue/sample.js');
-require('../samples/withSupport/sample.js');
-require('../samples/rewireClasses/sample.js');
-require('../samples/rewireParentChild/sample.js');
-require('../samples/objectAssign/sample.js');
-require('../samples/updateOperations/sample.js');
-require('../samples/wildcardExport/sample.js');
-require('../samples/namedWildcardExport/sample.js');
-require('../samples/assignmentOperations/sample.js');
-require('../samples/jsx-switch/sample.js');
-require('../samples/jsx-stateless-multilevel/sample.js');
-require('../samples/rewireToUndefined/sample.js');
-require('../samples/issue115-should-js/sample.js');
-require('../samples/issue140-chai-should/sample.js');
-require('../samples/issue130-jsx-es6-type-imports/sample.js');
-require('../samples/jsxSupport/sample.js');
-require('../samples/issue152/sample.js');
-hook.unhook('.js'); // removes your own transform
+		function transformFunction(source, filename) {
+			/*if(isSampleCode(filename)) {
+			 console.log("=========== " + filename + "============");
+			 var code = babel.transform(source, transformOptions).code;
+			 console.log(code);
+			 return code;
+			 }*/
+
+			return isSampleCode(filename) ? babel.transform(source, transformOptions).code : source;
+		}
+
+		hook.hook('.js', transformFunction);
+		configuration.samples.forEach(function (sampleName) {
+			require('../samples/' + sampleName + '/sample.js');
+		});
+		hook.unhook('.js'); // removes your own transform
+	});
+});

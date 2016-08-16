@@ -1,5 +1,3 @@
-import "babel-polyfill";
-
 import { asyncFunction } from './src/asyncFunction.js';
 import { wasCalled } from './src/anotherFunction.js';
 import expect from 'expect.js';
