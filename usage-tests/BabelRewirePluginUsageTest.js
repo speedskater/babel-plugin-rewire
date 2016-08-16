@@ -69,7 +69,8 @@ var configurations = {
 			'issue140-chai-should',
 			'issue130-jsx-es6-type-imports',
 			'jsxSupport',
-			'issue152-1'
+			'issue152-1',
+			'issue155'
 		]
 	},
 	transformSampleCodeToTestWithBabelPluginRewireAndTransformAsyncToGenerator: {
