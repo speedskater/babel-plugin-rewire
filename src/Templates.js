@@ -73,13 +73,15 @@ function UNIVERSAL_SETTER_ID(variableName, value) {
 			REWIRED_DATA_IDENTIFIER[name] = variableName[name];
 		});
 	} else {
-    if (value === undefined) {
-      REWIRED_DATA_IDENTIFIER[variableName] = INTENTIONAL_UNDEFINED
-    } else {
-      REWIRED_DATA_IDENTIFIER[variableName] = value
-    }
+	    if (value === undefined) {
+	      REWIRED_DATA_IDENTIFIER[variableName] = INTENTIONAL_UNDEFINED
+	    } else {
+	      REWIRED_DATA_IDENTIFIER[variableName] = value
+	    }
 
-    return value
+        return function() {
+            UNIVERSAL_RESETTER_ID(variableName);
+        };
 	}
 }
 

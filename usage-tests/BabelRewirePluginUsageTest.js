@@ -70,7 +70,8 @@ var configurations = {
 			'issue130-jsx-es6-type-imports',
 			'jsxSupport',
 			'issue152-1',
-			'issue155'
+			'issue155',
+			'issue146-revert-function-for-set'
 		]
 	},
 	transformSampleCodeToTestWithBabelPluginRewireAndTransformAsyncToGenerator: {

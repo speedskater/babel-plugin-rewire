@@ -11,7 +11,9 @@ It is inspired by [rewire.js](https://github.com/jhnns/rewire) and transfers its
 It is useful for writing tests, specifically to mock the dependencies of the module under test.
 
 Therefore for each module it adds and exports the methods `__GetDependency__`, `__Rewire__`, and `__ResetDependency__`.
-For compatibility reasons with rewire.js, the methods `__get__` and `__set__` are exported as well.
+For compatibility reasons with rewire.js, the methods `__get__` and `__set__` are exported as well. 
+From version 1.0.0-rc-7 on calls to `__set__` will return a revert function like rewire.js. 
+  
 These methods allow you to rewire the module under test.
 Furthermore in case of a default export these methods are assigned to the existing default export, except for default exports of primitive types (boolean, number, string, ...).
 
@@ -410,10 +412,11 @@ See the istanbul [sample-babel-node](https://github.com/istanbuljs/sample-babel-
 * 1.0.0-beta-5 Fixes rewiring of jsx elements. Readme improvements. Test for pass-through like modules.
 * 1.0.0-rc-1 Fixes rewiring of switch statements. Readme improvements. Wildcard imports and tdz issues.
 * 1.0.0-rc-2 Fixes issues with babelify, React stateless functions as well as flow declarations.
-* 1.0.0-rc-3 Added support for ignoring identifiers and support for objects as parameter to __set__
+* 1.0.0-rc-3 Added support for ignoring identifiers and support for objects as parameter to \__set\__
 * 1.0.0-rc-4 Support for rewiring to undefined, suppport for should.js and cleaned up package.json.
 * 1.0.0-rc-5 Improved support for rewiring JSX-Components. Further improved for working in combination with other plugins.
 * 1.0.0-rc-6 Fixed regression which can occur with variable declarators and function expressions. Fixed handling of default exports containing nested functions.
+* 1.0.0-rc-7 Added revert function as a return of \__set\__ calls.
 
 ## Contributors
 
