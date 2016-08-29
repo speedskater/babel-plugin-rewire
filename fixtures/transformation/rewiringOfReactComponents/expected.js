@@ -96,7 +96,9 @@ function _set__(variableName, value) {
 			_RewiredData__[variableName] = value;
 		}
 
-		return value;
+		return function () {
+			_reset__(variableName);
+		};
 	}
 }
 

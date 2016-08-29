@@ -12,8 +12,6 @@
  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.*/
 
-import traverse from "babel-traverse";
-
 import RewireState from './RewireState.js';
 import { wasProcessed, noRewire, contains } from './RewireHelpers.js';
 
