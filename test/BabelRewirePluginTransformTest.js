@@ -129,6 +129,7 @@ describe('BabelRewirePluginTest', function() {
 		'rewiringOfReactComponents',
 		'rewiringOfSimpleFunctionalComponents',
 		'issue121',
+		'issue133',
 		'issue152',
 		'issue155'
 	];
