@@ -1,5 +1,10 @@
 language: node_js
+
 node_js:
-- node
-- 4
-- '0.12'
+  - node
+  - 4
+  - '0.12'
+
+script:
+  - npm run test
+  - npm run build
