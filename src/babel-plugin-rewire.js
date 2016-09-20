@@ -24,6 +24,7 @@ module.exports = function({ types: t }) {
 		!(parent.type === 'FunctionExpression' && parent.id === node) &&
 		!(parent.type === 'MemberExpression' && parent.property === node) &&
 		!(parent.type === 'ObjectProperty' && parent.key === node) &&
+		!(parent.type === 'ObjectMethod' && parent.key === node) &&
 		!(parent.type === 'ObjectProperty' && path.parentPath && path.parentPath.parent && path.parentPath.parent.type === 'ObjectPattern') &&
 		!(parent.type === 'ExportSpecifier') &&
 		!(parent.type === 'ImportSpecifier') &&

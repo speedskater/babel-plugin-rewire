@@ -91,6 +91,25 @@ var configurations = {
 		samples: [
 			'issue152-2'
 		]
+	},
+	transformSampleCodeToTestWithBabelPluginRewireAndFlow: {
+		transformOptions: {
+			"presets": ["es2015", "react"], //,
+			"plugins": [
+				babelPluginRewire,
+				"transform-object-rest-spread",
+				"transform-flow-strip-types",
+				"syntax-async-functions",
+				"transform-es2015-template-literals",
+				"transform-es2015-block-scoping",
+				"transform-es2015-typeof-symbol",
+				"transform-export-extensions",
+				"transform-regenerator"
+			]
+		},
+		samples: [
+			'issue151-flow'
+		]
 	}
 };
 
