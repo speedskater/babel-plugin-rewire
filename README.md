@@ -326,6 +326,22 @@ var appBundler = browserify({
 
 ## Combining with other plugins/tools
 
+### istanbul
+
+To integrate babel-plugin-rewire with istanbul, it is recommended to use [babel-plugin-istanbul](https://github.com/istanbuljs/babel-plugin-istanbul).
+This babel plugin instruments your code with Istanbul coverage.
+
+It has been reported that the order of plugins are important. Therefore prefer the following order:
+ 
+```json
+{
+  "plugins": ["istanbul", "rewire"]
+}
+```
+
+For a project integrating karma, babel, babel-plugin-rewire and istanbul please see [karma-rewire-istanbul-example](https://github.com/jseminck/karma-rewire-istanbul-example) 
+
+
 ### [isparta](https://github.com/douglasduteil/isparta) 
 There are some things to consider when using babel-plugin-rewire together with isparta. Since isparta runs Babel itself it's important to remember to add the same configuration options to it as you would do with Babel. If you forget this you will in some cases see unexpected errors.
 
@@ -360,21 +376,6 @@ webpack: {
     ...
 }
 ```
-
-### istanbul
-Initially isparta was created to solve the problem of using istanbul with Babel. However work has been done recently on istanbul to support Babel generated code with sourcemaps.
-
-At the moment of this writing this is still part of an alpha version (1.0.0-alpha.2, see [#212](https://github.com/gotwarlost/istanbul/issues/212#issuecomment-160526692) for details). You need to use the [sourcemaps option](http://babeljs.io/docs/usage/options/) with the `inline` value (see [this](https://github.com/istanbuljs/sample-babel-node/blob/master/.babelrc) for an example).
-
-Because istanbul doesn't run babel by itself, you need to make sure that your code goes through babel. If you're running it through webpack it should be no different than what's shown on the [webpack](#webpack) section, but if you're running it through the node cli, you need to use [babel-node](http://babeljs.io/docs/usage/cli/#babel-node) and specify the plugin via the [cli argument](#commandline) or [babelrc](#with_babelrc).
-
-A small quirk is that you need to run the actual istanbul cli file, rather than the istanbul command, such as:
-
-```
-babel-node ./node_modules/istanbul/lib/cli.js cover test/run-tests.js
-```
-
-See the istanbul [sample-babel-node](https://github.com/istanbuljs/sample-babel-node) project for a full working example.
 
 ## Examples projects
 * [es6-library-boilerplate](https://github.com/CurtisHumphrey/es6-library-boilerplate)
@@ -417,6 +418,7 @@ See the istanbul [sample-babel-node](https://github.com/istanbuljs/sample-babel-
 * 1.0.0-rc-5 Improved support for rewiring JSX-Components. Further improved for working in combination with other plugins.
 * 1.0.0-rc-6 Fixed regression which can occur with variable declarators and function expressions. Fixed handling of default exports containing nested functions.
 * 1.0.0-rc-7 Added revert function as a return of \__set\__ calls.
+* 1.0.0 Fixed regression with object methods and improved istanbul documentation. 
 
 ## Contributors
 
