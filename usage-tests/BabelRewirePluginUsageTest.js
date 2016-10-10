@@ -69,6 +69,7 @@ var configurations = {
 			'issue140-chai-should',
 			'issue130-jsx-es6-type-imports',
 			'issue133',
+			'issue136',
 			'jsxSupport',
 			'issue152-1',
 			'issue155',

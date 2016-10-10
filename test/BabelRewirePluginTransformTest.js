@@ -140,6 +140,7 @@ describe('BabelRewirePluginTest', function() {
 		'rewiringOfSimpleFunctionalComponents',
 		'issue121',
 		'issue133',
+		'issue136',
 		'issue152',
 		'issue155'
 	];
