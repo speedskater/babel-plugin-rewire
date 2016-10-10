@@ -134,6 +134,11 @@ describe('BabelRewirePluginTest', function() {
 		'issue155'
 	];
 
+	var stage0FeaturesToTests = [
+		'issue164'
+	];
+
+
 	var ignoredIdentifiers = [
 		'ignoredIdentifiers'
 	];
@@ -152,5 +157,14 @@ describe('BabelRewirePluginTest', function() {
 
 	featuresToTest.forEach(function(feature) {
 		it('test successful translation babel-plugin-rewire for ' + feature, testSuccessfulTranslation.bind(null, feature));
+	});
+
+	stage0FeaturesToTests.forEach(function(feature) {
+		var stageZeroTranslationOptions = {
+			presets: babelTranslationOptions.presets.concat(['stage-0']),
+			plugins: babelTranslationOptions.plugins
+		};
+
+		it('test babel-plugin-rewire for ' + feature, testTranslation.bind(null, feature, stageZeroTranslationOptions));
 	});
 });
