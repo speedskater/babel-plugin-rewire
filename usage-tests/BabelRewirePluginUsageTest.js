@@ -72,7 +72,8 @@ var configurations = {
 			'jsxSupport',
 			'issue152-1',
 			'issue155',
-			'issue146-revert-function-for-set'
+			'issue146-revert-function-for-set',
+			'issue163'
 		]
 	},
 	transformSampleCodeToTestWithBabelPluginRewireAndTransformAsyncToGenerator: {
