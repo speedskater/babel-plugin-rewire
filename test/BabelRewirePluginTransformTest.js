@@ -3,7 +3,7 @@ var path = require('path');
 var fs = require('fs');
 var os = require('os');
 var expect = require('expect.js');
-var babelPluginRewire = require('../lib/babel-plugin-rewire.js'); // */ require('../test-helpers/getBabelPluginRewire.js');
+var babelPluginRewire = require('../lib/babel-plugin-rewire.js'); //  require('../test-helpers/getBabelPluginRewire.js');
 
 
 describe('BabelRewirePluginTest', function() {
@@ -71,11 +71,11 @@ describe('BabelRewirePluginTest', function() {
 		expect(transformationOutput.trim()).to.be(expected.trim());
 	}
 
-	function testSuccessfulTranslation(testName) {
+	function testSuccessfulTranslation(testName, additionalOptions) {
 		var directory = path.resolve(__dirname, '..', 'fixtures', 'transformation', testName);
 		var input = fs.readFileSync(path.resolve(directory, 'input.js'), 'utf-8');
 
-		var transformationResult = babel.transform(input, babelTranslationOptionsAllEnabled);
+		var transformationResult = babel.transform(input, combineOptions(babelTranslationOptionsAllEnabled, additionalOptions));
 	}
 
 	function testIgnoredIdentifiersTranslation(testName) {
@@ -83,6 +83,16 @@ describe('BabelRewirePluginTest', function() {
 		var input = fs.readFileSync(path.resolve(directory, 'input.js'), 'utf-8');
 
 		var transformationResult = babel.transform(input, babelTranslationOptionsAllEnabledIgnoredIdentifiers);
+	}
+
+	function combineOptions(baseOptions, additionalOptions) {
+		var additionalPresets = (additionalOptions && additionalOptions.presets) || [];
+		var additionalPlugins = (additionalOptions && additionalOptions.plugins) || [];
+
+		return {
+			presets: baseOptions.presets.concat(additionalPresets),
+			plugins: baseOptions.plugins.concat(additionalPlugins)
+		};
 	}
 
 
@@ -156,15 +166,15 @@ describe('BabelRewirePluginTest', function() {
 	});
 
 	featuresToTest.forEach(function(feature) {
-		it('test successful translation babel-plugin-rewire for ' + feature, testSuccessfulTranslation.bind(null, feature));
+		it('test successful translation babel-plugin-rewire for ' + feature, testSuccessfulTranslation.bind(null, feature, {}));
 	});
 
 	stage0FeaturesToTests.forEach(function(feature) {
-		var stageZeroTranslationOptions = {
-			presets: babelTranslationOptions.presets.concat(['stage-0']),
-			plugins: babelTranslationOptions.plugins
+		var additionalOptions = {
+			presets: ['stage-0'],
 		};
 
-		it('test babel-plugin-rewire for ' + feature, testTranslation.bind(null, feature, stageZeroTranslationOptions));
+		it('test successful translation babel-plugin-rewire for ' + feature, testSuccessfulTranslation.bind(null, feature, combineOptions(babelTranslationOptions, additionalOptions)));
+		it('test translation babel-plugin-rewire for ' + feature, testSuccessfulTranslation.bind(null, feature, additionalOptions));
 	});
 });
