@@ -346,6 +346,7 @@ For a project integrating karma, babel, babel-plugin-rewire and istanbul please 
 There are some things to consider when using babel-plugin-rewire together with isparta. Since isparta runs Babel itself it's important to remember to add the same configuration options to it as you would do with Babel. If you forget this you will in some cases see unexpected errors.
 
 If you use _.babelrc_ it's advised that you run your tests with a specific ENV, for example "test", and add the following to your _.babelrc_.
+Furthermore in case you use isparta only add the plugin once in the isparta loader and not in the babel loader as well.
 
 ```json
 "env": {
