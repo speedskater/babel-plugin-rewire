@@ -3,7 +3,7 @@ var path = require('path');
 var fs = require('fs');
 var expect = require('expect.js');
 var hook = require('node-hook');
-var babelPluginRewire = require('../lib/babel-plugin-rewire.js'); // */ require('../test-helpers/getBabelPluginRewire.js');
+var babelPluginRewire = require('../lib/babel-plugin-rewire.js'); // require('../test-helpers/getBabelPluginRewire.js');
 require('core-js');
 
 function isSampleCode(filename) {
@@ -66,6 +66,7 @@ var configurations = {
 			'jsx-switch',
 			'jsx-stateless-multilevel',
 			'rewireToUndefined',
+			'issue114',
 			'issue115-should-js',
 			'issue140-chai-should',
 			'issue130-jsx-es6-type-imports',

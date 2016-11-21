@@ -249,6 +249,59 @@ describe('async function export test', function() {
 });
 ```
 
+## Resetting all
+
+When "babel-plugin-rewire" is used the global method `__rewire_reset_all__` is added. 
+Each time this method is called all rewired dependencies across all modules are reset.
+
+### Example
+Assuming you have two imported modules:
+
+Module1:
+```js
+var value = 'Module1-Original';
+
+export default function getModule2Identifier() {
+	return value;
+}
+```
+
+Module2:
+```
+var value = 'Module2-Original';
+
+export default function getModule2Identifier() {
+	return value;
+}
+```
+
+### Test Code
+In your test by calling `__rewire_reset_all__` all dependencies are reset and you can ensure that no rewired data will harm subsequent tests.
+```js
+import getModule1Identifier from './src/Module1.js';
+import getModule2Identifier from './src/Module2.js';
+
+import expect from "expect.js";
+
+describe('__rewire_reset_all__', function () {
+	it('should allow to reset all rewired dependencies', function() {
+		expect(getModule1Identifier()).to.be('Module1-Original');
+		expect(getModule2Identifier()).to.be('Module2-Original');
+
+		getModule1Identifier.__set__('value', 'module1-rewired');
+		getModule2Identifier.__set__('value', 'module2-rewired');
+
+		expect(getModule1Identifier()).to.be('module1-rewired');
+		expect(getModule2Identifier()).to.be('module2-rewired');
+
+		__rewire_reset_all__();
+
+		expect(getModule1Identifier()).to.be('Module1-Original');
+		expect(getModule2Identifier()).to.be('Module2-Original');
+	});
+});
+```
+
 ## Installation
 
 ```
