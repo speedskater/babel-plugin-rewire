@@ -14,8 +14,9 @@ function isSampleCode(filename) {
 var configurations = {
 	transformSampleCodeToTestWithBabelPluginRewireAndTransformRegenerator: {
 		transformOptions: {
-			"presets": ["es2015", "react"], //,
+			"presets": ["es2015", "react" ], //,
 			"plugins": [
+				"transform-flow-strip-types",
 				babelPluginRewire,
 				"syntax-async-functions",
 				"transform-es2015-template-literals",
@@ -75,7 +76,8 @@ var configurations = {
 			'issue155',
 			'issue146-revert-function-for-set',
 			'issue163',
-			'issue165'
+			'issue165',
+			'issue109'
 		]
 	},
 	transformSampleCodeToTestWithBabelPluginRewireAndTransformAsyncToGenerator: {
