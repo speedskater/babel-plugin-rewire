@@ -78,7 +78,7 @@ var configurations = {
 			'issue163',
 			'issue165',
 			'issue109',
-      'issue174'
+			'issue174'
 		]
 	},
 	transformSampleCodeToTestWithBabelPluginRewireAndTransformAsyncToGenerator: {
