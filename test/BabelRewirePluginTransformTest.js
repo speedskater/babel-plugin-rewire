@@ -61,7 +61,7 @@ describe('BabelRewirePluginTest', function() {
 		try {
 			fs.mkdirSync(tempDir);
 		} catch(error) {}
-		
+
 		fs.writeFileSync(tempDir + '/testexpected' + testName + '.js', transformationOutput, 'utf-8');
 		//fs.writeFileSync(path.resolve(directory, 'expected.js'), transformationOutput, 'utf-8');
 
@@ -142,7 +142,8 @@ describe('BabelRewirePluginTest', function() {
 		'issue133',
 		'issue136',
 		'issue152',
-		'issue155'
+		'issue155',
+		'issue184'
 	];
 
 	var stage0FeaturesToTests = [
