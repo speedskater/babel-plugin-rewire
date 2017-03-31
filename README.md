@@ -19,22 +19,22 @@ Furthermore in case of a default export these methods are assigned to the existi
 
 An additional object named `__RewireAPI__` is exported as named export as well as a property of the default export. This object itself contains all the functions mentioned above as fields. This enables one to rewire members of the imported module itself without explicitly importing the module (see [Handling of default exports](#handling-of-default-exports) below).
 
-##ES6 Imports and React
+## ES6 Imports and React
 
 Dependencies from import statements can be rewired
 
-###Example
+### Example
 
 ```javascript
 import ChildComponent from 'child-component-module';
 
 export default class MyFancyWrapperComponent extends React.Component {
 
-	render() {
-		return (<div className="wrapper-style">
-			<ChildComponent {...this.props} />
-		</div>);
-	}
+  render() {
+    return (<div className="wrapper-style">
+      <ChildComponent {...this.props} />
+    </div>);
+  }
 }
 ```
 
@@ -51,11 +51,11 @@ ComponentToTest.__Rewire__('ChildComponent', React.createClass({
 ComponentToTest.__ResetDependency__('ChildComponent');
 ```
 
-##Node/browserify require() and top-level var support
+## Node/browserify require() and top-level var support
 
 Variables declared and initialised at the top level, such as those from require() calls, can be rewired
 
-###Example
+### Example
 
 ```javascript
 var Path = require('path');
@@ -63,7 +63,7 @@ var Path = require('path');
 var env = 'production';
 
 module.exports = function(name) {
-	return Path.normalise(name);
+  return Path.normalise(name);
 }
 ```
 
@@ -312,7 +312,7 @@ $ npm install babel-core babel-plugin-rewire
 
 To use the plugin identify it by its long name "babel-plugin-rewire" or by its abbreviation "rewire". In case you are using rewire.js in the same project you must use the unabbreviated plugin name. Otherwise babel is trying to load rewire.js as a plugin which will cause an [error](https://github.com/speedskater/babel-plugin-rewire/issues/5).
 
-###Commandline
+### Commandline
 abbreviated:
 ```
 $ babel --plugins rewire ..
