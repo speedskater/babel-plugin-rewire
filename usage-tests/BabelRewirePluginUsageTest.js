@@ -78,7 +78,8 @@ var configurations = {
 			'issue146-revert-function-for-set',
 			'issue163',
 			'issue165',
-			'issue109'
+			'issue109',
+			'issue184'
 		]
 	},
 	transformSampleCodeToTestWithBabelPluginRewireAndTransformAsyncToGenerator: {
