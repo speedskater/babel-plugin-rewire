@@ -487,6 +487,7 @@ webpack: {
 * [Kelly Selden](https://github.com/kellyselden) - fixed dependencies in package.json
 * [Sasha Koss](https://github.com/kossnocorp) - support for rewiring to undefined
 * [Kevin Canévet](https://github.com/StyMaar) - fixed incompatibility with should
+* [Mike Sherov](https://github.com/mikesherov) - added support for for in loops
 
 ## License
 
