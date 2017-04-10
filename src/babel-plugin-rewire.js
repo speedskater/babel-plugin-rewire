@@ -183,6 +183,19 @@ module.exports = function({ types: t }) {
 	const ProgramVisitor = {
 		Program: {
 			enter: function (path, state) {
+				//TODO work with the state.file.opts.filename and state.file.opts.sourceFileName
+				// and state.file.opts.sourceRoot to add an additional way to deal with module rewireings.
+				// therefore enforce filename and sourceRoot properties
+				// add the ability to use absolute and relative references
+				// add the ability to report in case the module was not processed by rewire
+				//
+				// __REWIRE_MODULE('/my/interesting/module', '').__set__()
+				// __REWIRE_MODULE('my/interesting/module', '').__reset__()
+				// __REWIRE_MODULE('../../my/interesting/module', '').__read__()
+				// __REWIRE_MODULE('./my/interesting/module', '')
+				//
+				//console.log('file: ', file.file.opts.filename);
+				//console.log('file: %O', file.file);
 				if (!wasProcessed(path)) {
 					let rewireState = new RewireState(path.scope);
 					rewireState.setIgnoredIdentifiers(state.opts.ignoredIdentifiers);
