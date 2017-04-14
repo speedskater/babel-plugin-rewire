@@ -304,7 +304,7 @@ require('babel-register')({
 
 abbreviated:
 ```javascript
-{test: /src\/js\/.+\.js$/, loader: 'babel-loader?plugins=rewire' }
+{test: /src\/js\/.+\.js$/, loader: 'babel-loader?plugins=babel-plugin-rewire' }
 ```
 full plugin name:
 ```javascript
