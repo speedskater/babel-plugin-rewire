@@ -55,7 +55,7 @@ function _getRewireRegistry__() {
 		theGlobalVariable.__$$GLOBAL_REWIRE_REGISTRY__ = Object.create(null);
 	}
 
-	return __$$GLOBAL_REWIRE_REGISTRY__;
+	return theGlobalVariable.__$$GLOBAL_REWIRE_REGISTRY__;
 }
 
 function _getRewiredData__() {
