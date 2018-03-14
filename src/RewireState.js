@@ -12,13 +12,21 @@
  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.*/
 
-import { universalAccesorsTemplate, enrichExportTemplate, filterWildcardImportTemplate } from './Templates.js';
+import Templates from './Templates.js';
 import { wasProcessed, noRewire } from './RewireHelpers.js';
-import * as t from 'babel-types';
+var t;
+var universalAccesorsTemplate;
+var enrichExportTemplate;
+var filterWildcardImportTemplate;
 
 export default class RewireState {
 
-	constructor(scope) {
+	constructor(scope, types, template) {
+		t = types;
+		const templates = Templates(template);
+		universalAccesorsTemplate = templates.universalAccesorsTemplate;
+		enrichExportTemplate = templates.enrichExportTemplate;
+		filterWildcardImportTemplate = templates.filterWildcardImportTemplate;
 		this.isES6Module = false;
 		this.hasES6Export = false;
 		this.hasES6DefaultExport = false;
@@ -95,7 +103,7 @@ export default class RewireState {
 		let hasWildcardImport = Object.keys(this.isWildcardImport).some(function(propertyName) {
 			return this.isWildcardImport[propertyName];
 		}.bind(this));
-		let filterWildcardImportIdentifier =  (hasWildcardImport &&  noRewire(scope.generateUidIdentifier('__filterWildcardImport__'))) || null;
+		let filterWildcardImportIdentifier = (hasWildcardImport && noRewire(scope.generateUidIdentifier('__filterWildcardImport__'))) || null;
 
 		let originalAccessor = t.functionDeclaration(this.originalVariableAccessorIdentifier, [ t.identifier('variableName') ], t.blockStatement([
 			t.switchStatement(t.identifier('variableName'), Object.keys(this.accessors).map(function(identifierName) {

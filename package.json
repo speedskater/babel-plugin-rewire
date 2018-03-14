@@ -77,10 +77,5 @@
     "regenerator-runtime": "^0.9.5",
     "should": "^9.0.2",
     "sinon": "^1.17.4"
-  },
-  "peerDependencies": {
-    "babel-core": "^6.0.0",
-    "babel-template": "^6.2.0",
-    "babel-types": "^6.2.0"
   }
 }

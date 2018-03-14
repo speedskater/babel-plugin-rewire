@@ -12,9 +12,8 @@
  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.*/
 
-import template from 'babel-template';
-
-export const universalAccesorsTemplate = template(`
+export default function(template) {
+	const universalAccesorsTemplate = template(`
 function GET_GLOBAL_VARIABLE_HANDLE_IDENTIFIER() {
 	try {
 			if(!!global) {
@@ -91,16 +90,16 @@ let API_OBJECT_ID = {};
 
 function UNIVERSAL_GETTER_ID(variableName) {
 	let rewireData = GET_REWIRE_DATA_IDENTIFIER();
-  if (rewireData[variableName] === undefined) {
-    return ORIGINAL_VARIABLE_ACCESSOR_IDENTIFIER(variableName);
-  } else {
-    var value = rewireData[variableName];
-    if (value === INTENTIONAL_UNDEFINED) {
-      return undefined;
-    } else {
-      return value;
-    }
-  }
+	if (rewireData[variableName] === undefined) {
+		return ORIGINAL_VARIABLE_ACCESSOR_IDENTIFIER(variableName);
+	} else {
+		var value = rewireData[variableName];
+		if (value === INTENTIONAL_UNDEFINED) {
+			return undefined;
+		} else {
+			return value;
+		}
+	}
 }
 
 ORIGINAL_ACCESSOR
@@ -130,15 +129,15 @@ function UNIVERSAL_SETTER_ID(variableName, value) {
 			rewireData[name] = variableName[name];
 		});
 	} else {
-	    if (value === undefined) {
-	      rewireData[variableName] = INTENTIONAL_UNDEFINED
-	    } else {
-	      rewireData[variableName] = value
-	    }
+		if (value === undefined) {
+			rewireData[variableName] = INTENTIONAL_UNDEFINED
+		} else {
+			rewireData[variableName] = value
+		}
 
-        return function() {
-            UNIVERSAL_RESETTER_ID(variableName);
-        };
+		return function() {
+			UNIVERSAL_RESETTER_ID(variableName);
+		};
 	}
 }
 
@@ -179,7 +178,7 @@ function UNIVERSAL_WITH_ID(object) {
 
 `);
 
-export const enrichExportTemplate = template(`
+	const enrichExportTemplate = template(`
 let TYPEOFORIGINALEXPORTVARIABLE = typeof EXPORT_VALUE;
 function addNonEnumerableProperty(name, value) {
 	Object.defineProperty(EXPORT_VALUE, name, { value: value, enumerable: false, configurable: true });
@@ -197,10 +196,10 @@ if((TYPEOFORIGINALEXPORTVARIABLE === 'object' || TYPEOFORIGINALEXPORTVARIABLE ==
 }
 `);
 
-export const filterWildcardImportTemplate = template(`
+	const filterWildcardImportTemplate = template(`
 function FILTER_WILDCARD_IMPORT_IDENTIFIER(wildcardImport={}) {
 	let validPropertyNames = Object.keys(wildcardImport).filter(function(propertyName) {
-		return  propertyName !== '__get__' &&
+		return propertyName !== '__get__' &&
 				propertyName !== '__set__' &&
 				propertyName !== '__reset__' &&
 				propertyName !== '__with__' &&
@@ -220,3 +219,5 @@ function FILTER_WILDCARD_IMPORT_IDENTIFIER(wildcardImport={}) {
 	);
 }
 `);
+	return {universalAccesorsTemplate, enrichExportTemplate, filterWildcardImportTemplate};
+}
