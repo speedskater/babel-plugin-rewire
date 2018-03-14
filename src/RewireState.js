@@ -142,7 +142,9 @@ export default class RewireState {
 			GET_REWIRE_DATA_IDENTIFIER: this.getRewiredDataIdentifier,
 			GET_UNIQUE_GLOBAL_MODULE_ID_IDENTIFIER : this.getUniqueGlobalModuleIdIdentifier,
 			GET_REWIRE_REGISTRY_IDENTIFIER: this.getRewireRegistryIdentifier,
-			UNIQUE_GLOBAL_MODULE_ID_IDENTIFIER: this.uniqueModuleIdIdentifier
+			UNIQUE_GLOBAL_MODULE_ID_IDENTIFIER: this.uniqueModuleIdIdentifier,
+			INTENTIONAL_UNDEFINED: t.identifier('INTENTIONAL_UNDEFINED'),
+			__INTENTIONAL_UNDEFINED__: '__INTENTIONAL_UNDEFINED__'
 		}));
 
 		if(hasWildcardImport) {
