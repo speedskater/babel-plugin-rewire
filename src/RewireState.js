@@ -29,7 +29,11 @@ export default class RewireState {
 		this.isWildcardImport = {};
 		this.ignoredIdentifiers = [];
 		this.updateableVariables = {};
-		this.rewiredDataIdentifier = scope.generateUidIdentifier('__RewiredData__');
+		this.getGlobalVariableHandleIdentifier = scope.generateUidIdentifier('getGlobalObject');
+		this.getRewiredDataIdentifier = scope.generateUidIdentifier('__getRewiredData__');
+		this.getRewireRegistryIdentifier = scope.generateUidIdentifier('__getRewireRegistry__');
+		this.getUniqueGlobalModuleIdIdentifier = scope.generateUidIdentifier('__getRewireModuleId__');
+		this.uniqueModuleIdIdentifier = scope.generateUidIdentifier('__RewireModuleId__');
 		this.originalVariableAccessorIdentifier = scope.generateUidIdentifier('__get_original__');
 		this.originalVariableSetterIdentifier = scope.generateUidIdentifier('__set_original__');
 		this.updateOperationIdentifier = scope.generateUidIdentifier('__update_operation__');
@@ -126,7 +130,11 @@ export default class RewireState {
 			UNIVERSAL_RESETTER_ID :this.getUniversalResetterID(),
 			UNIVERSAL_WITH_ID :this.getUniversalWithID(),
 			API_OBJECT_ID: this.getAPIObjectID(),
-			REWIRED_DATA_IDENTIFIER: this.rewiredDataIdentifier
+			GET_GLOBAL_VARIABLE_HANDLE_IDENTIFIER: this.getGlobalVariableHandleIdentifier,
+			GET_REWIRE_DATA_IDENTIFIER: this.getRewiredDataIdentifier,
+			GET_UNIQUE_GLOBAL_MODULE_ID_IDENTIFIER : this.getUniqueGlobalModuleIdIdentifier,
+			GET_REWIRE_REGISTRY_IDENTIFIER: this.getRewireRegistryIdentifier,
+			UNIQUE_GLOBAL_MODULE_ID_IDENTIFIER: this.uniqueModuleIdIdentifier
 		}));
 
 		if(hasWildcardImport) {

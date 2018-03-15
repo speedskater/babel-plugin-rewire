@@ -8,7 +8,73 @@ export default function getTestValue() {
 	}
 }
 
-var _RewiredData__ = Object.create(null);
+function _getGlobalObject() {
+	try {
+		if (!!global) {
+			return global;
+		}
+	} catch (e) {
+		try {
+			if (!!window) {
+				return window;
+			}
+		} catch (e) {
+			return this;
+		}
+	}
+}
+
+;
+var _RewireModuleId__ = null;
+
+function _getRewireModuleId__() {
+	if (_RewireModuleId__ === null) {
+		let globalVariable = _getGlobalObject();
+
+		if (!globalVariable.__$$GLOBAL_REWIRE_NEXT_MODULE_ID__) {
+			globalVariable.__$$GLOBAL_REWIRE_NEXT_MODULE_ID__ = 0;
+		}
+
+		_RewireModuleId__ = __$$GLOBAL_REWIRE_NEXT_MODULE_ID__++;
+	}
+
+	return _RewireModuleId__;
+}
+
+function _getRewireRegistry__() {
+	let theGlobalVariable = _getGlobalObject();
+
+	if (!theGlobalVariable.__$$GLOBAL_REWIRE_REGISTRY__) {
+		theGlobalVariable.__$$GLOBAL_REWIRE_REGISTRY__ = Object.create(null);
+	}
+
+	return __$$GLOBAL_REWIRE_REGISTRY__;
+}
+
+function _getRewiredData__() {
+	let moduleId = _getRewireModuleId__();
+
+	let registry = _getRewireRegistry__();
+
+	let rewireData = registry[moduleId];
+
+	if (!rewireData) {
+		registry[moduleId] = Object.create(null);
+		rewireData = registry[moduleId];
+	}
+
+	return rewireData;
+}
+
+(function registerResetAll() {
+	let theGlobalVariable = _getGlobalObject();
+
+	if (!theGlobalVariable['__rewire_reset_all__']) {
+		theGlobalVariable['__rewire_reset_all__'] = function () {
+			theGlobalVariable.__$$GLOBAL_REWIRE_REGISTRY__ = Object.create(null);
+		};
+	}
+})();
 
 var INTENTIONAL_UNDEFINED = '__INTENTIONAL_UNDEFINED__';
 let _RewireAPI__ = {};
@@ -32,10 +98,12 @@ let _RewireAPI__ = {};
 })();
 
 function _get__(variableName) {
-	if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
+	let rewireData = _getRewiredData__();
+
+	if (rewireData[variableName] === undefined) {
 		return _get_original__(variableName);
 	} else {
-		var value = _RewiredData__[variableName];
+		var value = rewireData[variableName];
 
 		if (value === INTENTIONAL_UNDEFINED) {
 			return undefined;
@@ -55,10 +123,12 @@ function _get_original__(variableName) {
 }
 
 function _assign__(variableName, value) {
-	if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
+	let rewireData = _getRewiredData__();
+
+	if (rewireData[variableName] === undefined) {
 		return _set_original__(variableName, value);
 	} else {
-		return _RewiredData__[variableName] = value;
+		return rewireData[variableName] = value;
 	}
 }
 
@@ -79,15 +149,17 @@ function _update_operation__(operation, variableName, prefix) {
 }
 
 function _set__(variableName, value) {
+	let rewireData = _getRewiredData__();
+
 	if (typeof variableName === 'object') {
 		Object.keys(variableName).forEach(function (name) {
-			_RewiredData__[name] = variableName[name];
+			rewireData[name] = variableName[name];
 		});
 	} else {
 		if (value === undefined) {
-			_RewiredData__[variableName] = INTENTIONAL_UNDEFINED;
+			rewireData[variableName] = INTENTIONAL_UNDEFINED;
 		} else {
-			_RewiredData__[variableName] = value;
+			rewireData[variableName] = value;
 		}
 
 		return function () {
@@ -97,23 +169,33 @@ function _set__(variableName, value) {
 }
 
 function _reset__(variableName) {
-	delete _RewiredData__[variableName];
+	let rewireData = _getRewiredData__();
+
+	delete rewireData[variableName];
+
+	if (Object.keys(rewireData).length == 0) {
+		delete _getRewireRegistry__()[_getRewireModuleId__];
+	}
+
+	;
 }
 
 function _with__(object) {
+	let rewireData = _getRewiredData__();
+
 	var rewiredVariableNames = Object.keys(object);
 	var previousValues = {};
 
 	function reset() {
 		rewiredVariableNames.forEach(function (variableName) {
-			_RewiredData__[variableName] = previousValues[variableName];
+			rewireData[variableName] = previousValues[variableName];
 		});
 	}
 
 	return function (callback) {
 		rewiredVariableNames.forEach(function (variableName) {
-			previousValues[variableName] = _RewiredData__[variableName];
-			_RewiredData__[variableName] = object[variableName];
+			previousValues[variableName] = rewireData[variableName];
+			rewireData[variableName] = object[variableName];
 		});
 		let result = callback();
 
