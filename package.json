@@ -49,6 +49,7 @@
   "license": "ISC",
   "devDependencies": {
     "babel-cli": "^6.10.1",
+    "babel-core": "^6.0.0",
     "babel-plugin-syntax-async-functions": "^6.8.0",
     "babel-plugin-syntax-flow": "^6.8.0",
     "babel-plugin-syntax-jsx": "^6.8.0 ",
@@ -67,6 +68,8 @@
     "babel-preset-react": "^6.11.0",
     "babel-preset-stage-0": "^6.16.0",
     "babel-runtime": "^6.11.6",
+    "babel-template": "^6.2.0",
+    "babel-types": "^6.2.0",
     "chai": "^3.5.0",
     "core-js": "^1.0.0",
     "expect.js": "^0.3.1",
@@ -77,10 +80,5 @@
     "regenerator-runtime": "^0.9.5",
     "should": "^9.0.2",
     "sinon": "^1.17.4"
-  },
-  "peerDependencies": {
-    "babel-core": "^6.0.0",
-    "babel-template": "^6.2.0",
-    "babel-types": "^6.2.0"
   }
 }

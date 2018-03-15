@@ -15,7 +15,7 @@
 import RewireState from './RewireState.js';
 import { wasProcessed, noRewire, contains } from './RewireHelpers.js';
 
-module.exports = function({ types: t }) {
+module.exports = function({ types: t, template }) {
 	function isRewireable(path, variableBinding) {
 		let { node, parent } = path;
 
@@ -184,7 +184,7 @@ module.exports = function({ types: t }) {
 		Program: {
 			enter: function (path, state) {
 				if (!wasProcessed(path)) {
-					let rewireState = new RewireState(path.scope);
+					let rewireState = new RewireState(path.scope, t, template);
 					rewireState.setIgnoredIdentifiers(state.opts.ignoredIdentifiers);
 
 					path.traverse(BodyVisitor, rewireState);
@@ -201,7 +201,7 @@ module.exports = function({ types: t }) {
 						rewireState.prependUniversalAccessors(scope);
 						rewireState.appendExports();
 
-						path.replaceWith(noRewire(t.Program(program.body.concat(rewireState.nodesToAppendToProgramBody), program.directives)));
+						path.pushContainer("body", rewireState.nodesToAppendToProgramBody);
 					}
 				}
 			}
