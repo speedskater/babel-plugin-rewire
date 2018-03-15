@@ -488,6 +488,7 @@ webpack: {
 * [Sasha Koss](https://github.com/kossnocorp) - support for rewiring to undefined
 * [Kevin Canévet](https://github.com/StyMaar) - fixed incompatibility with should
 * [Mike Sherov](https://github.com/mikesherov) - added support for for in loops
+* [Thomas Levy](https://github.com/NilSet) - added support for babel 7
 
 ## License
 
