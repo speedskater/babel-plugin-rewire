@@ -15,7 +15,7 @@
 import RewireState from './RewireState.js';
 import { wasProcessed, noRewire, contains } from './RewireHelpers.js';
 
-module.exports = function({ types: t }) {
+function rewire({ types: t }) {
 	function isRewireable(path, variableBinding) {
 		let { node, parent } = path;
 
@@ -86,7 +86,7 @@ module.exports = function({ types: t }) {
 		'ExportNamedDeclaration|ExportAllDeclaration': function ({node: {specifiers = []}}, rewireInformation) {
 			let hasDefaultExport = specifiers.some(function (specifier) {
 				return ((specifier.local && specifier.local.name === 'default') ||
-				(specifier.exported && specifier.exported.name === 'default'));
+					(specifier.exported && specifier.exported.name === 'default'));
 			});
 			rewireInformation.hasES6DefaultExport = rewireInformation.hasES6DefaultExport || hasDefaultExport;
 			rewireInformation.isES6Module = true;
@@ -211,4 +211,6 @@ module.exports = function({ types: t }) {
 	return {
 		visitor: ProgramVisitor
 	};
-};
+}
+
+module.exports = process.env.NODE_ENV === "test" || process.env.BABEL_ENV === "test" ? rewire : () => ({});

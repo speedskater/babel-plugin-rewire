@@ -4,7 +4,7 @@
   "description": "A babel plugin adding the ability to rewire module dependencies. This enables to mock modules for testing purposes.",
   "main": "lib/babel-plugin-rewire.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha && ./node_modules/.bin/mocha usage-tests",
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha && BABEL_ENV=test ./node_modules/.bin/mocha usage-tests",
     "build": "./node_modules/.bin/babel src --out-dir lib",
     "prepublish": "./node_modules/.bin/babel src --out-dir lib"
   },
