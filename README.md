@@ -473,13 +473,14 @@ webpack: {
 * 1.0.0-rc-6 Fixed regression which can occur with variable declarators and function expressions. Fixed handling of default exports containing nested functions.
 * 1.0.0-rc-7 Added revert function as a return of \__set\__ calls.
 * 1.0.0 Fixed regression with object methods and improved istanbul documentation. 
+* 1.2.0-rc.1 Add support for babel 7, object spread and revert function from \_\_set\_\_ with object and fixes undefined variable error  
 
 ## Contributors
 
 * [speedskater](https://github.com/speedskater) - author and creator of initial release
 * [Peet](https://github.com/peet) - module.exports and top-level var support
 * [TheSavior](https://github.com/TheSavior) - support for non-enumerable rewire properties, support for ignored identifiers
-* [Rene Saarsoo](https://github.com/nene) - support for using objects as parameter to __set__
+* [Rene Saarsoo](https://github.com/nene) - support for using objects as parameter to \_\_set\_\_
 * [PSpSynedra](https://github.com/PSpSynedra) - support for named export and function rewiring and improvements of default imports 
 * [Gustaf Dalemar](https://github.com/DLMR) - support for asynchronous functions
 * [Spencre Leichty](https://github.com/spncrlkt) - support for named wildcard exports
@@ -490,8 +491,8 @@ webpack: {
 * [Mike Sherov](https://github.com/mikesherov) - added support for for in loops
 * [Thomas Levy](https://github.com/NilSet) - added support for babel 7
 * [Malthe Jørgensen](https://github.com/malthejorgensen) - added support for object spread
-* [Tim Whitbeck](https://github.com/twhitbeck) - added revert function from __set__ with object
-* [Dennis E](https://github.com/destenson) - fixed undefined __$$GLOBAL_REWIRE_REGISTRY__ error  
+* [Tim Whitbeck](https://github.com/twhitbeck) - added revert function from  \_\_set\_\_ with object
+* [Dennis E](https://github.com/destenson) - fixed undefined \_\_$$GLOBAL_REWIRE_REGISTRY\_\_ error  
 
 ## License
 
