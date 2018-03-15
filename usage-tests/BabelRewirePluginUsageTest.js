@@ -117,6 +117,18 @@ var configurations = {
 		samples: [
 			'issue151-flow'
 		]
+	},
+	transformSampleCodeToTestWithBabelPluginRewireAndObjectRestProperty: {
+		transformOptions: {
+			"presets": ["es2015"],
+			"plugins": [
+				babelPluginRewire,
+				"transform-object-rest-spread"
+			]
+		},
+		samples: [
+			"objectRestProperty"
+		]
 	}
 };
 
