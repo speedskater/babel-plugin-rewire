@@ -158,6 +158,11 @@ function _set__(variableName, value) {
 		Object.keys(variableName).forEach(function (name) {
 			rewireData[name] = variableName[name];
 		});
+		return function () {
+			Object.keys(variableName).forEach(function (name) {
+				_reset__(variableName);
+			});
+		};
 	} else {
 		if (value === undefined) {
 			rewireData[variableName] = INTENTIONAL_UNDEFINED;
