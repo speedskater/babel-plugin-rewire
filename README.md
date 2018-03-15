@@ -490,6 +490,7 @@ webpack: {
 * [Mike Sherov](https://github.com/mikesherov) - added support for for in loops
 * [Thomas Levy](https://github.com/NilSet) - added support for babel 7
 * [Malthe Jørgensen](https://github.com/malthejorgensen) - added support for object spread
+* [Tim Whitbeck](https://github.com/twhitbeck) - added revert function from __set__ with object
 
 ## License
 
