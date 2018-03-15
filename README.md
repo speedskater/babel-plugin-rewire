@@ -491,6 +491,7 @@ webpack: {
 * [Thomas Levy](https://github.com/NilSet) - added support for babel 7
 * [Malthe Jørgensen](https://github.com/malthejorgensen) - added support for object spread
 * [Tim Whitbeck](https://github.com/twhitbeck) - added revert function from __set__ with object
+* [Dennis E](https://github.com/destenson) - fixed undefined __$$GLOBAL_REWIRE_REGISTRY__ error  
 
 ## License
 
