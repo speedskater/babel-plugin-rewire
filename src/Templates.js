@@ -47,7 +47,7 @@ function GET_REWIRE_REGISTRY_IDENTIFIER() {
 	if(!theGlobalVariable.__$$GLOBAL_REWIRE_REGISTRY__) {
 		theGlobalVariable.__$$GLOBAL_REWIRE_REGISTRY__ = Object.create(null);
 	}
-	return __$$GLOBAL_REWIRE_REGISTRY__; 
+	return theGlobalVariable.__$$GLOBAL_REWIRE_REGISTRY__; 
 }
 
 function GET_REWIRE_DATA_IDENTIFIER() {
