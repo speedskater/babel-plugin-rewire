@@ -128,6 +128,12 @@ function UNIVERSAL_SETTER_ID(variableName, value) {
 		Object.keys(variableName).forEach(function(name) {
 			rewireData[name] = variableName[name];
 		});
+
+		return function() {
+			Object.keys(variableName).forEach(function(name) {
+				UNIVERSAL_RESETTER_ID(variableName);
+			});
+		}
 	} else {
 		if (value === undefined) {
 			rewireData[variableName] = INTENTIONAL_UNDEFINED
