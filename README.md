@@ -357,13 +357,14 @@ require('babel-register')({
 
 abbreviated:
 ```javascript
-{test: /src\/js\/.+\.js$/, loader: 'babel-loader?plugins=rewire' }
+{
+  test: /src\/js\/.+\.js$/, 
+  loader: 'babel-loader',
+  options: {
+    plugins: [require('babel-plugin-rewire')],
+  }
+}
 ```
-full plugin name:
-```javascript
-{test: /src\/js\/.+\.js$/, loader: 'babel-loader?plugins=babel-plugin-rewire' }
-```
-
 ### Browserify/Babelify
 
 full plugin name:
