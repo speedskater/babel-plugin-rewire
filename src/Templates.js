@@ -131,7 +131,7 @@ function UNIVERSAL_SETTER_ID(variableName, value) {
 
 		return function() {
 			Object.keys(variableName).forEach(function(name) {
-				UNIVERSAL_RESETTER_ID(variableName);
+				UNIVERSAL_RESETTER_ID(name);
 			});
 		}
 	} else {
