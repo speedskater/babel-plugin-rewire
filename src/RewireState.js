@@ -73,7 +73,7 @@ export default class RewireState {
 	}
 
 	ensureAccessor(variableName, isWildcardImport = false) {
-		if(!this.accessors[variableName]) {
+		if(!this.accessors.hasOwnProperty(variableName)) {
 			this.accessors[variableName] = true;
 			this.addTrackedIdentifier(variableName, isWildcardImport);
 		}
